@@ -12,7 +12,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="14,519,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="141" Width="800" FontSize="16"><Run Text="W/A/S/D - Movement"/><LineBreak/><Run Text=""/></TextBlock>
         <Button Content="Gear" HorizontalAlignment="Left" Margin="878,112,0,0" VerticalAlignment="Top" Width="114" Height="36" FontSize="16"/>
         <Label Content="Actions" HorizontalAlignment="Left" Margin="888,0,0,0" VerticalAlignment="Top" Width="95" FontSize="18" HorizontalContentAlignment="Center"/>
-        <Separator HorizontalAlignment="Left" Height="100" Margin="835,-17,0,0" VerticalAlignment="Top" Width="203" Background="Black" Opacity="0.3"/>
+        <Separator HorizontalAlignment="Left" Height="51" Margin="835,7,0,0" VerticalAlignment="Top" Width="203" Background="Black" Opacity="0.3"/>
 
     </Grid>
 </Window>
