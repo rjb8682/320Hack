@@ -25,6 +25,8 @@ namespace _320Hack
             // This is for making the splash screen appear for longer
             System.Threading.Thread.Sleep(2000);
             InitializeComponent();
+
+            gameArea.Text = "Hello World";
         }
     }
 }
