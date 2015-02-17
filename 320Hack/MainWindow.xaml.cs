@@ -20,12 +20,15 @@ namespace _320Hack
     /// </summary>
     public partial class MainWindow : Window
     {
+        double titleFontSize = 20.0;
+
         public MainWindow()
         {
             // This is for making the splash screen appear for longer
-            System.Threading.Thread.Sleep(2000);
+            // System.Threading.Thread.Sleep(2000);
             InitializeComponent();
 
+            gameArea.FontSize = titleFontSize;
             gameArea.Text = "Hello World";
         }
     }
