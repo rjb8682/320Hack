@@ -3,16 +3,24 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="700" Width="1050"
         WindowStartupLocation="CenterScreen">
-    <Grid Background="#FFCFCFCF">
-        <Rectangle Fill="#FF8D8D8D" HorizontalAlignment="Left" Height="672" Margin="866,0,0,-3" Stroke="Black" VerticalAlignment="Top" Width="176"/>
+    <Grid Background="#FF595D72">
+        <Rectangle Fill="#FF383A49" HorizontalAlignment="Left" Height="672" Margin="866,0,0,-3" Stroke="Black" VerticalAlignment="Top" Width="176"/>
 
-        <Button Content="Inventory" Margin="909,56,39,0" VerticalAlignment="Top" Height="36" FontSize="16"/>
-        <TextBox x:Name="gameArea" Height="417" Margin="34,57,208,0" TextWrapping="Wrap" VerticalAlignment="Top" BorderThickness="2" ToolTip="Game Area" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="Black" Background="White" Foreground="#FF131313" Focusable="False"/>
-        <TextBox x:Name="Console" Margin="34,504,208,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="140" FontSize="16" Background="White" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2"/>
-        <Button Content="Gear" Margin="909,118,39,0" VerticalAlignment="Top" Height="36" FontSize="16"/>
-        <Label Content="Actions" Margin="871,0,0,0" VerticalAlignment="Top" Width="161" FontSize="18" HorizontalContentAlignment="Center"/>
-        <Separator HorizontalAlignment="Left" Height="34" Margin="871,22,0,0" VerticalAlignment="Top" Width="171" Background="Black" Opacity="0.3" HorizontalContentAlignment="Center"/>
-        <ProgressBar x:Name="XPBar" Height="40" Margin="34,10,208,0" VerticalAlignment="Top" BorderBrush="#FF787878" BorderThickness="2"/>
+        <Button Content="Inventory" Margin="876,61,10,0" VerticalAlignment="Top" Height="36" FontSize="16"/>
+        <TextBox x:Name="gameArea" Height="417" Margin="34,57,208,0" TextWrapping="Wrap" VerticalAlignment="Top" BorderThickness="2" ToolTip="Game Area" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" BorderBrush="Black" Background="#FFCECFDA" Foreground="#FF131313" Focusable="False"/>
+        <TextBox x:Name="Console" Margin="34,504,208,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="140" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2"/>
+        <Button Content="Gear" Margin="876,122,10,0" VerticalAlignment="Top" Height="36" FontSize="16"/>
+        <Label Content="Actions" Margin="871,0,0,0" VerticalAlignment="Top" Width="161" FontSize="18" HorizontalContentAlignment="Center" Foreground="#FF6C6C70"/>
+        <Separator HorizontalAlignment="Left" Height="34" Margin="866,22,0,0" VerticalAlignment="Top" Width="176" Background="#FFB8BACD" Opacity="0.3" HorizontalContentAlignment="Center" Foreground="#FF38383E"/>
+        <ProgressBar x:Name="XPBar" Height="40" Margin="34,10,208,0" VerticalAlignment="Top" BorderBrush="#FF323232" BorderThickness="2" Foreground="#FF07891F">
+            <ProgressBar.Background>
+                <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
+                    <GradientStop Color="#FF636472" Offset="0"/>
+                    <GradientStop Color="#FFA5A7CD" Offset="0.5"/>
+                    <GradientStop Color="#FF7D7E8F" Offset="1"/>
+                </LinearGradientBrush>
+            </ProgressBar.Background>
+        </ProgressBar>
         <Label Content="Level #" HorizontalAlignment="Left" Margin="362,11,0,0" VerticalAlignment="Top" Height="39" Width="144" FontSize="18" HorizontalContentAlignment="Center" Opacity="0.7"/>
         <Label Content="Console" HorizontalAlignment="Left" Margin="34,472,0,0" VerticalAlignment="Top" Width="122" FontSize="18" Height="32"/>
 
