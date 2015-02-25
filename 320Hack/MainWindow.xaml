@@ -12,15 +12,7 @@
         <Button Content="Gear" Margin="876,122,10,0" VerticalAlignment="Top" Height="36" FontSize="16"/>
         <Label Content="Actions" Margin="871,0,0,0" VerticalAlignment="Top" Width="161" FontSize="18" HorizontalContentAlignment="Center" Foreground="#FF6C6C70"/>
         <Separator HorizontalAlignment="Left" Height="34" Margin="866,22,0,0" VerticalAlignment="Top" Width="176" Background="#FFB8BACD" Opacity="0.3" HorizontalContentAlignment="Center" Foreground="#FF38383E"/>
-        <ProgressBar x:Name="XPBar" Height="40" Margin="34,10,208,0" VerticalAlignment="Top" BorderBrush="#FF323232" BorderThickness="2" Foreground="#FF07891F">
-            <ProgressBar.Background>
-                <LinearGradientBrush EndPoint="1,0" StartPoint="0,0">
-                    <GradientStop Color="#FF636472" Offset="0"/>
-                    <GradientStop Color="#FFA5A7CD" Offset="0.5"/>
-                    <GradientStop Color="#FF7D7E8F" Offset="1"/>
-                </LinearGradientBrush>
-            </ProgressBar.Background>
-        </ProgressBar>
+        <ProgressBar x:Name="XPBar" Height="40" Margin="34,10,208,0" VerticalAlignment="Top" BorderBrush="#FF323232" BorderThickness="2" Foreground="#FF07891F" Background="#FF979EB0"/>
         <Label Content="Level #" HorizontalAlignment="Left" Margin="362,11,0,0" VerticalAlignment="Top" Height="39" Width="144" FontSize="18" HorizontalContentAlignment="Center" Opacity="0.7"/>
         <Label Content="Console" HorizontalAlignment="Left" Margin="34,472,0,0" VerticalAlignment="Top" Width="122" FontSize="18" Height="32"/>
 
