@@ -30,7 +30,7 @@ namespace _320Hack
 
         public Map(List<List<Tile>> map)
         {
-            map[playerRow = PlayerStartRow][playerCol = PlayerStartCol] = new Tile('@', false);
+            map[playerRow = PlayerStartRow][playerCol = PlayerStartCol] = new Tile('@');
             this.levelMap = map;
         }
 
@@ -38,11 +38,16 @@ namespace _320Hack
         {
             String resultLevel = "";
 
+            updateSeen();
+
             foreach (List<Tile> list in levelMap)
             {
                 foreach (Tile c in list)
                 {
-                    resultLevel += c.Symbol;
+                    if (c.Seen || c.Symbol == '@')
+                        resultLevel += c.Symbol;
+                    else
+                        resultLevel += ' ';
                 }
                 resultLevel += '\n';
             }
@@ -91,6 +96,11 @@ namespace _320Hack
                     levelMap[playerRow][playerCol] = player;
                 }
             }
+        }
+
+        public void updateSeen()
+        {
+            // Update the tiles in levelMap to be seen if the player is near them
         }
     }
 }

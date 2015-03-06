@@ -90,14 +90,7 @@ namespace _320Hack
                 List<Tile> currentRow = new List<Tile>();
                 foreach (Char c in list)
                 {
-                    if (c == '.')
-                    {
-                        currentRow.Add(new Tile(c, true));
-                    }
-                    else
-                    {
-                        currentRow.Add(new Tile(c, false));
-                    }
+                    currentRow.Add(new Tile(c));
                 }
                 toReturn.Add(currentRow);
             }

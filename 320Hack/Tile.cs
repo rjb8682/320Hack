@@ -9,6 +9,20 @@ namespace _320Hack
     public class Tile
     {
         // Private fields and their getters/setters
+        private Boolean seen;
+        public Boolean Seen
+        {
+            get
+            {
+                return this.seen;
+            }
+
+            set
+            {
+                this.seen = value;
+            }
+        }
+
         private Char symbol;
         public Char Symbol {
             get
@@ -22,25 +36,11 @@ namespace _320Hack
             }
         }
 
-        private Boolean canWalkOn;
-        public Boolean CanWalkOn
-        {
-            get
-            {
-                return this.canWalkOn;
-            }
-
-            set
-            {
-                this.canWalkOn = value;
-            }
-        }
-
         // Constructor
-        public Tile(Char sym, Boolean canWalk)
+        public Tile(Char sym)
         {
             this.symbol = sym;
-            this.canWalkOn = canWalk;
+            this.seen = false;
         }
 
 
