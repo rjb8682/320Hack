@@ -8,9 +8,14 @@ namespace _320Hack
 {
     class Map
     {
+        private int PlayerStartRow = 2;
+        private int PlayerStartCol = 37;
 
-        private List<List<Char>> levelMap;
-        public List<List<Char>> LevelMap
+        private int playerRow;
+        private int playerCol;
+
+        private List<List<Tile>> levelMap;
+        public List<List<Tile>> LevelMap
         {
             get
             {
@@ -23,8 +28,9 @@ namespace _320Hack
             }
         }
 
-        public Map(List<List<Char>> map)
+        public Map(List<List<Tile>> map)
         {
+            map[playerRow = PlayerStartRow][playerCol = PlayerStartCol] = new Tile('@', false);
             this.levelMap = map;
         }
 
@@ -32,15 +38,59 @@ namespace _320Hack
         {
             String resultLevel = "";
 
-            foreach (List<Char> list in levelMap)
+            foreach (List<Tile> list in levelMap)
             {
-                foreach (Char c in list)
+                foreach (Tile c in list)
                 {
-                    resultLevel += c;
+                    resultLevel += c.Symbol;
                 }
                 resultLevel += '\n';
             }
             return resultLevel;
+        }
+
+        public void movePlayer(int dir)
+        {
+            if (dir == MainWindow.UP)
+            {
+                if (levelMap[playerRow - 1][playerCol].Symbol == MainWindow.floor)
+                {
+                    Tile temp = levelMap[playerRow - 1][playerCol];
+                    Tile player = levelMap[playerRow][playerCol];
+                    levelMap[playerRow--][playerCol] = temp;
+                    levelMap[playerRow][playerCol] = player;
+                }
+            }
+            else if (dir == MainWindow.DOWN)
+            {
+                if (levelMap[playerRow + 1][playerCol].Symbol == MainWindow.floor)
+                {
+                    Tile temp = levelMap[playerRow + 1][playerCol];
+                    Tile player = levelMap[playerRow][playerCol];
+                    levelMap[playerRow++][playerCol] = temp;
+                    levelMap[playerRow][playerCol] = player;
+                }
+            }
+            else if (dir == MainWindow.LEFT)
+            {
+                if (levelMap[playerRow][playerCol - 1].Symbol == MainWindow.floor)
+                {
+                    Tile temp = levelMap[playerRow][playerCol - 1];
+                    Tile player = levelMap[playerRow][playerCol];
+                    levelMap[playerRow][playerCol--] = temp;
+                    levelMap[playerRow][playerCol] = player;
+                }
+            }
+            else if (dir == MainWindow.RIGHT)
+            {
+                if (levelMap[playerRow][playerCol + 1].Symbol == MainWindow.floor)
+                {
+                    Tile temp = levelMap[playerRow][playerCol + 1];
+                    Tile player = levelMap[playerRow][playerCol];
+                    levelMap[playerRow][playerCol++] = temp;
+                    levelMap[playerRow][playerCol] = player;
+                }
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _320Hack
 {
-    class Tile
+    public class Tile
     {
         // Private fields and their getters/setters
         private Char symbol;
