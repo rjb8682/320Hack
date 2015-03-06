@@ -31,6 +31,7 @@ namespace _320Hack
         public static int RIGHT = 9003;
 
         public static Char floor = '·';
+        public static Char horizWall = '—';
 
         public MainWindow()
         {
@@ -57,6 +58,10 @@ namespace _320Hack
                     if (c == '.')
                     {
                         currentRow.Add(floor);
+                    }
+                    else if (c == '-')
+                    {
+                        currentRow.Add(horizWall);
                     }
                     else
                     {

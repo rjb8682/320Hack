@@ -4,7 +4,7 @@
         Title="MainWindow" Height="926" Width="1050"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="keyPressed">
     <Grid Background="#FF595D72">
-        <TextBox x:Name="textEntry" Margin="34,769,34,5" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam"/>
+        <TextBox x:Name="textEntry" Margin="34,769,34,10" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam"/>
         <ProgressBar x:Name="XPBar" Height="40"  Margin="34,10,34,0" VerticalAlignment="Top" BorderBrush="#FF323232" BorderThickness="2" Foreground="#FF07891F" Background="#FF979EB0"/>
         <Label Content="Level #" HorizontalAlignment="Left" Margin="450,12,0,0" VerticalAlignment="Top" Height="39" Width="144" FontSize="18" HorizontalContentAlignment="Center" Opacity="0.7" RenderTransformOrigin="0.507,0.474"/>
         <Label Content="Console" HorizontalAlignment="Left" Margin="34,732,0,0" VerticalAlignment="Top" Width="122" FontSize="18" Height="32"/>
