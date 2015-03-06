@@ -101,6 +101,23 @@ namespace _320Hack
         public void updateSeen()
         {
             // Update the tiles in levelMap to be seen if the player is near them
+            int numRows = levelMap.Count;
+
+            for (int i = 0; i < numRows; i++)
+            {
+                int numColsForThisRow = levelMap[i].Count;
+                for (int j = 0; j < numColsForThisRow; j++)
+                {
+                    if (!levelMap[i][j].Seen)
+                    {
+                        int taxiValue = Math.Abs(i - playerRow) + Math.Abs(j - playerCol);
+                        if (taxiValue < 5)
+                        {
+                            levelMap[i][j].Seen = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }
