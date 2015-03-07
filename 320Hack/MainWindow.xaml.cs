@@ -30,10 +30,17 @@ namespace _320Hack
         public static int LEFT = 9002;
         public static int RIGHT = 9003;
 
+        public static double MAINHEIGHT = 926;
+        public static double MAINWIDTH = 1050;
+
         public static Char floor = '·';
         public static Char horizWall = '—';
 
         public static Boolean LookingAtHelpMenu = false;
+        private HelpMenu help = new HelpMenu();
+
+        public double mainLeft = (System.Windows.SystemParameters.PrimaryScreenWidth - MAINWIDTH) / 2;
+        public double mainTop = (System.Windows.SystemParameters.PrimaryScreenHeight - MAINHEIGHT) / 2;
 
         public MainWindow()
         {
@@ -41,8 +48,8 @@ namespace _320Hack
             // System.Threading.Thread.Sleep(2000);
             InitializeComponent();
             gameArea.FontSize = titleFontSize;
-            Application.Current.MainWindow.Left = (System.Windows.SystemParameters.PrimaryScreenWidth / 2) - (Application.Current.MainWindow.Width / 2) + 100;
-            Application.Current.MainWindow.Top = (System.Windows.SystemParameters.PrimaryScreenHeight / 2) - (Application.Current.MainWindow.Height / 2);
+            Application.Current.MainWindow.Left = mainLeft;
+            Application.Current.MainWindow.Top = mainTop;
 
             StreamReader levelReader = new StreamReader("../../Levels/level1.map");
             String fullLevel = levelReader.ReadToEnd();
@@ -157,18 +164,10 @@ namespace _320Hack
             {
                 if (text == "/help")
                 {
-                    // Will eventually open a help
-                    Console.WriteLine(LookingAtHelpMenu);
-                    if (!LookingAtHelpMenu)
-                    {
-                        HelpMenu help = new HelpMenu();
-                        help.ShowInTaskbar = false;
-                        help.Left = Application.Current.MainWindow.Left - help.Width;
-                        help.Top = Application.Current.MainWindow.Top;
-                        help.Owner = Application.Current.MainWindow;
-                        help.ShowDialog();
-                        LookingAtHelpMenu = true;
-                    }
+                    help.ShowInTaskbar = false;
+                    help.Left = mainLeft - help.Width;
+                    help.Top = mainTop;
+                    help.ShowDialog();
                 }
                 return "";
             }
