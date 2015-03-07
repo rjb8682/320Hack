@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Help Menu" Height="407" Width="355"
-        WindowStartupLocation="Manual" ResizeMode="NoResize">
+        WindowStartupLocation="Manual" ResizeMode="NoResize" KeyDown="keyPressed">
     <Grid Background="#FF595D72">
         <TextBlock Margin="10,10,10,10" TextWrapping="Wrap" Background="#FFCECFDA" FontSize="16" Padding="10"><Run FontWeight="Bold" Text="Help Menu:"/><LineBreak/><Run FontWeight="Bold"/><LineBreak/><Run FontSize="14" Text="Information:"/><LineBreak/><Run FontSize="14" Text="    You are stranded in this dungeon. You're only way out is to fight through the monsters, find the many treasures, and discover the secrets of this hole."/><LineBreak/><Run FontSize="14"/><LineBreak/><Run FontSize="14" Text="Controls:"/><LineBreak/><Run FontSize="14" Text="- Movement: WASD or Arrow Keys"/><LineBreak/><Run FontSize="14" Text=""/><LineBreak/><Run FontSize="14" Text="Commands:"/><LineBreak/><Run FontSize="14" Text="- /? - List the slash commands"/><LineBreak/><Run FontSize="14" Text="- /help - show this screen"/><LineBreak/><Run FontSize="14" Text="- /inventory - Show the inventory screen"/></TextBlock>
 

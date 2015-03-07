@@ -23,5 +23,13 @@ namespace _320Hack
         {
             InitializeComponent();
         }
+
+        private void keyPressed(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.Close();
+            }
+        }
     }
 }

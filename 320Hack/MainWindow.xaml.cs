@@ -37,7 +37,7 @@ namespace _320Hack
         public static Char horizWall = '—';
 
         public static Boolean LookingAtHelpMenu = false;
-        private HelpMenu help = new HelpMenu();
+        private HelpMenu help;
 
         public double mainLeft = (System.Windows.SystemParameters.PrimaryScreenWidth - MAINWIDTH) / 2;
         public double mainTop = (System.Windows.SystemParameters.PrimaryScreenHeight - MAINHEIGHT) / 2;
@@ -48,7 +48,7 @@ namespace _320Hack
             // System.Threading.Thread.Sleep(2000);
             InitializeComponent();
             gameArea.FontSize = titleFontSize;
-            Application.Current.MainWindow.Left = mainLeft;
+            Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
 
             StreamReader levelReader = new StreamReader("../../Levels/level1.map");
@@ -119,6 +119,9 @@ namespace _320Hack
                 movePlayer(e.Key);
                 update();
             }
+            else if (e.Key == Key.OemQuestion) {
+                Keyboard.Focus(textEntry);
+            }
         }
 
         public void movePlayer(Key k)
@@ -164,9 +167,12 @@ namespace _320Hack
             {
                 if (text == "/help")
                 {
+                    textEntry.Clear();
+                    help = new HelpMenu();
                     help.ShowInTaskbar = false;
-                    help.Left = mainLeft - help.Width;
+                    help.Left = mainLeft - (help.Width / 2);
                     help.Top = mainTop;
+                    help.Owner = Application.Current.MainWindow;
                     help.ShowDialog();
                 }
                 return "";
