@@ -33,12 +33,16 @@ namespace _320Hack
         public static Char floor = '·';
         public static Char horizWall = '—';
 
+        public static Boolean LookingAtHelpMenu = false;
+
         public MainWindow()
         {
             // This is for making the splash screen appear for longer
             // System.Threading.Thread.Sleep(2000);
             InitializeComponent();
             gameArea.FontSize = titleFontSize;
+            Application.Current.MainWindow.Left = (System.Windows.SystemParameters.PrimaryScreenWidth / 2) - (Application.Current.MainWindow.Width / 2) + 100;
+            Application.Current.MainWindow.Top = (System.Windows.SystemParameters.PrimaryScreenHeight / 2) - (Application.Current.MainWindow.Height / 2);
 
             StreamReader levelReader = new StreamReader("../../Levels/level1.map");
             String fullLevel = levelReader.ReadToEnd();
@@ -154,12 +158,19 @@ namespace _320Hack
                 if (text == "/help")
                 {
                     // Will eventually open a help
-                    return getHelpString();
+                    Console.WriteLine(LookingAtHelpMenu);
+                    if (!LookingAtHelpMenu)
+                    {
+                        HelpMenu help = new HelpMenu();
+                        help.ShowInTaskbar = false;
+                        help.Left = Application.Current.MainWindow.Left - help.Width;
+                        help.Top = Application.Current.MainWindow.Top;
+                        help.Owner = Application.Current.MainWindow;
+                        help.ShowDialog();
+                        LookingAtHelpMenu = true;
+                    }
                 }
-                else
-                {
-                    return "";
-                }
+                return "";
             }
         }
 
