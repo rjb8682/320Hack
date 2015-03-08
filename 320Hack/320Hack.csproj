@@ -53,6 +53,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Coordinate.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="PlayerTile.cs" />
     <Compile Include="Tile.cs" />

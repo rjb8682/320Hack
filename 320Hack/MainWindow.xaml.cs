@@ -34,6 +34,7 @@ namespace _320Hack
         public static double MAINWIDTH = 1050;
 
         public static Char floor = '·';
+        public static Char player = '@';
         public static Char horizWall = '—';
 
         public static Boolean LookingAtHelpMenu = false;
