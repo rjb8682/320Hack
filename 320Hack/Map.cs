@@ -160,11 +160,40 @@ namespace _320Hack
                 {
                     if (!levelMap[i][j].Seen)
                     {
-                        int taxiValue = Math.Abs(i - playerRow) + Math.Abs(j - playerCol);
-                        if (taxiValue < 5)
+                        //int taxiValue = Math.Abs(i - playerRow) + Math.Abs(j - playerCol);
+                        //if (taxiValue < 5)
+                        //{
+                        //    levelMap[i][j].Seen = true;
+                        //}
+
+                        int rowSign = playerRow - i > 0 ? 1 : -1 ;
+                        int colSign = playerCol - j > 0 ? 1 : -1 ;
+
+                        if (playerCol == j)
                         {
-                            levelMap[i][j].Seen = true;
+                            for (int row = playerRow; isValidCoordinate(row, playerCol); row += rowSign)
+                            {
+                                Tile t = levelMap[row][playerCol];
+                                t.Seen = true;
+                                if (t.Symbol != MainWindow.floor && t.Symbol != 'o') { break; }
+                            }
                         }
+
+                        double slope = (Math.Abs(playerRow - i) * 1.0) / (Math.Abs(playerCol - j));
+                        double currentRow = Convert.ToDouble(playerCol);
+
+                        for (int col = 0; col < numColsForThisRow; col++)
+                        {
+                            int newRow = playerRow + (int)(rowSign * slope * (col + 1));
+                            int newCol = playerCol + (col * colSign) + colSign;
+
+                            if (!isValidCoordinate(newRow, newCol)) { break; }
+
+                            Tile t = levelMap[newRow][newCol];
+                            t.Seen = true;
+                            if (t.Symbol != MainWindow.floor && t.Symbol != 'o') { break; }
+                        }
+
                     }
                 }
             }

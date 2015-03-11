@@ -110,7 +110,9 @@ namespace _320Hack
                 List<Tile> currentRow = new List<Tile>();
                 foreach (Char c in list)
                 {
-                    currentRow.Add(new Tile(c));
+                    Tile t = new Tile(c);
+                    t.Seen = false;
+                    currentRow.Add(t);
                 }
                 toReturn.Add(currentRow);
             }
