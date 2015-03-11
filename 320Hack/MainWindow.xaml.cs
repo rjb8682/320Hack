@@ -30,6 +30,14 @@ namespace _320Hack
         public static int LEFT = 9002;
         public static int RIGHT = 9003;
 
+        public static int UP_LEFT = 9004;
+        public static int DOWN_LEFT = 9005;
+        public static int UP_RIGHT = 9006;
+        public static int DOWN_RIGHT = 9007;
+
+        public Key[] keys = {Key.NumPad8, Key.NumPad2, Key.NumPad4, Key.NumPad6, Key.NumPad7, Key.NumPad9, Key.NumPad1, Key.NumPad3,
+                                Key.K, Key.J, Key.H, Key.L, Key.Y, Key.U, Key.B, Key.N,};
+
         public static double MAINHEIGHT = 926;
         public static double MAINWIDTH = 1050;
 
@@ -112,10 +120,7 @@ namespace _320Hack
 
         private void keyPressed(object sender, KeyEventArgs e)
         {
-            if ((e.Key == Key.W || e.Key == Key.Up ||
-                e.Key == Key.S || e.Key == Key.Down ||
-                e.Key == Key.A || e.Key == Key.Left ||
-                e.Key == Key.D || e.Key == Key.Right) && !textEntry.IsFocused)
+            if (keys.Contains(e.Key) && !textEntry.IsFocused)
             {
                 movePlayer(e.Key);
                 update();
@@ -127,21 +132,37 @@ namespace _320Hack
 
         public void movePlayer(Key k)
         {
-            if (k == Key.Up || k == Key.W)
+            if (k == Key.K || k == Key.NumPad8)
             {
                 gameLevel.movePlayer(UP);
             }
-            else if (k == Key.Down || k == Key.S)
+            else if (k == Key.J || k == Key.NumPad2)
             {
                 gameLevel.movePlayer(DOWN);
             }
-            else if (k == Key.Left || k == Key.A)
+            else if (k == Key.H || k == Key.NumPad4)
             {
                 gameLevel.movePlayer(LEFT);
             }
-            else if (k == Key.Right || k == Key.D)
+            else if (k == Key.L || k == Key.NumPad6)
             {
                 gameLevel.movePlayer(RIGHT);
+            }
+            else if (k == Key.Y || k == Key.NumPad7)
+            {
+                gameLevel.movePlayer(UP_LEFT);
+            }
+            else if (k == Key.U || k == Key.NumPad9)
+            {
+                gameLevel.movePlayer(UP_RIGHT);
+            }
+            else if (k == Key.B || k == Key.NumPad1)
+            {
+                gameLevel.movePlayer(DOWN_LEFT);
+            }
+            else if (k == Key.N || k == Key.NumPad3)
+            {
+                gameLevel.movePlayer(DOWN_RIGHT);
             }
         }
 

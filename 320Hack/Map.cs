@@ -41,6 +41,13 @@ namespace _320Hack
             this.levelMap = map;
         }
 
+        public void swap(int r1, int c1, int r2, int c2)
+        {
+            Tile temp = levelMap[r1][c1];
+            levelMap[r1][c1] = levelMap[r2][c2];
+            levelMap[r2][c2] = temp;
+        }
+
         public String printMap()
         {
             String resultLevel = "";
@@ -67,40 +74,56 @@ namespace _320Hack
             {
                 if (levelMap[playerRow - 1][playerCol].Symbol == MainWindow.floor)
                 {
-                    Tile temp = levelMap[playerRow - 1][playerCol];
-                    Tile player = levelMap[playerRow][playerCol];
-                    levelMap[playerRow--][playerCol] = temp;
-                    levelMap[playerRow][playerCol] = player;
+                    swap(playerRow, playerCol, --playerRow, playerCol);
                 }
             }
             else if (dir == MainWindow.DOWN)
             {
                 if (levelMap[playerRow + 1][playerCol].Symbol == MainWindow.floor)
                 {
-                    Tile temp = levelMap[playerRow + 1][playerCol];
-                    Tile player = levelMap[playerRow][playerCol];
-                    levelMap[playerRow++][playerCol] = temp;
-                    levelMap[playerRow][playerCol] = player;
+                    swap(playerRow, playerCol, ++playerRow, playerCol);
                 }
             }
             else if (dir == MainWindow.LEFT)
             {
                 if (levelMap[playerRow][playerCol - 1].Symbol == MainWindow.floor)
                 {
-                    Tile temp = levelMap[playerRow][playerCol - 1];
-                    Tile player = levelMap[playerRow][playerCol];
-                    levelMap[playerRow][playerCol--] = temp;
-                    levelMap[playerRow][playerCol] = player;
+                    swap(playerRow, playerCol, playerRow, --playerCol);
                 }
             }
             else if (dir == MainWindow.RIGHT)
             {
                 if (levelMap[playerRow][playerCol + 1].Symbol == MainWindow.floor)
                 {
-                    Tile temp = levelMap[playerRow][playerCol + 1];
-                    Tile player = levelMap[playerRow][playerCol];
-                    levelMap[playerRow][playerCol++] = temp;
-                    levelMap[playerRow][playerCol] = player;
+                    swap(playerRow, playerCol, playerRow, ++playerCol);
+                }
+            }
+            else if (dir == MainWindow.UP_LEFT)
+            {
+                if (levelMap[playerRow - 1][playerCol - 1].Symbol == MainWindow.floor)
+                {
+                    swap(playerRow, playerCol, --playerRow, --playerCol);
+                }
+            }
+            else if (dir == MainWindow.UP_RIGHT)
+            {
+                if (levelMap[playerRow - 1][playerCol + 1].Symbol == MainWindow.floor)
+                {
+                    swap(playerRow, playerCol, --playerRow, ++playerCol);
+                }
+            }
+            else if (dir == MainWindow.DOWN_LEFT)
+            {
+                if (levelMap[playerRow + 1][playerCol - 1].Symbol == MainWindow.floor)
+                {
+                    swap(playerRow, playerCol, ++playerRow, --playerCol);
+                }
+            }
+            else if (dir == MainWindow.DOWN_RIGHT)
+            {
+                if (levelMap[playerRow + 1][playerCol + 1].Symbol == MainWindow.floor)
+                {
+                    swap(playerRow, playerCol, ++playerRow, ++playerCol);
                 }
             }
 
@@ -178,6 +201,27 @@ namespace _320Hack
             if (isSpaceType(r - 1, c, validTypes))
             {
                 result.Add(new Coordinate(r - 1, c));
+            }
+
+            // Difficulty toggle for the future
+            if (true)
+            {
+                if (isSpaceType(r + 1, c + 1, validTypes))
+                {
+                    result.Add(new Coordinate(r + 1, c + 1));
+                }
+                if (isSpaceType(r + 1, c - 1, validTypes))
+                {
+                    result.Add(new Coordinate(r + 1, c - 1));
+                }
+                if (isSpaceType(r - 1, c + 1, validTypes))
+                {
+                    result.Add(new Coordinate(r - 1, c + 1));
+                }
+                if (isSpaceType(r - 1, c - 1, validTypes))
+                {
+                    result.Add(new Coordinate(r - 1, c - 1));
+                }
             }
 
             return result;
