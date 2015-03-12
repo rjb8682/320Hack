@@ -8,8 +8,10 @@ namespace _320Hack
 {
     class Map
     {
-        private int PlayerStartRow = 2;
-        private int PlayerStartCol = 37;
+        //private int PlayerStartRow = 2;
+        //private int PlayerStartCol = 37;
+        private int PlayerStartRow = 9;
+        private int PlayerStartCol = 4;
 
         private int playerRow;
         private int playerCol;
@@ -37,7 +39,7 @@ namespace _320Hack
         {
             map[playerRow = PlayerStartRow][playerCol = PlayerStartCol] = new Tile(MainWindow.player);
             monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
-            map[monster.row][monster.col] = new Tile('o');
+            //map[monster.row][monster.col] = new Tile('o');
             this.levelMap = map;
         }
 
@@ -158,45 +160,55 @@ namespace _320Hack
                 int numColsForThisRow = levelMap[i].Count;
                 for (int j = 0; j < numColsForThisRow; j++)
                 {
-                    if (!levelMap[i][j].Seen)
-                    {
-                        //int taxiValue = Math.Abs(i - playerRow) + Math.Abs(j - playerCol);
-                        //if (taxiValue < 5)
-                        //{
-                        //    levelMap[i][j].Seen = true;
-                        //}
-
-                        int rowSign = playerRow - i > 0 ? 1 : -1 ;
-                        int colSign = playerCol - j > 0 ? 1 : -1 ;
-
-                        if (playerCol == j)
-                        {
-                            for (int row = playerRow; isValidCoordinate(row, playerCol); row += rowSign)
-                            {
-                                Tile t = levelMap[row][playerCol];
-                                t.Seen = true;
-                                if (t.Symbol != MainWindow.floor && t.Symbol != 'o') { break; }
-                            }
-                        }
-
-                        double slope = (Math.Abs(playerRow - i) * 1.0) / (Math.Abs(playerCol - j));
-                        double currentRow = Convert.ToDouble(playerCol);
-
-                        for (int col = 0; col < numColsForThisRow; col++)
-                        {
-                            int newRow = playerRow + (int)(rowSign * slope * (col + 1));
-                            int newCol = playerCol + (col * colSign) + colSign;
-
-                            if (!isValidCoordinate(newRow, newCol)) { break; }
-
-                            Tile t = levelMap[newRow][newCol];
-                            t.Seen = true;
-                            if (t.Symbol != MainWindow.floor && t.Symbol != 'o') { break; }
-                        }
-
-                    }
+                    //levelMap[i][j].Seen = false;
+                    if (!levelMap[i][j].Seen) levelMap[i][j].Seen = canSeeTile(i, j);
                 }
             }
+        }
+
+        private bool canSeeTile(int r, int c)
+        {
+            if (playerRow == r && playerCol == c) return true;
+            int rowSign = playerRow - r > 0 ? -1 : 1;
+            int colSign = playerCol - c > 0 ? -1 : 1;
+
+            // If the tile in question is in the same column, iterate from playerRow to this row.
+            if (playerCol == c)
+            {
+                for (int row = playerRow; row != r; row += rowSign)
+                {
+                    if (!isValidCoordinate(row, playerCol)) return false;
+                    Tile t = levelMap[row][playerCol];
+                    if (t.Symbol != MainWindow.floor && t.Symbol != 'o' && t.Symbol != MainWindow.player)
+                    {
+                        return false;
+                    }
+                }
+
+                // Don't bother with the slope, since it's infinity.
+                return true;
+            }
+
+            double slope = Math.Abs((playerRow - r) * 1.0 / (playerCol - c));
+            double currentRow = Convert.ToDouble(playerRow);
+
+            for (int col = playerCol; col != c; col += colSign)
+            {
+                int newRow = Convert.ToInt32(currentRow + 0.0);
+
+                if (!isValidCoordinate(newRow, col)) { return false; }
+
+                Tile t = levelMap[newRow][col];
+                if (t.Symbol != MainWindow.floor && 
+                    t.Symbol != 'o' && 
+                    t.Symbol != MainWindow.player) {
+                    return false;
+                }
+
+                currentRow += rowSign * slope;
+            }
+
+            return true;
         }
 
         /**
