@@ -172,32 +172,44 @@ namespace _320Hack
             int rowSign = playerRow - r > 0 ? -1 : 1;
             int colSign = playerCol - c > 0 ? -1 : 1;
 
+            double slope = Math.Abs((playerRow - r) * 1.0 / (playerCol - c));
+
+
             // If the tile in question is in the same column, iterate from playerRow to this row.
-            if (playerCol == c)
+            if (playerCol == c || Math.Abs(slope) > 2)
             {
                 for (int row = playerRow; row != r; row += rowSign)
                 {
-                    if (!isValidCoordinate(row, playerCol)) return false;
+                    // Off the map--return false.
+                    if (!isValidCoordinate(row, playerCol)) { return false; }
                     Tile t = levelMap[row][playerCol];
-                    if (t.Symbol != MainWindow.floor && t.Symbol != 'o' && t.Symbol != MainWindow.player)
-                    {
-                        return false;
-                    }
+
+                    // If the symbol isn't floor, monster, or player, return false.
+                    if (t.Symbol != MainWindow.floor &&
+                        t.Symbol != 'o' &&
+                        t.Symbol != MainWindow.player) { return false; }
                 }
 
                 // Don't bother with the slope, since it's infinity.
                 return true;
             }
 
-            double slope = Math.Abs((playerRow - r) * 1.0 / (playerCol - c));
+            //if (Math.Abs(slope) > 3) { 
+            //    // Attempt special logic (use fractions of cells to look for walls - 
+            //    // be convervative here, not a big deal to return false)
+            //    return false;
+            //}
+
             double currentRow = Convert.ToDouble(playerRow);
 
             for (int col = playerCol; col != c; col += colSign)
             {
-                int newRow = Convert.ToInt32(currentRow + 0.0);
+                int newRow = Convert.ToInt32(currentRow);
 
+                // Off the map--return false.
                 if (!isValidCoordinate(newRow, col)) { return false; }
 
+                // If the symbol isn't floor, monster, or player, return false.
                 Tile t = levelMap[newRow][col];
                 if (t.Symbol != MainWindow.floor && 
                     t.Symbol != 'o' && 
@@ -207,7 +219,7 @@ namespace _320Hack
 
                 currentRow += rowSign * slope;
             }
-
+            
             return true;
         }
 
