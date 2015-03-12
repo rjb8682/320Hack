@@ -204,7 +204,7 @@ namespace _320Hack
 
             for (int col = playerCol; col != c; col += colSign)
             {
-                int newRow = Convert.ToInt32(currentRow + (0.5 * rowSign));
+                int newRow = Convert.ToInt32(currentRow);
 
                 // Off the map--return false.
                 if (!isValidCoordinate(newRow, col)) { return false; }
