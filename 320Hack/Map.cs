@@ -40,21 +40,16 @@ namespace _320Hack
 
         public Map(List<List<Tile>> map, Room room, List<Door> doors)
         {
-            map[playerRow = PlayerStartRow][playerCol = PlayerStartCol] = new Tile(MainWindow.player);
+            playerRow = PlayerStartRow;
+            playerCol = PlayerStartCol;
             monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
             //map[monster.row][monster.col] = new Tile('o');
+            this.doors = doors;
             this.levelMap = map;
 
             foreach (Door door in doors) {
                 levelMap[door.Row][door.Col] = new Tile(MainWindow.door);
             }
-        }
-
-        public void swap(int r1, int c1, int r2, int c2)
-        {
-            Tile temp = levelMap[r1][c1];
-            levelMap[r1][c1] = levelMap[r2][c2];
-            levelMap[r2][c2] = temp;
         }
 
         public String printMap()
@@ -63,18 +58,42 @@ namespace _320Hack
 
             updateSeen();
 
-            foreach (List<Tile> list in levelMap)
+            int maxRows = levelMap.Count;
+            for (int row = 0; row < maxRows; row++ )
             {
-                foreach (Tile c in list)
+                int maxCols = levelMap[row].Count;
+                for (int col = 0; col < maxCols; col++)
                 {
-                    if (c.Seen || c.Symbol == '@')
-                        resultLevel += c.Symbol;
-                    else
-                        resultLevel += ' ';
+                    resultLevel += findChar(row, col);
                 }
                 resultLevel += '\n';
             }
             return resultLevel;
+        }
+
+        private char findChar(int row, int col)
+        {
+            if (row == playerRow && col == playerCol)
+            {
+                return MainWindow.player;
+            }
+
+            Tile current = levelMap[row][col];
+
+            if (!current.Seen)
+            {
+                return ' ';
+            }
+
+            foreach (Door d in doors)
+            {
+                if (row == d.Row && col == d.Col)
+                {
+                    return MainWindow.door;
+                }
+            }
+
+            return current.Symbol;
         }
 
         public void movePlayer(int dir)
@@ -83,56 +102,60 @@ namespace _320Hack
             {
                 if (levelMap[playerRow - 1][playerCol].Symbol == MainWindow.floor)
                 {
-                    swap(playerRow, playerCol, --playerRow, playerCol);
+                    playerRow--;
                 }
             }
             else if (dir == MainWindow.DOWN)
             {
                 if (levelMap[playerRow + 1][playerCol].Symbol == MainWindow.floor)
                 {
-                    swap(playerRow, playerCol, ++playerRow, playerCol);
+                    playerRow++;
                 }
             }
             else if (dir == MainWindow.LEFT)
             {
                 if (levelMap[playerRow][playerCol - 1].Symbol == MainWindow.floor)
                 {
-                    swap(playerRow, playerCol, playerRow, --playerCol);
+                    playerCol--;
                 }
             }
             else if (dir == MainWindow.RIGHT)
             {
                 if (levelMap[playerRow][playerCol + 1].Symbol == MainWindow.floor)
                 {
-                    swap(playerRow, playerCol, playerRow, ++playerCol);
+                    playerCol++;
                 }
             }
             else if (dir == MainWindow.UP_LEFT)
             {
                 if (levelMap[playerRow - 1][playerCol - 1].Symbol == MainWindow.floor)
                 {
-                    swap(playerRow, playerCol, --playerRow, --playerCol);
+                    playerCol--;
+                    playerRow--;
                 }
             }
             else if (dir == MainWindow.UP_RIGHT)
             {
                 if (levelMap[playerRow - 1][playerCol + 1].Symbol == MainWindow.floor)
                 {
-                    swap(playerRow, playerCol, --playerRow, ++playerCol);
+                    playerCol++;
+                    playerRow--;
                 }
             }
             else if (dir == MainWindow.DOWN_LEFT)
             {
                 if (levelMap[playerRow + 1][playerCol - 1].Symbol == MainWindow.floor)
                 {
-                    swap(playerRow, playerCol, ++playerRow, --playerCol);
+                    playerCol--;
+                    playerRow++;
                 }
             }
             else if (dir == MainWindow.DOWN_RIGHT)
             {
                 if (levelMap[playerRow + 1][playerCol + 1].Symbol == MainWindow.floor)
                 {
-                    swap(playerRow, playerCol, ++playerRow, ++playerCol);
+                    playerCol++;
+                    playerRow++;
                 }
             }
 
