@@ -21,6 +21,9 @@ namespace _320Hack
 
         private List<char> floorTiles;
 
+        private List<Door> doors;
+        private Room room;
+
         private List<List<Tile>> levelMap;
         public List<List<Tile>> LevelMap
         {
@@ -35,12 +38,16 @@ namespace _320Hack
             }
         }
 
-        public Map(List<List<Tile>> map)
+        public Map(List<List<Tile>> map, Room room, List<Door> doors)
         {
             map[playerRow = PlayerStartRow][playerCol = PlayerStartCol] = new Tile(MainWindow.player);
             monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
             //map[monster.row][monster.col] = new Tile('o');
             this.levelMap = map;
+
+            foreach (Door door in doors) {
+                levelMap[door.Row][door.Col] = new Tile(MainWindow.door);
+            }
         }
 
         public void swap(int r1, int c1, int r2, int c2)
@@ -128,6 +135,8 @@ namespace _320Hack
                     swap(playerRow, playerCol, ++playerRow, ++playerCol);
                 }
             }
+
+            // TODO did we hit the door? if so, load that map...
 
             playerCoord = new Coordinate(playerRow, playerCol);
 

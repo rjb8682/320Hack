@@ -1,6 +1,8 @@
 namespace _320Hack.Migrations
 {
     using System;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.IO;
@@ -17,10 +19,8 @@ namespace _320Hack.Migrations
 
         protected override void Seed(_320Hack.Model1 context)
         {
-            context.MyEntities.AddOrUpdate(new MyEntity { Name = "Herp" });
             AddMonsters(context);
-            AddRooms(context);
-            AddTestPlayer(context);
+            AddRoomsAndDoors(context);
             base.Seed(context);
         }
 
@@ -31,15 +31,15 @@ namespace _320Hack.Migrations
             context.Monsters.AddOrUpdate(new Monster { Id = 3, Symbol = "k", HP = 8 });
         }
 
-        private void AddRooms(_320Hack.Model1 context)
+        private void AddRoomsAndDoors(_320Hack.Model1 context)
         {
             StreamReader levelReader = new StreamReader(SourceCodePath("../../Levels/level1.map"));
-            context.Rooms.AddOrUpdate(new Room { Id = 1, map = levelReader.ReadToEnd() });
-        }
-
-        private void AddTestPlayer(_320Hack.Model1 context)
-        {
-            context.Player.AddOrUpdate(new Player{ Id = 1, name = "testPlayer", currentRoom = 1, lastRoom = 0, experience = 0, health = 100 });
+            Room level1 = new Room { Id = 1, Map = levelReader.ReadToEnd()};
+            Room level2 = new Room { Id = 2, Map = level1.Map };
+            context.Rooms.AddOrUpdate(level1);
+            context.Rooms.AddOrUpdate(level2);
+            context.Doors.AddOrUpdate(new Door { Id = 1, LivesIn = 1, ConnectsTo = 2, Row = 2, Col = 37 });
+            context.Player.AddOrUpdate(new Player { Id = 1, Name = "testPlayer", CurrentRoom = 1, LastRoom = 0, Experience = 0, Health = 100 });
         }
 
         // Gets us relative paths even though we're in a different directory.

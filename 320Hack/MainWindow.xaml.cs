@@ -44,6 +44,7 @@ namespace _320Hack
         public static Char floor = '·';
         public static Char player = '@';
         public static Char horizWall = '—';
+        public static Char door = '=';
 
         public static Boolean LookingAtHelpMenu = false;
         private HelpMenu help;
@@ -61,6 +62,8 @@ namespace _320Hack
             Application.Current.MainWindow.Top = mainTop;
 
             Player player;
+            Room currentRoom;
+            List<Door> doorsInRoom;
             String fullLevel;
 
             List<List<Char>> levelMap = new List<List<Char>>();
@@ -70,16 +73,11 @@ namespace _320Hack
 
             using (var db = new Model1())
             {
-                MyEntity newEntity = new MyEntity{ Name = "Derp" };
-
-                db.MyEntities.Add(newEntity);
-                db.SaveChanges();
-
                 var query = from b in db.Monsters
                             orderby b.Id
                             select b;
 
-                Console.WriteLine("All blogs in the database:");
+                Console.WriteLine("All monsters in the database:");
                 foreach (var item in query)
                 {
                     Console.WriteLine(item.Symbol + " with " + item.HP + " hp.");
@@ -91,11 +89,19 @@ namespace _320Hack
 
                 player = playerQuery.First<Player>();
 
-                var currentRoom = from level in db.Rooms
-                                  where level.Id == player.currentRoom
+                var currentRoomQuery = from level in db.Rooms
+                                  where level.Id == player.CurrentRoom
                                   select level;
 
-                fullLevel = currentRoom.Single<Room>().map;
+                currentRoom = currentRoomQuery.Single<Room>();
+                fullLevel = currentRoom.Map;
+
+                var doorsInRoomQuery = from d in db.Doors
+                                       where d.LivesIn == player.CurrentRoom
+                                       select d;
+
+                doorsInRoom = doorsInRoomQuery.ToList();
+         
             }
 
             foreach (Char c in fullLevel)
@@ -123,7 +129,7 @@ namespace _320Hack
             }
             levelMap.Add(currentRow);
 
-            gameLevel = new Map(convertToTiles(levelMap));
+            gameLevel = new Map(convertToTiles(levelMap), currentRoom, doorsInRoom);
             update();
 
         }
