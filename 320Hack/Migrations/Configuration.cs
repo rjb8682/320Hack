@@ -11,15 +11,20 @@ namespace _320Hack.Migrations
 
     internal sealed class Configuration : DbMigrationsConfiguration<_320Hack.Model1>
     {
+        private const String COMMENT = "//";
+        private char[] delimiters;
+
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
+            delimiters = new char[] { ' ' };
         }
 
         protected override void Seed(_320Hack.Model1 context)
         {
             AddMonsters(context);
+            AddItems(context);
             AddRoomsAndDoors(context);
             AddTestPlayer(context);
             base.Seed(context);
@@ -27,18 +32,56 @@ namespace _320Hack.Migrations
 
         private void AddMonsters(_320Hack.Model1 context)
         {
-            context.Monsters.AddOrUpdate(new Monster { Id = 1, Symbol = "o", HP = 20 });
-            context.Monsters.AddOrUpdate(new Monster { Id = 2, Symbol = "D", HP = 3 });
-            context.Monsters.AddOrUpdate(new Monster { Id = 3, Symbol = "k", HP = 8 });
+            StreamReader monsterReader = new StreamReader(SourceCodePath("../../GameData/Monsters.txt"));
+            int id = 1;
+            String line = monsterReader.ReadLine();
+            while (line != null)
+            {
+                if (!line.StartsWith(COMMENT))
+                {
+                    String[] tokens = line.Split(delimiters);
+                    context.Monsters.AddOrUpdate(new Monster
+                    {
+                        Id = id++,
+                        Symbol = tokens[0],
+                        HP = Convert.ToInt32(tokens[1])
+                    });
+                }
+                line = monsterReader.ReadLine();
+            }
+        }
+
+        private void AddItems(_320Hack.Model1 context)
+        {
+            StreamReader itemReader = new StreamReader(SourceCodePath("../../GameData/Items.txt"));
+            int id = 1;
+            String line = itemReader.ReadLine();
+            while (line != null)
+            {
+                if (!line.StartsWith(COMMENT))
+                {
+                    String[] tokens = line.Split(delimiters);
+                    /*
+                    context.Monsters.AddOrUpdate(new Monster
+                    {
+                        Id = id++,
+                        Symbol = tokens[0],
+                        HP = Convert.ToInt32(tokens[1])
+                    });
+                     */
+                }
+                line = itemReader.ReadLine();
+            }
         }
 
         private void AddRoomsAndDoors(_320Hack.Model1 context)
         {
-            StreamReader levelReader = new StreamReader(SourceCodePath("../../Levels/level1.map"));
-            Room level1 = new Room { Id = 1, Map = levelReader.ReadToEnd()};
-            Room level2 = new Room { Id = 2, Map = level1.Map };
-            context.Rooms.AddOrUpdate(level1);
-            context.Rooms.AddOrUpdate(level2);
+            context.Rooms.AddOrUpdate(new Room { 
+                    Id = 1, 
+                    Map = new StreamReader(SourceCodePath("../../GameData/Levels/level1.map")).ReadToEnd() });
+            context.Rooms.AddOrUpdate(new Room { 
+                Id = 2, 
+                Map = new StreamReader(SourceCodePath("../../GameData/Levels/level2.map")).ReadToEnd() });
             context.Doors.AddOrUpdate(new Door { Id = 1, LivesIn = 1, ConnectsTo = 2, Row = 2, Col = 37 });
         }
 
