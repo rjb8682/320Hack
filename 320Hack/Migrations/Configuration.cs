@@ -21,6 +21,7 @@ namespace _320Hack.Migrations
         {
             AddMonsters(context);
             AddRoomsAndDoors(context);
+            AddTestPlayer(context);
             base.Seed(context);
         }
 
@@ -39,6 +40,10 @@ namespace _320Hack.Migrations
             context.Rooms.AddOrUpdate(level1);
             context.Rooms.AddOrUpdate(level2);
             context.Doors.AddOrUpdate(new Door { Id = 1, LivesIn = 1, ConnectsTo = 2, Row = 2, Col = 37 });
+        }
+
+        private void AddTestPlayer(_320Hack.Model1 context)
+        {
             context.Player.AddOrUpdate(new Player { Id = 1, Name = "testPlayer", CurrentRoom = 1, LastRoom = 0, Experience = 0, Health = 100 });
         }
 
