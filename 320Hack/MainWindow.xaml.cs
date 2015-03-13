@@ -60,11 +60,34 @@ namespace _320Hack
             Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
 
-            StreamReader levelReader = new StreamReader("../../Levels/level1.map");
-            String fullLevel = levelReader.ReadToEnd();
+            String fullLevel;
 
             List<List<Char>> levelMap = new List<List<Char>>();
             List<Char> currentRow = new List<Char>();
+
+            using (var db = new Model1())
+            {
+                MyEntity newEntity = new MyEntity{ Name = "Derp" };
+
+                db.MyEntities.Add(newEntity);
+                db.SaveChanges();
+
+                var query = from b in db.Monsters
+                            orderby b.Id
+                            select b;
+
+                Console.WriteLine("All blogs in the database:");
+                foreach (var item in query)
+                {
+                    Console.WriteLine(item.Symbol + " with " + item.HP + " hp.");
+                }
+
+                var currentRoom = from level in db.Rooms
+                            where level.Id == 1
+                            select level;
+
+                fullLevel = currentRoom.Single<Room>().map;
+            }
 
             foreach (Char c in fullLevel)
             {
