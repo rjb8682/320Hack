@@ -60,10 +60,13 @@ namespace _320Hack
             Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
 
+            Player player;
             String fullLevel;
 
             List<List<Char>> levelMap = new List<List<Char>>();
             List<Char> currentRow = new List<Char>();
+
+            // TODO If no player is available, dialog for adding one (plus add to database etc.)
 
             using (var db = new Model1())
             {
@@ -82,9 +85,15 @@ namespace _320Hack
                     Console.WriteLine(item.Symbol + " with " + item.HP + " hp.");
                 }
 
+                var playerQuery = from p in db.Player
+                                  orderby p.Id descending 
+                                  select p;
+
+                player = playerQuery.First<Player>();
+
                 var currentRoom = from level in db.Rooms
-                            where level.Id == 1
-                            select level;
+                                  where level.Id == player.currentRoom
+                                  select level;
 
                 fullLevel = currentRoom.Single<Room>().map;
             }
@@ -206,7 +215,7 @@ namespace _320Hack
 
         public String processInput(String text)
         {
-            if (text[0] != '/')
+            if (text != "" && text[0] != '/')
             {
                 return "Not a command. Input /help to see a list of commands";
             }
