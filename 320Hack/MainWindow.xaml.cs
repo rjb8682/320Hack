@@ -129,7 +129,7 @@ namespace _320Hack
             }
             levelMap.Add(currentRow);
 
-            gameLevel = new Map(convertToTiles(levelMap), currentRoom, doorsInRoom);
+            gameLevel = new Map(convertToTiles(levelMap), currentRoom, doorsInRoom, player);
             update();
 
         }

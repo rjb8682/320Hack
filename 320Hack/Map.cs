@@ -8,13 +8,7 @@ namespace _320Hack
 {
     class Map
     {
-        //private int PlayerStartRow = 2;
-        //private int PlayerStartCol = 37;
-        private int PlayerStartRow = 9;
-        private int PlayerStartCol = 4;
-
-        private int playerRow;
-        private int playerCol;
+        private Player player;
         private Coordinate playerCoord;
 
         private Coordinate monster;
@@ -23,6 +17,7 @@ namespace _320Hack
 
         private List<Door> doors;
         private Room room;
+
 
         private List<List<Tile>> levelMap;
         public List<List<Tile>> LevelMap
@@ -38,14 +33,13 @@ namespace _320Hack
             }
         }
 
-        public Map(List<List<Tile>> map, Room room, List<Door> doors)
+        public Map(List<List<Tile>> map, Room room, List<Door> doors, Player player)
         {
-            playerRow = PlayerStartRow;
-            playerCol = PlayerStartCol;
-            monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
+            //monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
             //map[monster.row][monster.col] = new Tile('o');
             this.doors = doors;
             this.levelMap = map;
+            this.player = player;
 
             foreach (Door door in doors) {
                 levelMap[door.Row][door.Col] = new Tile(MainWindow.door);
@@ -73,7 +67,7 @@ namespace _320Hack
 
         private char findChar(int row, int col)
         {
-            if (row == playerRow && col == playerCol)
+            if (row == player.Row && col == player.Col)
             {
                 return MainWindow.player;
             }
@@ -100,68 +94,68 @@ namespace _320Hack
         {
             if (dir == MainWindow.UP)
             {
-                if (levelMap[playerRow - 1][playerCol].Symbol == MainWindow.floor)
+                if (levelMap[player.Row - 1][player.Col].Symbol == MainWindow.floor)
                 {
-                    playerRow--;
+                    player.Row--;
                 }
             }
             else if (dir == MainWindow.DOWN)
             {
-                if (levelMap[playerRow + 1][playerCol].Symbol == MainWindow.floor)
+                if (levelMap[player.Row + 1][player.Col].Symbol == MainWindow.floor)
                 {
-                    playerRow++;
+                    player.Row++;
                 }
             }
             else if (dir == MainWindow.LEFT)
             {
-                if (levelMap[playerRow][playerCol - 1].Symbol == MainWindow.floor)
+                if (levelMap[player.Row][player.Col - 1].Symbol == MainWindow.floor)
                 {
-                    playerCol--;
+                    player.Col--;
                 }
             }
             else if (dir == MainWindow.RIGHT)
             {
-                if (levelMap[playerRow][playerCol + 1].Symbol == MainWindow.floor)
+                if (levelMap[player.Row][player.Col + 1].Symbol == MainWindow.floor)
                 {
-                    playerCol++;
+                    player.Col++;
                 }
             }
             else if (dir == MainWindow.UP_LEFT)
             {
-                if (levelMap[playerRow - 1][playerCol - 1].Symbol == MainWindow.floor)
+                if (levelMap[player.Row - 1][player.Col - 1].Symbol == MainWindow.floor)
                 {
-                    playerCol--;
-                    playerRow--;
+                    player.Col--;
+                    player.Row--;
                 }
             }
             else if (dir == MainWindow.UP_RIGHT)
             {
-                if (levelMap[playerRow - 1][playerCol + 1].Symbol == MainWindow.floor)
+                if (levelMap[player.Row - 1][player.Col + 1].Symbol == MainWindow.floor)
                 {
-                    playerCol++;
-                    playerRow--;
+                    player.Col++;
+                    player.Row--;
                 }
             }
             else if (dir == MainWindow.DOWN_LEFT)
             {
-                if (levelMap[playerRow + 1][playerCol - 1].Symbol == MainWindow.floor)
+                if (levelMap[player.Row + 1][player.Col - 1].Symbol == MainWindow.floor)
                 {
-                    playerCol--;
-                    playerRow++;
+                    player.Col--;
+                    player.Row++;
                 }
             }
             else if (dir == MainWindow.DOWN_RIGHT)
             {
-                if (levelMap[playerRow + 1][playerCol + 1].Symbol == MainWindow.floor)
+                if (levelMap[player.Row + 1][player.Col + 1].Symbol == MainWindow.floor)
                 {
-                    playerCol++;
-                    playerRow++;
+                    player.Col++;
+                    player.Row++;
                 }
             }
 
             // TODO did we hit the door? if so, load that map...
 
-            playerCoord = new Coordinate(playerRow, playerCol);
+            playerCoord = new Coordinate(player.Row, player.Col);
 
             List<char> floorOrPlayer = new List<char>();
             floorOrPlayer.Add(MainWindow.floor);
@@ -200,21 +194,21 @@ namespace _320Hack
 
         private bool canSeeTile(int r, int c)
         {
-            if (playerRow == r && playerCol == c) return true;
-            int rowSign = playerRow - r > 0 ? -1 : 1;
-            int colSign = playerCol - c > 0 ? -1 : 1;
+            if (player.Row == r && player.Col == c) return true;
+            int rowSign = player.Row - r > 0 ? -1 : 1;
+            int colSign = player.Col - c > 0 ? -1 : 1;
 
-            double slope = Math.Abs((playerRow - r) * 1.0 / (playerCol - c));
+            double slope = Math.Abs((player.Row - r) * 1.0 / (player.Col - c));
 
 
             // If the tile in question is in the same column, iterate from playerRow to this row.
-            if (playerCol == c || Math.Abs(slope) > 2)
+            if (player.Col == c || Math.Abs(slope) > 2)
             {
-                for (int row = playerRow; row != r; row += rowSign)
+                for (int row = player.Row; row != r; row += rowSign)
                 {
                     // Off the map--return false.
-                    if (!isValidCoordinate(row, playerCol)) { return false; }
-                    Tile t = levelMap[row][playerCol];
+                    if (!isValidCoordinate(row, player.Col)) { return false; }
+                    Tile t = levelMap[row][player.Col];
 
                     // If the symbol isn't floor, monster, or player, return false.
                     if (t.Symbol != MainWindow.floor &&
@@ -226,15 +220,9 @@ namespace _320Hack
                 return true;
             }
 
-            //if (Math.Abs(slope) > 3) { 
-            //    // Attempt special logic (use fractions of cells to look for walls - 
-            //    // be convervative here, not a big deal to return false)
-            //    return false;
-            //}
+            double currentRow = Convert.ToDouble(player.Row);
 
-            double currentRow = Convert.ToDouble(playerRow);
-
-            for (int col = playerCol; col != c; col += colSign)
+            for (int col = player.Col; col != c; col += colSign)
             {
                 int newRow = Convert.ToInt32(currentRow);
 

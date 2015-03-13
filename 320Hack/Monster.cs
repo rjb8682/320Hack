@@ -29,9 +29,13 @@ namespace _320Hack
     {
         public int Id { get; set; }
 
-        public virtual int CurrentRoom { get; set; }
+        public int CurrentRoom { get; set; }
 
-        public virtual int LastRoom { get; set; }
+        public int LastRoom { get; set; }
+
+        public int Row { get; set; }
+
+        public int Col { get; set; }
 
         public int Experience { get; set; }
 
@@ -48,8 +52,8 @@ namespace _320Hack
 
         public int Col { get; set; }
 
-        public virtual int LivesIn { get; set; }
+        public int LivesIn { get; set; }
 
-        public virtual int ConnectsTo { get; set; }
+        public int ConnectsTo { get; set; }
     }
 }
