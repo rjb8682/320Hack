@@ -20,27 +20,11 @@ namespace _320Hack
         private List<Door> doors;
         private Room room;
 
-
-        private List<List<Tile>> levelMap;
-        public List<List<Tile>> LevelMap
-        {
-            get
-            {
-                return this.levelMap;
-            }
-
-            set
-            {
-                this.levelMap = value;
-            }
-        }
-
-        public Map(List<List<Tile>> map, Room room, List<Door> doors, Player player)
+        public Map(Room room, List<Door> doors, Player player)
         {
             //monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
             //map[monster.row][monster.col] = new Tile('o');
             this.doors = doors;
-            this.levelMap = map;
             this.player = player;
             this.room = room;
 
@@ -53,10 +37,10 @@ namespace _320Hack
 
             updateSeen();
 
-            int maxRows = levelMap.Count;
+            int maxRows = room.LevelTiles.Count;
             for (int row = 0; row < maxRows; row++ )
             {
-                int maxCols = levelMap[row].Count;
+                int maxCols = room.LevelTiles[row].Count;
                 for (int col = 0; col < maxCols; col++)
                 {
                     resultLevel += findChar(row, col);
@@ -73,7 +57,7 @@ namespace _320Hack
                 return MainWindow.player;
             }
 
-            Tile current = levelMap[row][col];
+            Tile current = room.LevelTiles[row][col];
 
             if (!current.Seen)
             {
@@ -93,7 +77,7 @@ namespace _320Hack
 
         public void movePlayer(int dRow, int dCol)
         {
-            if (walkTiles.Contains(levelMap[player.Row + dRow][player.Col + dCol].Symbol))
+            if (walkTiles.Contains(room.LevelTiles[player.Row + dRow][player.Col + dCol].Symbol))
             {
                 player.Row += dRow;
                 player.Col += dCol;
@@ -113,7 +97,7 @@ namespace _320Hack
                                       where d.LivesIn == door.ConnectsTo
                                       select d).ToList();
 
-                        this.levelMap = MainWindow.convertToTiles(MainWindow.buildLevelMap(room.Map), room);
+                        room.setupMap();
 
                         foreach (Door newDoor in doors)
                         {
@@ -169,19 +153,18 @@ namespace _320Hack
         public void updateSeen()
         {
             // Update the tiles in levelMap to be seen if the player is near them
-            int numRows = levelMap.Count;
+            int numRows = room.LevelTiles.Count;
 
             for (int i = 0; i < numRows; i++)
             {
-                int numColsForThisRow = levelMap[i].Count;
+                int numColsForThisRow = room.LevelTiles[i].Count;
                 for (int j = 0; j < numColsForThisRow; j++)
                 {
-                    //levelMap[i][j].Seen = false;
-                    if (!levelMap[i][j].Seen) levelMap[i][j].Seen = canSeeTile(i, j);
+                    if (!room.LevelTiles[i][j].Seen) room.LevelTiles[i][j].Seen = canSeeTile(i, j);
                 }
             }
 
-            room.UpdateSeenValues(levelMap);
+            room.UpdateSeenValues(room.LevelTiles);
         }
 
         private bool canSeeTile(int r, int c)
@@ -192,7 +175,6 @@ namespace _320Hack
 
             double slope = Math.Abs((player.Row - r) * 1.0 / (player.Col - c));
 
-
             // If the tile in question is in the same column, iterate from playerRow to this row.
             if (player.Col == c || Math.Abs(slope) > 2)
             {
@@ -200,7 +182,7 @@ namespace _320Hack
                 {
                     // Off the map--return false.
                     if (!isValidCoordinate(row, player.Col)) { return false; }
-                    Tile t = levelMap[row][player.Col];
+                    Tile t = room.LevelTiles[row][player.Col];
 
                     // If the symbol isn't floor, monster, or player, return false.
                     if (t.Symbol != MainWindow.floor &&
@@ -222,7 +204,7 @@ namespace _320Hack
                 if (!isValidCoordinate(newRow, col)) { return false; }
 
                 // If the symbol isn't floor, monster, or player, return false.
-                Tile t = levelMap[newRow][col];
+                Tile t = room.LevelTiles[newRow][col];
                 if (t.Symbol != MainWindow.floor && 
                     t.Symbol != 'o' && 
                     t.Symbol != MainWindow.player) {
@@ -246,6 +228,7 @@ namespace _320Hack
         /**
          * Returns all tiles neighboring row and col. Only counts 'floor' or the player as reachable.
          * Result if of form (int[] {row, col}).
+         * TODO loop around the 9 square block so we don't have these ifs?
          */
         public List<Coordinate> neighborCoordinates(int r, int c, List<char> validTypes)
         {
@@ -297,7 +280,7 @@ namespace _320Hack
          */
         public Boolean isValidCoordinate(int r, int c)
         {
-            return r > 0 && r < levelMap.Count && c > 0 && c < levelMap[r].Count;
+            return r > 0 && r < room.LevelTiles.Count && c > 0 && c < room.LevelTiles[r].Count;
         }
 
         /**
@@ -305,7 +288,7 @@ namespace _320Hack
          */
         private Boolean isSpaceType(int r, int c, List<Char> validTypes)
         {
-            return isValidCoordinate(r, c) && validTypes.Contains(levelMap[r][c].Symbol);
+            return isValidCoordinate(r, c) && validTypes.Contains(room.LevelTiles[r][c].Symbol);
         }
 
         /**

@@ -49,7 +49,13 @@ namespace _320Hack
             }
         }
 
-        public void buildLevelChars()
+        public void setupMap()
+        {
+            buildLevelChars();
+            buildLevelTiles();
+        }
+
+        private void buildLevelChars()
         {
             LevelChars = new List<List<Char>>();
             List<Char> currentRow = new List<Char>();
@@ -69,7 +75,7 @@ namespace _320Hack
             LevelChars.Add(currentRow);
         }
 
-        public void buildLevelTiles()
+        private void buildLevelTiles()
         {
             int i = 0;
             LevelTiles = new List<List<Tile>>();

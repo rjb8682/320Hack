@@ -89,58 +89,15 @@ namespace _320Hack
                                where d.LivesIn == player.CurrentRoom
                                select d).ToList();         
             }
+            currentRoom.setupMap();
 
-            levelMap = buildLevelMap(fullLevel);
-
-            gameLevel = new Map(convertToTiles(levelMap, currentRoom), currentRoom, doorsInRoom, player);
+            gameLevel = new Map(currentRoom, doorsInRoom, player);
             update();
-        }
-
-        public static List<List<Char>> buildLevelMap(String fullLevel)
-        {
-            List<List<Char>> levelMap = new List<List<Char>>();
-            List<Char> currentRow = new List<Char>();
-
-            foreach (Char c in fullLevel)
-            {
-                if (c == '\n')
-                {
-                    levelMap.Add(currentRow);
-                    currentRow = new List<Char>();
-                }
-                else
-                {
-                    currentRow.Add(c);
-                }
-            }
-            levelMap.Add(currentRow);
-
-            return levelMap;
         }
 
         public void update()
         {
             gameArea.Text = gameLevel.printMap();
-        }
-
-        public static List<List<Tile>> convertToTiles(List<List<Char>> map, Room room)
-        {
-            int i = 0;
-            List<List<Tile>> toReturn = new List<List<Tile>>();
-
-            foreach (List<Char> list in map)
-            {
-                List<Tile> currentRow = new List<Tile>();
-                foreach (Char c in list)
-                {
-                    Tile t = new Tile(c);
-                    t.Seen = room.IsTileSeen(i++);
-                    currentRow.Add(t);
-                }
-                toReturn.Add(currentRow);
-            }
-
-            return toReturn;
         }
 
         private void keyPressed(object sender, KeyEventArgs e)
