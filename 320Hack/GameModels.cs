@@ -8,17 +8,6 @@ using System.Threading.Tasks;
 
 namespace _320Hack
 {
-    public class Monster
-    {
-        public int Id { get; set; }
-
-        [Required]
-        public String Symbol { get; set; }
-
-        public int HP { get; set; }
-
-    }
-
     public class Player
     {
         public int Id { get; set; }

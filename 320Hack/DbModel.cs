@@ -19,6 +19,8 @@ namespace _320Hack
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
 
         public virtual DbSet<Monster> Monsters { get; set; }
+        public virtual DbSet<MonsterInstance> MonsterInstances { get; set; }
+        public virtual DbSet<MonsterHistory> MonsterHistory { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<Player> Player { get; set; }
         public virtual DbSet<Door> Doors { get; set; }

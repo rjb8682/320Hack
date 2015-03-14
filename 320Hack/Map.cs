@@ -9,37 +9,41 @@ namespace _320Hack
     class Map
     {
         private Player player;
-        private Coordinate playerCoord;
-
-        private Coordinate monster;
-
-        private List<char> floorTiles;
 
         private char[] walkTiles;
 
         private List<Door> doors;
+        private List<MonsterInstance> monsters;
         private Room room;
 
         public Map(Player p)
         {
-            //monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
-            //map[monster.row][monster.col] = new Tile('o');
             player = p;
+            setupState(p.CurrentRoom);
+            this.walkTiles = new char[] { MainWindow.floor, MainWindow.door };
+        }
 
+        // Sets up the game state in the given room.
+        public void setupState(int roomId)
+        {
             using (var db = new DbModel())
             {
-                room = (from level in db.Rooms
-                        where level.Id == player.CurrentRoom
-                        select level).Single();
+                player.CurrentRoom = roomId;
 
-                room.setupMap();
+                room = (from r in db.Rooms
+                        where r.Id == player.CurrentRoom
+                        select r).Single();
 
                 doors = (from d in db.Doors
                          where d.LivesIn == player.CurrentRoom
                          select d).ToList();
+
+                monsters = (from m in db.MonsterInstances
+                            where m.RoomId == player.CurrentRoom
+                            select m).ToList();
             }
-            
-            this.walkTiles = new char[] { MainWindow.floor, MainWindow.door };
+
+            room.setupMap();
         }
 
         public String printMap()
@@ -61,6 +65,7 @@ namespace _320Hack
             return resultLevel;
         }
 
+        // Returns the appropriate character to be printed at row, col.
         private char findChar(int row, int col)
         {
             if (row == player.Row && col == player.Col)
@@ -69,23 +74,27 @@ namespace _320Hack
             }
 
             Tile current = room.LevelTiles[row][col];
-
             if (!current.Seen)
             {
                 return ' ';
             }
 
-            foreach (Door d in doors)
+            Door door = doors.Find(d => d.Row == row && d.Col == col);
+            if (door != null)
             {
-                if (row == d.Row && col == d.Col)
-                {
-                    return MainWindow.door;
-                }
+                return MainWindow.door;
+            }
+
+            MonsterInstance monster = monsters.Find(m => m.Row == row && m.Col == col);
+            if (monster != null)
+            {
+                return Convert.ToChar(monster.Symbol);
             }
 
             return current.Symbol;
         }
 
+        // Given a row delta and col delta, moves the player if the new tile is valid.
         public void movePlayer(int dRow, int dCol)
         {
             if (walkTiles.Contains(room.LevelTiles[player.Row + dRow][player.Col + dCol].Symbol))
@@ -103,6 +112,7 @@ namespace _320Hack
             save();
         }
 
+        // Saves all game state.
         public void save()
         {
             using (var db = new DbModel())
@@ -112,6 +122,12 @@ namespace _320Hack
 
                 db.Rooms.Attach(room);
                 db.Entry(room).State = System.Data.Entity.EntityState.Modified;
+
+                foreach (MonsterInstance monster in monsters)
+                {
+                    db.MonsterInstances.Attach(monster);
+                    db.Entry(monster).State = System.Data.Entity.EntityState.Modified;
+                }
 
                 db.SaveChanges();
             }
@@ -138,27 +154,15 @@ namespace _320Hack
         // Reloads the map given the door the player stood on.
         public void reloadMap(Door door)
         {
-            using (var db = new DbModel())
-            {
-                room = (from r in db.Rooms
-                                where r.Id == door.ConnectsTo
-                                select r).Single();
+            setupState(door.ConnectsTo);
+            Door newDoor = doors.Find(d => d.ConnectsTo == door.LivesIn);
+            if (newDoor == null) { throw new Exception("No corresponding door in the new room! newRoom=" + room.Id); }
 
-                doors = (from d in db.Doors
-                         where d.LivesIn == door.ConnectsTo
-                         select d).ToList();
-
-                room.setupMap();
-
-                Door newDoor = doors.Find(d => d.ConnectsTo == player.CurrentRoom);
-                if (newDoor == null) { throw new Exception("No corresponding door in the new room! newRoom=" + room.Id); }
-
-                player.Row = newDoor.Row;
-                player.Col = newDoor.Col;
-                player.CurrentRoom = door.ConnectsTo;
-            }
+            player.Row = newDoor.Row;
+            player.Col = newDoor.Col;
         }
 
+        // Updates which tiles the player has seen is this room.
         public void updateSeen()
         {
             // Update the tiles in levelMap to be seen if the player is near them
@@ -176,6 +180,7 @@ namespace _320Hack
             room.UpdateSeenValues(room.LevelTiles);
         }
 
+        // Returns true if the player is able to see the title at r, c.
         private bool canSeeTile(int r, int c)
         {
             if (player.Row == r && player.Col == c) return true;
@@ -227,7 +232,7 @@ namespace _320Hack
         }
 
         /**
-         * Returns all tiles neighboring start. Only counts 'floor' as reachable.
+         * Returns all tiles neighboring start that are contained in validSpaces.
          */
         public List<Coordinate> neighborCoordinates(Coordinate start, List<char> validSpaces)
         {

@@ -49,6 +49,17 @@ namespace _320Hack.Migrations
                 }
                 line = monsterReader.ReadLine();
             }
+
+            context.MonsterInstances.AddOrUpdate(new MonsterInstance
+            {
+                Id = 1,
+                MonsterId = 1,
+                CurrentHP = 20,
+                RoomId = 1,
+                Row = 9,
+                Col = 7,
+                Symbol = "o"
+            });
         }
 
         private void AddItems(_320Hack.DbModel context)

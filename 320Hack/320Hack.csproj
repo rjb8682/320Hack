@@ -98,6 +98,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Monster.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="GameModels.cs" />
