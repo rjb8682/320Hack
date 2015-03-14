@@ -103,8 +103,13 @@ namespace _320Hack
                 player.Col += dCol;
             }
 
+            foreach (MonsterInstance monster in monsters)
+            {
+                monster.move(room, player.Row, player.Col, walkTiles);
+            }
+
             Door door = doors.Find(d => d.Row == player.Row && d.Col == player.Col);
-            if (door != null) 
+            if (door != null)
             {
                 reloadMap(door);
             }
@@ -232,128 +237,11 @@ namespace _320Hack
         }
 
         /**
-         * Returns all tiles neighboring start that are contained in validSpaces.
-         */
-        public List<Coordinate> neighborCoordinates(Coordinate start, List<char> validSpaces)
-        {
-            return neighborCoordinates(start.row, start.col, validSpaces);
-        }
-
-        /**
-         * Returns all tiles neighboring row and col. Only counts 'floor' or the player as reachable.
-         * Result if of form (int[] {row, col}).
-         * TODO loop around the 9 square block so we don't have these ifs?
-         */
-        public List<Coordinate> neighborCoordinates(int r, int c, List<char> validTypes)
-        {
-            List<Coordinate> result = new List<Coordinate>();
-
-            if (isSpaceType(r, c + 1, validTypes))
-            {
-                result.Add(new Coordinate(r, c + 1));
-            }
-            if (isSpaceType(r, c - 1, validTypes))
-            {
-                result.Add(new Coordinate(r, c - 1));
-            }
-            if (isSpaceType(r + 1, c, validTypes))
-            {
-                result.Add(new Coordinate(r + 1, c));
-            }
-            if (isSpaceType(r - 1, c, validTypes))
-            {
-                result.Add(new Coordinate(r - 1, c));
-            }
-
-            // Difficulty toggle for the future
-            if (true)
-            {
-                if (isSpaceType(r + 1, c + 1, validTypes))
-                {
-                    result.Add(new Coordinate(r + 1, c + 1));
-                }
-                if (isSpaceType(r + 1, c - 1, validTypes))
-                {
-                    result.Add(new Coordinate(r + 1, c - 1));
-                }
-                if (isSpaceType(r - 1, c + 1, validTypes))
-                {
-                    result.Add(new Coordinate(r - 1, c + 1));
-                }
-                if (isSpaceType(r - 1, c - 1, validTypes))
-                {
-                    result.Add(new Coordinate(r - 1, c - 1));
-                }
-            }
-
-            return result;
-        }
-
-        /**
          * Returns true iff the coordinate is valid on this map.
          */
         public Boolean isValidCoordinate(int r, int c)
         {
             return r > 0 && r < room.LevelTiles.Count && c > 0 && c < room.LevelTiles[r].Count;
-        }
-
-        /**
-         * Returns true iff the given space is in the list of given types (checks validity first).
-         */
-        private Boolean isSpaceType(int r, int c, List<Char> validTypes)
-        {
-            return isValidCoordinate(r, c) && validTypes.Contains(room.LevelTiles[r][c].Symbol);
-        }
-
-        /**
-         * Performs a BFS from the start to any coordinate in finish.
-         * Returns the next tile to move to on the shortest path,
-         * or start if finish is not reachable.
-         * validSpaces is a list of chars that should be considered neighbors.
-         * (e.g. for AI pathfinding, that should be ['.', '@'].
-         */
-        public Coordinate shortestPathTo(Coordinate start, Coordinate finish, List<char> validSpaces)
-        {
-            if (finish.Equals(start))
-            {
-                return start;
-            }
-
-            Queue<Coordinate> toVisit = new Queue<Coordinate>();
-            toVisit.Enqueue(start);
-            HashSet<Coordinate> marked = new HashSet<Coordinate>();
-            Dictionary<Coordinate, Coordinate> edgeTo = new Dictionary<Coordinate, Coordinate>();
-
-            while (toVisit.Count > 0)
-            {
-                Coordinate v = toVisit.Dequeue();
-
-                foreach (Coordinate n in neighborCoordinates(v, validSpaces))
-                {
-                    if (!marked.Contains(n))
-                    {
-                        marked.Add(n);
-                        edgeTo.Add(n, v);
-                        toVisit.Enqueue(n);
-
-                        if (finish.Equals(n))
-                        {
-                            // Since we've found the result, backtrack through the edges
-                            // until we find the node just before the start.
-                            Coordinate cur = n;
-                            while (!edgeTo[cur].Equals(start))
-                            {
-                                cur = edgeTo[cur];
-                            }
-
-                            return cur;
-                        }
-                    }
-                }
-            }
-
-            // No path was found.
-            return start;
         }
     }
 /* TODO make monsters a collection etc.
