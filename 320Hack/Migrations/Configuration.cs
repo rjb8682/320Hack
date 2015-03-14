@@ -87,6 +87,7 @@ namespace _320Hack.Migrations
                 Map = level2,
                 Seen = new byte[level2.Length] });
             context.Doors.AddOrUpdate(new Door { Id = 1, LivesIn = 1, ConnectsTo = 2, Row = 2, Col = 37 });
+            context.Doors.AddOrUpdate(new Door { Id = 1, LivesIn = 2, ConnectsTo = 1, Row = 5, Col = 2 });
         }
 
         private void AddTestPlayer(_320Hack.DbModel context)

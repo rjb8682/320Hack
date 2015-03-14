@@ -66,8 +66,7 @@ namespace _320Hack
             List<Door> doorsInRoom;
             String fullLevel;
 
-            List<List<Char>> levelMap = new List<List<Char>>();
-            List<Char> currentRow = new List<Char>();
+            List<List<Char>> levelMap;
 
             // TODO If no player is available, dialog for adding one (plus add to database etc.)
 
@@ -96,13 +95,21 @@ namespace _320Hack
                 currentRoom = currentRoomQuery.Single<Room>();
                 fullLevel = currentRoom.Map;
 
-                var doorsInRoomQuery = from d in db.Doors
-                                       where d.LivesIn == player.CurrentRoom
-                                       select d;
-
-                doorsInRoom = doorsInRoomQuery.ToList();
-         
+                doorsInRoom = (from d in db.Doors
+                               where d.LivesIn == player.CurrentRoom
+                               select d).ToList();         
             }
+
+            levelMap = buildLevelMap(fullLevel);
+
+            gameLevel = new Map(convertToTiles(levelMap, currentRoom), currentRoom, doorsInRoom, player);
+            update();
+        }
+
+        public static List<List<Char>> buildLevelMap(String fullLevel)
+        {
+            List<List<Char>> levelMap = new List<List<Char>>();
+            List<Char> currentRow = new List<Char>();
 
             foreach (Char c in fullLevel)
             {
@@ -129,9 +136,7 @@ namespace _320Hack
             }
             levelMap.Add(currentRow);
 
-            gameLevel = new Map(convertToTiles(levelMap, currentRoom), currentRoom, doorsInRoom, player);
-            update();
-
+            return levelMap;
         }
 
         public void update()
@@ -139,7 +144,7 @@ namespace _320Hack
             gameArea.Text = gameLevel.printMap();
         }
 
-        public List<List<Tile>> convertToTiles(List<List<Char>> map, Room room)
+        public static List<List<Tile>> convertToTiles(List<List<Char>> map, Room room)
         {
             int i = 0;
             List<List<Tile>> toReturn = new List<List<Tile>>();

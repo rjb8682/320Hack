@@ -15,6 +15,8 @@ namespace _320Hack
 
         private List<char> floorTiles;
 
+        private char[] walkTiles;
+
         private List<Door> doors;
         private Room room;
 
@@ -42,9 +44,7 @@ namespace _320Hack
             this.player = player;
             this.room = room;
 
-            foreach (Door door in doors) {
-                levelMap[door.Row][door.Col] = new Tile(MainWindow.door);
-            }
+            this.walkTiles = new char[] { MainWindow.floor, MainWindow.door };
         }
 
         public String printMap()
@@ -102,14 +102,14 @@ namespace _320Hack
             }
             else if (dir == MainWindow.DOWN)
             {
-                if (levelMap[player.Row + 1][player.Col].Symbol == MainWindow.floor)
+                if (walkTiles.Contains(levelMap[player.Row + 1][player.Col].Symbol))
                 {
                     player.Row++;
                 }
             }
             else if (dir == MainWindow.LEFT)
             {
-                if (levelMap[player.Row][player.Col - 1].Symbol == MainWindow.floor)
+                if (walkTiles.Contains(levelMap[player.Row][player.Col - 1].Symbol))
                 {
                     player.Col--;
                 }
@@ -151,6 +151,38 @@ namespace _320Hack
                 {
                     player.Col++;
                     player.Row++;
+                }
+            }
+
+            foreach (Door door in doors)
+            {
+                if (player.Row == door.Row && player.Col == door.Col)
+                {
+                    using (var db = new DbModel())
+                    {
+                        this.room = (from r in db.Rooms
+                                     where r.Id == door.ConnectsTo
+                                     select r).Single();
+
+                        this.doors = (from d in db.Doors
+                                      where d.LivesIn == door.ConnectsTo
+                                      select d).ToList();
+
+                        this.levelMap = MainWindow.convertToTiles(MainWindow.buildLevelMap(room.Map), room);
+
+                        foreach (Door newDoor in doors)
+                        {
+                            if (newDoor.ConnectsTo == player.CurrentRoom)
+                            {
+                                player.Row = newDoor.Row;
+                                player.Col = newDoor.Col;
+                                break;
+                            }
+                        }
+
+                        this.player.CurrentRoom = door.ConnectsTo;
+                        break;
+                    }
                 }
             }
 
