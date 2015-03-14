@@ -28,6 +28,20 @@ namespace _320Hack
         {
             return Health <= 0;
         }
+
+        public void attack(MonsterInstance monster)
+        {
+            // TODO function of level + armor + chance
+            // return some string "glancing blow" "beheaded you" etc
+            int damage = monster.getAttackPower();
+            Health -= damage;
+            Console.WriteLine("The " + monster.Symbol + " dealt " + damage + "to you!");
+        }
+
+        public int getAttackPower()
+        {
+            return (int) (Experience * 1.25) + 5;
+        }
     }
 
     public class Door

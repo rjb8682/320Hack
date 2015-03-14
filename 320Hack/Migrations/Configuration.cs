@@ -58,7 +58,8 @@ namespace _320Hack.Migrations
                 RoomId = 1,
                 Row = 9,
                 Col = 7,
-                Symbol = "o"
+                Symbol = "o",
+                Power = 5
             });
         }
 
@@ -112,8 +113,8 @@ namespace _320Hack.Migrations
                 Id = MainWindow.TEST_PLAYER_ID, 
                 Name = "testPlayer", 
                 CurrentRoom = 1, 
-                Row = 9,
-                Col = 4,
+                Row = 4,
+                Col = 48,
                 Experience = 0, 
                 Health = 100 });
         }

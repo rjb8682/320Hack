@@ -32,6 +32,7 @@ namespace _320Hack
         public static double MAINWIDTH = 1050;
 
         public const int TEST_PLAYER_ID = 1;
+        public const int INVALID_POSITION = -1;
 
         public static Char floor = '·';
         public static Char player = '@';

@@ -42,7 +42,59 @@ namespace _320Hack
 
         public int Col { get; set; }
 
+        public int Power { get; set; }
+
         public String Symbol { get; set; }
+
+        public int getAttackPower()
+        {
+            return Power;
+        }
+
+        public void attack(Player player)
+        {
+            int damage = player.getAttackPower();
+            CurrentHP -= damage;
+            Console.WriteLine("You dealt " + damage + " damage to the " + Symbol + "!");
+
+            if (isDead())
+            {
+                Row = MainWindow.INVALID_POSITION;
+                Col = MainWindow.INVALID_POSITION;
+
+                // Add this monster to the monster history table.
+                using (var db = new DbModel())
+                {
+                    MonsterHistory monsterHistory = (from m in db.MonsterHistory
+                                                     where m.MonsterId == this.MonsterId
+                                                     select m).SingleOrDefault();
+
+                    if (monsterHistory != null)
+                    {
+                        monsterHistory.Count++;
+                        db.MonsterHistory.Attach(monsterHistory);
+                        db.Entry(monsterHistory).State = System.Data.Entity.EntityState.Modified;
+                    }
+                    else
+                    {
+                        monsterHistory = new MonsterHistory { PlayerId = player.Id, MonsterId = this.MonsterId, Count = 1 };
+                        db.MonsterHistory.Attach(monsterHistory);
+                        db.Entry(monsterHistory).State = System.Data.Entity.EntityState.Added;
+                    }
+
+                    // Save the state of this monster instance.
+                    db.MonsterInstances.Attach(this);
+                    db.Entry(this).State = System.Data.Entity.EntityState.Modified;
+
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        public bool isDead()
+        {
+            return CurrentHP <= 0;
+        }
 
         public void move(Room room, int r, int c, char[] validSpaces)
         {
