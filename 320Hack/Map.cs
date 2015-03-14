@@ -102,6 +102,8 @@ namespace _320Hack
             {
                 reloadMap(door);
             }
+
+            save();
         }
 
         public void save()
@@ -113,6 +115,22 @@ namespace _320Hack
 
                 db.Rooms.Attach(room);
                 db.Entry(room).State = System.Data.Entity.EntityState.Modified;
+
+                db.SaveChanges();
+            }
+        }
+
+        public void reset()
+        {
+            using (var db = new DbModel())
+            {
+                List<Room> allRooms = (from r in db.Rooms select r).ToList();
+                foreach (Room r in allRooms)
+                {
+                    r.reset();
+                    db.Rooms.Attach(r);
+                    db.Entry(r).State = System.Data.Entity.EntityState.Modified;
+                }
 
                 db.SaveChanges();
             }
@@ -135,9 +153,9 @@ namespace _320Hack
 
                 Door newDoor = doors.Find(d => d.ConnectsTo == player.CurrentRoom);
                 if (newDoor == null) { throw new Exception("No corresponding door in the new room! newRoom=" + room.Id); }
+
                 player.Row = newDoor.Row;
                 player.Col = newDoor.Col;
-
                 player.CurrentRoom = door.ConnectsTo;
             }
         }

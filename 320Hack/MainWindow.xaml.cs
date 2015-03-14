@@ -162,5 +162,10 @@ namespace _320Hack
             return result;
         }
 
+        private void isClosed(object sender, EventArgs e)
+        {
+            //gameLevel.reset();
+        }
+
     }
 }

@@ -101,7 +101,6 @@ namespace _320Hack.Migrations
                 Id = 1, 
                 Name = "testPlayer", 
                 CurrentRoom = 1, 
-                LastRoom = 0,
                 Row = 9,
                 Col = 4,
                 Experience = 0, 
