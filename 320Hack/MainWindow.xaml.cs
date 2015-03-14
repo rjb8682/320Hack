@@ -51,13 +51,6 @@ namespace _320Hack
             Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
 
-            Player player;
-            Room currentRoom;
-            List<Door> doorsInRoom;
-            String fullLevel;
-
-            List<List<Char>> levelMap;
-
             // TODO If no player is available, dialog for adding one (plus add to database etc.)
 
             gameLevel = new Map();
