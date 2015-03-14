@@ -93,7 +93,7 @@ namespace _320Hack
 
         public void movePlayer(int dRow, int dCol)
         {
-            if (levelMap[player.Row + dRow][player.Col + dCol].Symbol == MainWindow.floor)
+            if (walkTiles.Contains(levelMap[player.Row + dRow][player.Col + dCol].Symbol))
             {
                 player.Row += dRow;
                 player.Col += dCol;

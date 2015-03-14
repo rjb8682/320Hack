@@ -110,18 +110,7 @@ namespace _320Hack
                 }
                 else
                 {
-                    if (c == '.')
-                    {
-                        currentRow.Add(floor);
-                    }
-                    else if (c == '-')
-                    {
-                        currentRow.Add(horizWall);
-                    }
-                    else
-                    {
-                        currentRow.Add(c);
-                    }
+                    currentRow.Add(c);
                 }
             }
             levelMap.Add(currentRow);

@@ -74,10 +74,15 @@ namespace _320Hack.Migrations
             }
         }
 
+        private String fixCharacters(String map)
+        {
+            return map.Replace('.', MainWindow.floor).Replace('-', MainWindow.horizWall);
+        }
+
         private void AddRoomsAndDoors(_320Hack.DbModel context)
         {
-            String level1 = new StreamReader(SourceCodePath("../../GameData/Levels/level1.map")).ReadToEnd();
-            String level2 = new StreamReader(SourceCodePath("../../GameData/Levels/level2.map")).ReadToEnd();
+            String level1 = fixCharacters(new StreamReader(SourceCodePath("../../GameData/Levels/level1.map")).ReadToEnd());
+            String level2 = fixCharacters(new StreamReader(SourceCodePath("../../GameData/Levels/level2.map")).ReadToEnd());
             context.Rooms.AddOrUpdate(new Room { 
                 Id = 1, 
                 Map = level1,
