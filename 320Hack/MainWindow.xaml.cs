@@ -60,38 +60,7 @@ namespace _320Hack
 
             // TODO If no player is available, dialog for adding one (plus add to database etc.)
 
-            using (var db = new DbModel())
-            {
-                var query = from b in db.Monsters
-                            orderby b.Id
-                            select b;
-
-                Console.WriteLine("All monsters in the database:");
-                foreach (var item in query)
-                {
-                    Console.WriteLine(item.Symbol + " with " + item.HP + " hp.");
-                }
-
-                var playerQuery = from p in db.Player
-                                  orderby p.Id descending 
-                                  select p;
-
-                player = playerQuery.First<Player>();
-
-                var currentRoomQuery = from level in db.Rooms
-                                  where level.Id == player.CurrentRoom
-                                  select level;
-
-                currentRoom = currentRoomQuery.Single<Room>();
-                fullLevel = currentRoom.Map;
-
-                doorsInRoom = (from d in db.Doors
-                               where d.LivesIn == player.CurrentRoom
-                               select d).ToList();         
-            }
-            currentRoom.setupMap();
-
-            gameLevel = new Map(currentRoom, doorsInRoom, player);
+            gameLevel = new Map();
             update();
         }
 

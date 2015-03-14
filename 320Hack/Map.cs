@@ -20,14 +20,28 @@ namespace _320Hack
         private List<Door> doors;
         private Room room;
 
-        public Map(Room room, List<Door> doors, Player player)
+        public Map()
         {
             //monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
             //map[monster.row][monster.col] = new Tile('o');
-            this.doors = doors;
-            this.player = player;
-            this.room = room;
 
+            using (var db = new DbModel())
+            {
+                player = (from p in db.Player
+                          orderby p.Id descending
+                          select p).First();
+
+                room = (from level in db.Rooms
+                        where level.Id == player.CurrentRoom
+                        select level).Single();
+
+                room.setupMap();
+
+                doors = (from d in db.Doors
+                         where d.LivesIn == player.CurrentRoom
+                         select d).ToList();
+            }
+            
             this.walkTiles = new char[] { MainWindow.floor, MainWindow.door };
         }
 
@@ -83,38 +97,15 @@ namespace _320Hack
                 player.Col += dCol;
             }
 
-            foreach (Door door in doors)
+            Door door = doors.Find(d => d.Row == player.Row && d.Col == player.Col);
+            if (door != null) 
             {
-                if (player.Row == door.Row && player.Col == door.Col)
-                {
-                    using (var db = new DbModel())
-                    {
-                        this.room = (from r in db.Rooms
-                                     where r.Id == door.ConnectsTo
-                                     select r).Single();
-
-                        this.doors = (from d in db.Doors
-                                      where d.LivesIn == door.ConnectsTo
-                                      select d).ToList();
-
-                        room.setupMap();
-
-                        foreach (Door newDoor in doors)
-                        {
-                            if (newDoor.ConnectsTo == player.CurrentRoom)
-                            {
-                                player.Row = newDoor.Row;
-                                player.Col = newDoor.Col;
-                                break;
-                            }
-                        }
-
-                        this.player.CurrentRoom = door.ConnectsTo;
-                        break;
-                    }
-                }
+                reloadMap(door);
             }
+        }
 
+        public void save()
+        {
             using (var db = new DbModel())
             {
                 db.Player.Attach(player);
@@ -125,29 +116,30 @@ namespace _320Hack
 
                 db.SaveChanges();
             }
-            // TODO did we hit the door? if so, load that map...
+        }
 
-            /* TODO make monsters a collection etc.
-            playerCoord = new Coordinate(player.Row, player.Col);
+        // Reloads the map given the door the player stood on.
+        public void reloadMap(Door door)
+        {
+            using (var db = new DbModel())
+            {
+                room = (from r in db.Rooms
+                                where r.Id == door.ConnectsTo
+                                select r).Single();
 
-            List<char> floorOrPlayer = new List<char>();
-            floorOrPlayer.Add(MainWindow.floor);
-            floorOrPlayer.Add(MainWindow.player);
-            Coordinate monsterNext = shortestPathTo(monster, playerCoord, floorOrPlayer);
-            if (monsterNext == playerCoord)
-            {
-                // Here is where the monster would attack the player (since it's adjacent to it)
+                doors = (from d in db.Doors
+                         where d.LivesIn == door.ConnectsTo
+                         select d).ToList();
+
+                room.setupMap();
+
+                Door newDoor = doors.Find(d => d.ConnectsTo == player.CurrentRoom);
+                if (newDoor == null) { throw new Exception("No corresponding door in the new room! newRoom=" + room.Id); }
+                player.Row = newDoor.Row;
+                player.Col = newDoor.Col;
+
+                player.CurrentRoom = door.ConnectsTo;
             }
-            else
-            {
-                // TODO clean up ugly code like this (make a swap / move method?)
-                Tile monsterNew = levelMap[monsterNext.row][monsterNext.col];
-                Tile monsterTile = levelMap[monster.row][monster.col];
-                levelMap[monster.row][monster.col] = monsterNew;
-                levelMap[monsterNext.row][monsterNext.col] = monsterTile;
-                monster = monsterNext;
-            }
-             */
         }
 
         public void updateSeen()
@@ -342,4 +334,25 @@ namespace _320Hack
             return start;
         }
     }
+/* TODO make monsters a collection etc.
+playerCoord = new Coordinate(player.Row, player.Col);
+
+List<char> floorOrPlayer = new List<char>();
+floorOrPlayer.Add(MainWindow.floor);
+floorOrPlayer.Add(MainWindow.player);
+Coordinate monsterNext = shortestPathTo(monster, playerCoord, floorOrPlayer);
+if (monsterNext == playerCoord)
+{
+    // Here is where the monster would attack the player (since it's adjacent to it)
+}
+else
+{
+    // TODO clean up ugly code like this (make a swap / move method?)
+    Tile monsterNew = levelMap[monsterNext.row][monsterNext.col];
+    Tile monsterTile = levelMap[monster.row][monster.col];
+    levelMap[monster.row][monster.col] = monsterNew;
+    levelMap[monsterNext.row][monsterNext.col] = monsterTile;
+    monster = monsterNext;
+}
+ */
 }
