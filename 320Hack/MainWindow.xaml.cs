@@ -25,16 +25,6 @@ namespace _320Hack
         private double titleFontSize = 16.0;
         private Map gameLevel;
 
-        public static int UP = 9000;
-        public static int DOWN = 9001;
-        public static int LEFT = 9002;
-        public static int RIGHT = 9003;
-
-        public static int UP_LEFT = 9004;
-        public static int DOWN_LEFT = 9005;
-        public static int UP_RIGHT = 9006;
-        public static int DOWN_RIGHT = 9007;
-
         public Key[] keys = {Key.NumPad8, Key.NumPad2, Key.NumPad4, Key.NumPad6, Key.NumPad7, Key.NumPad9, Key.NumPad1, Key.NumPad3,
                                 Key.K, Key.J, Key.H, Key.L, Key.Y, Key.U, Key.B, Key.N,};
 
@@ -44,7 +34,7 @@ namespace _320Hack
         public static Char floor = '·';
         public static Char player = '@';
         public static Char horizWall = '—';
-        public static Char door = '=';
+        public static Char door = '#';
 
         public static Boolean LookingAtHelpMenu = false;
         private HelpMenu help;
@@ -180,35 +170,35 @@ namespace _320Hack
         {
             if (k == Key.K || k == Key.NumPad8)
             {
-                gameLevel.movePlayer(UP);
+                gameLevel.movePlayer(-1, 0);
             }
             else if (k == Key.J || k == Key.NumPad2)
             {
-                gameLevel.movePlayer(DOWN);
+                gameLevel.movePlayer(+1, 0);
             }
             else if (k == Key.H || k == Key.NumPad4)
             {
-                gameLevel.movePlayer(LEFT);
+                gameLevel.movePlayer(0, -1);
             }
             else if (k == Key.L || k == Key.NumPad6)
             {
-                gameLevel.movePlayer(RIGHT);
+                gameLevel.movePlayer(0, +1);
             }
             else if (k == Key.Y || k == Key.NumPad7)
             {
-                gameLevel.movePlayer(UP_LEFT);
+                gameLevel.movePlayer(-1, -1);
             }
             else if (k == Key.U || k == Key.NumPad9)
             {
-                gameLevel.movePlayer(UP_RIGHT);
+                gameLevel.movePlayer(-1, +1);
             }
             else if (k == Key.B || k == Key.NumPad1)
             {
-                gameLevel.movePlayer(DOWN_LEFT);
+                gameLevel.movePlayer(+1, -1);
             }
             else if (k == Key.N || k == Key.NumPad3)
             {
-                gameLevel.movePlayer(DOWN_RIGHT);
+                gameLevel.movePlayer(+1, +1);
             }
         }
 

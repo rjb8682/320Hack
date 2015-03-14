@@ -91,67 +91,12 @@ namespace _320Hack
             return current.Symbol;
         }
 
-        public void movePlayer(int dir)
+        public void movePlayer(int dRow, int dCol)
         {
-            if (dir == MainWindow.UP)
+            if (levelMap[player.Row + dRow][player.Col + dCol].Symbol == MainWindow.floor)
             {
-                if (levelMap[player.Row - 1][player.Col].Symbol == MainWindow.floor)
-                {
-                    player.Row--;
-                }
-            }
-            else if (dir == MainWindow.DOWN)
-            {
-                if (walkTiles.Contains(levelMap[player.Row + 1][player.Col].Symbol))
-                {
-                    player.Row++;
-                }
-            }
-            else if (dir == MainWindow.LEFT)
-            {
-                if (walkTiles.Contains(levelMap[player.Row][player.Col - 1].Symbol))
-                {
-                    player.Col--;
-                }
-            }
-            else if (dir == MainWindow.RIGHT)
-            {
-                if (levelMap[player.Row][player.Col + 1].Symbol == MainWindow.floor)
-                {
-                    player.Col++;
-                }
-            }
-            else if (dir == MainWindow.UP_LEFT)
-            {
-                if (levelMap[player.Row - 1][player.Col - 1].Symbol == MainWindow.floor)
-                {
-                    player.Col--;
-                    player.Row--;
-                }
-            }
-            else if (dir == MainWindow.UP_RIGHT)
-            {
-                if (levelMap[player.Row - 1][player.Col + 1].Symbol == MainWindow.floor)
-                {
-                    player.Col++;
-                    player.Row--;
-                }
-            }
-            else if (dir == MainWindow.DOWN_LEFT)
-            {
-                if (levelMap[player.Row + 1][player.Col - 1].Symbol == MainWindow.floor)
-                {
-                    player.Col--;
-                    player.Row++;
-                }
-            }
-            else if (dir == MainWindow.DOWN_RIGHT)
-            {
-                if (levelMap[player.Row + 1][player.Col + 1].Symbol == MainWindow.floor)
-                {
-                    player.Col++;
-                    player.Row++;
-                }
+                player.Row += dRow;
+                player.Col += dCol;
             }
 
             foreach (Door door in doors)
