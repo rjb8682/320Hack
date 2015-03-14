@@ -71,7 +71,7 @@ namespace _320Hack
 
             // TODO If no player is available, dialog for adding one (plus add to database etc.)
 
-            using (var db = new Model1())
+            using (var db = new DbModel())
             {
                 var query = from b in db.Monsters
                             orderby b.Id
@@ -129,7 +129,7 @@ namespace _320Hack
             }
             levelMap.Add(currentRow);
 
-            gameLevel = new Map(convertToTiles(levelMap), currentRoom, doorsInRoom, player);
+            gameLevel = new Map(convertToTiles(levelMap, currentRoom), currentRoom, doorsInRoom, player);
             update();
 
         }
@@ -139,8 +139,9 @@ namespace _320Hack
             gameArea.Text = gameLevel.printMap();
         }
 
-        public List<List<Tile>> convertToTiles(List<List<Char>> map)
+        public List<List<Tile>> convertToTiles(List<List<Char>> map, Room room)
         {
+            int i = 0;
             List<List<Tile>> toReturn = new List<List<Tile>>();
 
             foreach (List<Char> list in map)
@@ -149,7 +150,7 @@ namespace _320Hack
                 foreach (Char c in list)
                 {
                     Tile t = new Tile(c);
-                    t.Seen = false;
+                    t.Seen = room.IsTileSeen(i++);
                     currentRow.Add(t);
                 }
                 toReturn.Add(currentRow);

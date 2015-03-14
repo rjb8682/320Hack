@@ -40,6 +40,7 @@ namespace _320Hack
             this.doors = doors;
             this.levelMap = map;
             this.player = player;
+            this.room = room;
 
             foreach (Door door in doors) {
                 levelMap[door.Row][door.Col] = new Tile(MainWindow.door);
@@ -153,10 +154,14 @@ namespace _320Hack
                 }
             }
 
-            using (var db = new Model1())
+            using (var db = new DbModel())
             {
                 db.Player.Attach(player);
                 db.Entry(player).State = System.Data.Entity.EntityState.Modified;
+
+                db.Rooms.Attach(room);
+                db.Entry(room).State = System.Data.Entity.EntityState.Modified;
+
                 db.SaveChanges();
             }
             // TODO did we hit the door? if so, load that map...
@@ -198,6 +203,8 @@ namespace _320Hack
                     if (!levelMap[i][j].Seen) levelMap[i][j].Seen = canSeeTile(i, j);
                 }
             }
+
+            room.UpdateSeenValues(levelMap);
         }
 
         private bool canSeeTile(int r, int c)

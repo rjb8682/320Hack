@@ -71,7 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Monster.cs" />
+    <Compile Include="GameModels.cs" />
     <Compile Include="Coordinate.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="Model1.cs" />

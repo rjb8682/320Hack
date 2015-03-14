@@ -9,7 +9,7 @@ namespace _320Hack.Migrations
     using System.Linq;
     using System.Reflection;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<_320Hack.Model1>
+    internal sealed class Configuration : DbMigrationsConfiguration<_320Hack.DbModel>
     {
         private const String COMMENT = "//";
         private char[] delimiters;
@@ -21,7 +21,7 @@ namespace _320Hack.Migrations
             delimiters = new char[] { ' ' };
         }
 
-        protected override void Seed(_320Hack.Model1 context)
+        protected override void Seed(_320Hack.DbModel context)
         {
             AddMonsters(context);
             AddItems(context);
@@ -30,7 +30,7 @@ namespace _320Hack.Migrations
             base.Seed(context);
         }
 
-        private void AddMonsters(_320Hack.Model1 context)
+        private void AddMonsters(_320Hack.DbModel context)
         {
             StreamReader monsterReader = new StreamReader(SourceCodePath("../../GameData/Monsters.txt"));
             int id = 1;
@@ -51,7 +51,7 @@ namespace _320Hack.Migrations
             }
         }
 
-        private void AddItems(_320Hack.Model1 context)
+        private void AddItems(_320Hack.DbModel context)
         {
             StreamReader itemReader = new StreamReader(SourceCodePath("../../GameData/Items.txt"));
             int id = 1;
@@ -74,18 +74,22 @@ namespace _320Hack.Migrations
             }
         }
 
-        private void AddRoomsAndDoors(_320Hack.Model1 context)
+        private void AddRoomsAndDoors(_320Hack.DbModel context)
         {
+            String level1 = new StreamReader(SourceCodePath("../../GameData/Levels/level1.map")).ReadToEnd();
+            String level2 = new StreamReader(SourceCodePath("../../GameData/Levels/level2.map")).ReadToEnd();
             context.Rooms.AddOrUpdate(new Room { 
-                    Id = 1, 
-                    Map = new StreamReader(SourceCodePath("../../GameData/Levels/level1.map")).ReadToEnd() });
+                Id = 1, 
+                Map = level1,
+                Seen = new byte[level1.Length] });
             context.Rooms.AddOrUpdate(new Room { 
                 Id = 2, 
-                Map = new StreamReader(SourceCodePath("../../GameData/Levels/level2.map")).ReadToEnd() });
+                Map = level2,
+                Seen = new byte[level2.Length] });
             context.Doors.AddOrUpdate(new Door { Id = 1, LivesIn = 1, ConnectsTo = 2, Row = 2, Col = 37 });
         }
 
-        private void AddTestPlayer(_320Hack.Model1 context)
+        private void AddTestPlayer(_320Hack.DbModel context)
         {
             context.Player.AddOrUpdate(new Player { 
                 Id = 1, 
