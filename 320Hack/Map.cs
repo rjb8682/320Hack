@@ -153,8 +153,15 @@ namespace _320Hack
                 }
             }
 
+            using (var db = new Model1())
+            {
+                db.Player.Attach(player);
+                db.Entry(player).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
             // TODO did we hit the door? if so, load that map...
 
+            /* TODO make monsters a collection etc.
             playerCoord = new Coordinate(player.Row, player.Col);
 
             List<char> floorOrPlayer = new List<char>();
@@ -174,6 +181,7 @@ namespace _320Hack
                 levelMap[monsterNext.row][monsterNext.col] = monsterTile;
                 monster = monsterNext;
             }
+             */
         }
 
         public void updateSeen()
