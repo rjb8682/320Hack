@@ -20,17 +20,14 @@ namespace _320Hack
         private List<Door> doors;
         private Room room;
 
-        public Map()
+        public Map(Player p)
         {
             //monster = new Coordinate(PlayerStartRow + 2, PlayerStartCol + 4);
             //map[monster.row][monster.col] = new Tile('o');
+            player = p;
 
             using (var db = new DbModel())
             {
-                player = (from p in db.Player
-                          orderby p.Id descending
-                          select p).First();
-
                 room = (from level in db.Rooms
                         where level.Id == player.CurrentRoom
                         select level).Single();
@@ -124,6 +121,7 @@ namespace _320Hack
         {
             using (var db = new DbModel())
             {
+                /*
                 List<Room> allRooms = (from r in db.Rooms select r).ToList();
                 foreach (Room r in allRooms)
                 {
@@ -131,6 +129,7 @@ namespace _320Hack
                     db.Rooms.Attach(r);
                     db.Entry(r).State = System.Data.Entity.EntityState.Modified;
                 }
+                */
 
                 db.SaveChanges();
             }

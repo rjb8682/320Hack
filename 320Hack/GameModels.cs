@@ -34,6 +34,11 @@ namespace _320Hack
         public int Health { get; set; }
 
         public String Name { get; set; }
+
+        public bool isDead()
+        {
+            return Health <= 0;
+        }
     }
 
     public class Door

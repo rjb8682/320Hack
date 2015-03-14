@@ -31,6 +31,8 @@ namespace _320Hack
         public static double MAINHEIGHT = 926;
         public static double MAINWIDTH = 1050;
 
+        public const int TEST_PLAYER_ID = 1;
+
         public static Char floor = '·';
         public static Char player = '@';
         public static Char horizWall = '—';
@@ -51,9 +53,23 @@ namespace _320Hack
             Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
 
-            // TODO If no player is available, dialog for adding one (plus add to database etc.)
+            Player player;
 
-            gameLevel = new Map();
+            using (var db = new DbModel())
+            {
+                player = (from p in db.Player
+                          orderby p.Id descending
+                          select p).First();
+            }
+
+            // TODO delete the player.Id check for release
+            if (player.isDead() || player.Id == TEST_PLAYER_ID)
+            {
+                // TODO If no player is available, dialog for adding one (plus add to database etc.)
+                Console.WriteLine("You need a new player");
+            }
+
+            gameLevel = new Map(player);
             update();
         }
 

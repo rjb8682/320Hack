@@ -98,7 +98,7 @@ namespace _320Hack.Migrations
         private void AddTestPlayer(_320Hack.DbModel context)
         {
             context.Player.AddOrUpdate(new Player { 
-                Id = 1, 
+                Id = MainWindow.TEST_PLAYER_ID, 
                 Name = "testPlayer", 
                 CurrentRoom = 1, 
                 Row = 9,
