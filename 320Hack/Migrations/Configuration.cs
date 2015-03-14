@@ -61,6 +61,18 @@ namespace _320Hack.Migrations
                 Symbol = "o",
                 Power = 5
             });
+
+            context.MonsterInstances.AddOrUpdate(new MonsterInstance
+            {
+                Id = 2,
+                MonsterId = 2,
+                CurrentHP = 200,
+                RoomId = 2,
+                Row = 5,
+                Col = 30,
+                Symbol = "D",
+                Power = 1
+            });
         }
 
         private void AddItems(_320Hack.DbModel context)

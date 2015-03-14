@@ -59,6 +59,8 @@ namespace _320Hack
 
             if (isDead())
             {
+                Console.WriteLine("You killed the " + Symbol + "!");
+
                 Row = MainWindow.INVALID_POSITION;
                 Col = MainWindow.INVALID_POSITION;
 
@@ -96,13 +98,14 @@ namespace _320Hack
             return CurrentHP <= 0;
         }
 
-        public void move(Room room, int r, int c, char[] validSpaces)
+        public void move(Room room, Player player, char[] validSpaces)
         {
             Coordinate start = new Coordinate(Row, Col);
-            Coordinate target = new Coordinate(r, c);
+            Coordinate target = new Coordinate(player.Row, player.Col);
 
             if (neighborCoordinates(room, start, validSpaces).Contains(target))
             {
+                player.attack(this);
                 return;
             }
 

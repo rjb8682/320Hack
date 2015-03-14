@@ -106,10 +106,8 @@ namespace _320Hack
                 // attack
                 Console.WriteLine("Attacking!");
                 monsterToAttack.attack(player);
-                return;
             }
-
-            if (walkTiles.Contains(room.LevelTiles[newRow][newCol].Symbol))
+            else if (walkTiles.Contains(room.LevelTiles[newRow][newCol].Symbol))
             {
                 player.Row = newRow;
                 player.Col = newCol;
@@ -117,7 +115,7 @@ namespace _320Hack
 
             foreach (MonsterInstance monster in monsters)
             {
-                monster.move(room, player.Row, player.Col, walkTiles);
+                monster.move(room, player, walkTiles);
             }
 
             Door door = doors.Find(d => d.Row == player.Row && d.Col == player.Col);

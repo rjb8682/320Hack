@@ -35,7 +35,7 @@ namespace _320Hack
             // return some string "glancing blow" "beheaded you" etc
             int damage = monster.getAttackPower();
             Health -= damage;
-            Console.WriteLine("The " + monster.Symbol + " dealt " + damage + "to you!");
+            Console.WriteLine("The " + monster.Symbol + " dealt " + damage + " damage to you!");
         }
 
         public int getAttackPower()
