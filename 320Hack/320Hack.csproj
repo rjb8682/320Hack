@@ -145,6 +145,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="320Hack_TemporaryKey.pfx" />
+    <None Include="GameData\Levels\level3.map" />
     <None Include="GameData\Levels\level2.map" />
     <None Include="GameData\Levels\level1.map" />
     <None Include="packages.config" />

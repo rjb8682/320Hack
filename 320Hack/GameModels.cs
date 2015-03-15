@@ -97,5 +97,15 @@ namespace _320Hack
         public int LivesIn { get; set; }
 
         public int ConnectsTo { get; set; }
+
+        public String getChar()
+        {
+            return isUp() ? "‹" : "›";
+        }
+
+        public bool isUp()
+        {
+            return LivesIn > ConnectsTo;
+        }
     }
 }

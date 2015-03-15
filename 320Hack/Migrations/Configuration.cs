@@ -116,6 +116,7 @@ namespace _320Hack.Migrations
         {
             String level1 = fixCharacters(new StreamReader(SourceCodePath("../../GameData/Levels/level1.map")).ReadToEnd());
             String level2 = fixCharacters(new StreamReader(SourceCodePath("../../GameData/Levels/level2.map")).ReadToEnd());
+            String level3 = fixCharacters(new StreamReader(SourceCodePath("../../GameData/Levels/level3.map")).ReadToEnd());
             context.Rooms.AddOrUpdate(new Room { 
                 Id = 1, 
                 Map = level1,
@@ -124,9 +125,16 @@ namespace _320Hack.Migrations
                 Id = 2, 
                 Map = level2,
                 Seen = new byte[level2.Length] });
+            context.Rooms.AddOrUpdate(new Room
+            {
+                Id = 3,
+                Map = level3,
+                Seen = new byte[level3.Length]
+            });
             context.Doors.AddOrUpdate(new Door { Id = 1, LivesIn = 1, ConnectsTo = 2, Row = 2, Col = 37 });
-            context.Doors.AddOrUpdate(new Door { Id = 1, LivesIn = 1, ConnectsTo = 2, Row = 5, Col = 48 });
-            context.Doors.AddOrUpdate(new Door { Id = 2, LivesIn = 2, ConnectsTo = 1, Row = 3, Col = 23 });
+            context.Doors.AddOrUpdate(new Door { Id = 2, LivesIn = 2, ConnectsTo = 1, Row = 2, Col = 8 });
+            context.Doors.AddOrUpdate(new Door { Id = 3, LivesIn = 2, ConnectsTo = 3, Row = 3, Col = 23 });
+            context.Doors.AddOrUpdate(new Door { Id = 4, LivesIn = 3, ConnectsTo = 2, Row = 3, Col = 23 });
         }
 
         private void AddTestPlayer(_320Hack.DbModel context)

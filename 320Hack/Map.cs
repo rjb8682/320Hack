@@ -102,7 +102,7 @@ namespace _320Hack
             Door door = doors.Find(d => d.Row == row && d.Col == col);
             if (door != null)
             {
-                return buffer + Convert.ToString(MainWindow.door);
+                return buffer + door.getChar();
             }
 
 
@@ -110,7 +110,7 @@ namespace _320Hack
         }
 
         // Given a row delta and col delta, moves the player if the new tile is valid.
-        public void movePlayer(int dRow, int dCol)
+        public void movePlayer(int dRow, int dCol, bool goInDoor = false, bool up = false)
         {
             int newRow = player.Row + dRow;
             int newCol = player.Col + dCol;
@@ -132,9 +132,12 @@ namespace _320Hack
             }
 
             Door door = doors.Find(d => d.Row == player.Row && d.Col == player.Col);
-            if (door != null)
+            if (door != null && goInDoor)
             {
-                reloadMap(door);
+                if ((up && door.isUp()) || (!up && !door.isUp()))
+                {
+                    reloadMap(door);
+                }
             }
 
             save();
@@ -212,6 +215,31 @@ namespace _320Hack
         private bool canSeeTile(int r, int c)
         {
             if (player.Row == r && player.Col == c) return true;
+            int dr = r - player.Row;
+            int dc = c - player.Col;
+
+            double distance = (1.5 * Math.Sqrt(Math.Pow(dr, 2) + Math.Pow(dc, 2)));
+            double straightness = Math.Abs(dr) * Math.Abs(dc);
+            if (straightness != 0) {
+                distance -= 6.0 / straightness;
+            }
+            else
+            {
+                distance -= 1;
+            }
+            if (distance > 7)
+            {
+                return false;
+            }
+
+            //double distance = (Math.Sqrt(
+            //    Math.Pow((r - player.Row) * 0.9, 2) +
+            //    Math.Pow((c - player.Col) * 0.70, 2)));
+            //if (distance > 4)
+            //{
+            //    return false;
+            //}
+
             int rowSign = player.Row - r > 0 ? -1 : 1;
             int colSign = player.Col - c > 0 ? -1 : 1;
 

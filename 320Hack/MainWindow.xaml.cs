@@ -92,6 +92,16 @@ namespace _320Hack
             else if (e.Key == Key.OemQuestion) {
                 Keyboard.Focus(textEntry);
             }
+            else if (e.Key == Key.OemPeriod)
+            {
+                gameLevel.movePlayer(0,0, true, false);
+                update();
+            }
+            else if (e.Key == Key.OemComma)
+            {
+                gameLevel.movePlayer(0, 0, true, true);
+                update();
+            }
         }
 
         public void movePlayer(Key k)
