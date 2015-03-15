@@ -105,6 +105,9 @@
     <Compile Include="Coordinate.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="DbModel.cs" />
+    <Compile Include="startGame.xaml.cs">
+      <DependentUpon>startGame.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tile.cs" />
     <Compile Include="HelpMenu.xaml.cs">
       <DependentUpon>HelpMenu.xaml</DependentUpon>
@@ -122,6 +125,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="HelpMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="startGame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -47,7 +47,7 @@ namespace _320Hack
         public double mainLeft = (System.Windows.SystemParameters.PrimaryScreenWidth - MAINWIDTH) / 2;
         public double mainTop = (System.Windows.SystemParameters.PrimaryScreenHeight - MAINHEIGHT) / 2;
 
-        public MainWindow()
+        public MainWindow(Player player)
         {
             // This is for making the splash screen appear for longer
             // System.Threading.Thread.Sleep(2000);
@@ -56,12 +56,7 @@ namespace _320Hack
             Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
 
-            using (var db = new DbModel())
-            {
-                player = (from p in db.Player
-                          orderby p.Id descending
-                          select p).First();
-            }
+            this.player = player;
 
             // TODO delete the player.Id check for release
             if (player.isDead() || player.Id == TEST_PLAYER_ID)
@@ -78,8 +73,54 @@ namespace _320Hack
         {
             gameLevel.printMap(gameArea);
             healthBar.Value = player.Health;
+            if (player.isDead())
+            {
+                showDeathStuff();
+            }
             levelBar.Value = 100 * player.getFracToNextLevel();
             outputPanel.Text = player.getInfo();
+        }
+
+        public void showDeathStuff()
+        {
+            using (var db = new DbModel())
+            {
+
+                List<MonsterHistory> killedMonsters = (from m in db.MonsterHistory
+                                                       where m.PlayerId == player.Id
+                                                       orderby m.Count descending
+                                                       select m).ToList();
+
+                int sum = 0;
+                foreach (MonsterHistory m in killedMonsters)
+                {
+                    sum += m.Count;
+                }
+                gameArea.Text += "\nYou have killed " + sum + " monster" + (sum > 0 ? "s" : "") + ":\n";
+
+                int count = 0;
+                foreach (MonsterHistory killedMonster in killedMonsters)
+                {
+                    Monster monster = (from m in db.Monsters
+                                       where m.Id == killedMonster.MonsterId
+                                       select m).First();
+
+                    for (int i = 0; i < killedMonster.Count; i++)
+                    {
+                        gameArea.Inlines.Add(new Run(monster.Symbol)
+                        {
+                            Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(monster.Color))
+                        });
+
+                        count++;
+                        if (count == 10)
+                        {
+                            gameArea.Text += "\n";
+                            count = 0;
+                        }
+                    }
+                }
+            }
         }
 
         private void keyPressed(object sender, KeyEventArgs e)

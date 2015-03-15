@@ -78,7 +78,7 @@ namespace _320Hack
                 using (var db = new DbModel())
                 {
                     MonsterHistory monsterHistory = (from m in db.MonsterHistory
-                                                     where m.MonsterId == this.MonsterId
+                                                     where m.MonsterId == this.MonsterId && m.PlayerId == player.Id
                                                      select m).SingleOrDefault();
 
                     if (monsterHistory != null)

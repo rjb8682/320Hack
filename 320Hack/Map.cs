@@ -164,24 +164,6 @@ namespace _320Hack
             }
         }
 
-        public void reset()
-        {
-            using (var db = new DbModel())
-            {
-                /*
-                List<Room> allRooms = (from r in db.Rooms select r).ToList();
-                foreach (Room r in allRooms)
-                {
-                    r.reset();
-                    db.Rooms.Attach(r);
-                    db.Entry(r).State = System.Data.Entity.EntityState.Modified;
-                }
-                */
-
-                db.SaveChanges();
-            }
-        }
-
         // Reloads the map given the door the player stood on.
         public void reloadMap(Door door)
         {
@@ -292,25 +274,4 @@ namespace _320Hack
             return r > 0 && r < room.LevelTiles.Count && c > 0 && c < room.LevelTiles[r].Count;
         }
     }
-/* TODO make monsters a collection etc.
-playerCoord = new Coordinate(player.Row, player.Col);
-
-List<char> floorOrPlayer = new List<char>();
-floorOrPlayer.Add(MainWindow.floor);
-floorOrPlayer.Add(MainWindow.player);
-Coordinate monsterNext = shortestPathTo(monster, playerCoord, floorOrPlayer);
-if (monsterNext == playerCoord)
-{
-    // Here is where the monster would attack the player (since it's adjacent to it)
-}
-else
-{
-    // TODO clean up ugly code like this (make a swap / move method?)
-    Tile monsterNew = levelMap[monsterNext.row][monsterNext.col];
-    Tile monsterTile = levelMap[monster.row][monster.col];
-    levelMap[monster.row][monster.col] = monsterNew;
-    levelMap[monsterNext.row][monsterNext.col] = monsterTile;
-    monster = monsterNext;
-}
- */
 }
