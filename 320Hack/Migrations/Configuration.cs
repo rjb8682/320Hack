@@ -45,7 +45,8 @@ namespace _320Hack.Migrations
                         Id = id++,
                         Symbol = tokens[0],
                         HP = Convert.ToInt32(tokens[1]),
-                        Color = tokens[2]
+                        Color = tokens[2],
+                        Name = tokens[3]
                     };
                     context.Monsters.AddOrUpdate(monster);
 
@@ -60,6 +61,7 @@ namespace _320Hack.Migrations
                 MonsterId = 1,
                 CurrentHP = 20,
                 Color = "#FF00FF00",
+                Name = "orc",
                 RoomId = 1,
                 Row = 9,
                 Col = 7,
@@ -73,6 +75,7 @@ namespace _320Hack.Migrations
                 MonsterId = 2,
                 CurrentHP = 200,
                 Color = "#FFFF0000",
+                Name = "FUCKING DRAGONS HOW DO THEY WORK",
                 RoomId = 2,
                 Row = 5,
                 Col = 32,

@@ -89,12 +89,6 @@ namespace _320Hack
                 return buffer + " ";
             }
 
-            Door door = doors.Find(d => d.Row == row && d.Col == col);
-            if (door != null)
-            {
-                return buffer + Convert.ToString(MainWindow.door);
-            }
-
             MonsterInstance monster = monsters.Find(m => m.Row == row && m.Col == col);
             if (monster != null)
             {
@@ -104,6 +98,13 @@ namespace _320Hack
                 });
                 return "";
             }
+
+            Door door = doors.Find(d => d.Row == row && d.Col == col);
+            if (door != null)
+            {
+                return buffer + Convert.ToString(MainWindow.door);
+            }
+
 
             return buffer + Convert.ToString(current.Symbol);
         }

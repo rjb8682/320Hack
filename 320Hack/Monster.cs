@@ -16,6 +16,8 @@ namespace _320Hack
 
         public String Color { get; set; }
 
+        public String Name { get; set; }
+
         public int HP { get; set; }
     }
 
@@ -40,6 +42,8 @@ namespace _320Hack
 
         public String Color { get; set; }
 
+        public String Name { get; set; }
+
         public int RoomId { get; set; }
 
         public int Row { get; set; }
@@ -59,11 +63,11 @@ namespace _320Hack
         {
             int damage = player.getAttackPower();
             CurrentHP -= damage;
-            Console.WriteLine("You dealt " + damage + " damage to the " + Symbol + "!");
+            Console.WriteLine("You dealt " + damage + " damage to the " + Name + "!");
 
             if (isDead())
             {
-                Console.WriteLine("You killed the " + Symbol + "!");
+                Console.WriteLine("You killed the " + Name + "!");
 
                 player.awardExperience(Power);
 
