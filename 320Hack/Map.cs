@@ -11,6 +11,7 @@ namespace _320Hack
         private Player player;
 
         private char[] walkTiles;
+        private char[] seeTiles;
 
         private List<Door> doors;
         private List<MonsterInstance> monsters;
@@ -21,6 +22,7 @@ namespace _320Hack
             player = p;
             setupState(p.CurrentRoom);
             this.walkTiles = new char[] { MainWindow.floor, MainWindow.door };
+            this.seeTiles = new char[] { MainWindow.floor, MainWindow.door};
         }
 
         // Sets up the game state in the given room.
@@ -70,7 +72,7 @@ namespace _320Hack
         {
             if (row == player.Row && col == player.Col)
             {
-                return MainWindow.player;
+                return MainWindow.playerChar;
             }
 
             Tile current = room.LevelTiles[row][col];
@@ -214,9 +216,7 @@ namespace _320Hack
                     Tile t = room.LevelTiles[row][player.Col];
 
                     // If the symbol isn't floor, monster, or player, return false.
-                    if (t.Symbol != MainWindow.floor &&
-                        t.Symbol != 'o' &&
-                        t.Symbol != MainWindow.player) { return false; }
+                    if (!seeTiles.Contains(t.Symbol)) { return false; }
                 }
 
                 // Don't bother with the slope, since it's infinity.
@@ -234,9 +234,8 @@ namespace _320Hack
 
                 // If the symbol isn't floor, monster, or player, return false.
                 Tile t = room.LevelTiles[newRow][col];
-                if (t.Symbol != MainWindow.floor && 
-                    t.Symbol != 'o' && 
-                    t.Symbol != MainWindow.player) {
+                if (!seeTiles.Contains(t.Symbol))
+                {
                     return false;
                 }
 

@@ -24,9 +24,36 @@ namespace _320Hack
 
         public String Name { get; set; }
 
+        public String getInfo()
+        {
+            String toReturn = "";
+
+            toReturn += "Level: " + getLevel();
+
+            return toReturn;
+        }
+
         public bool isDead()
         {
             return Health <= 0;
+        }
+
+        public int getLevel()
+        {
+            if (Experience > 0) { return (int)Math.Log(Experience, 2); }
+            return 0;
+        }
+
+        private double expRequired(int level)
+        {
+            return Math.Pow(level, 2);
+        }
+
+        public double getFracToNextLevel()
+        {
+            int currLevel = getLevel();
+            double expForNext = expRequired(currLevel + 1) - expRequired(currLevel);
+            return (Experience - expRequired(currLevel)) / expForNext;
         }
 
         public void attack(MonsterInstance monster)

@@ -1,13 +1,21 @@
 ﻿<Window x:Class="_320Hack.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="712.091" Width="1050"
+        Title="MainWindow" Height="682.091" Width="1050"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="keyPressed" Closed="isClosed">
     <Grid Background="#FF595D72">
         <TextBox x:Name="textEntry" Margin="34,603,34,10" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam"/>
         <Label Content="Console" HorizontalAlignment="Left" Margin="34,571,0,0" VerticalAlignment="Top" Width="122" FontSize="18" Height="32"/>
         <TextBlock x:Name="gameArea" Margin="34,13,34,0" VerticalAlignment="Top" Height="424" Background="Black" FontSize="20" IsEnabled="False" FontFamily="MS Mincho" Foreground="#FFB8B8B8" Padding="200,10,0,0" TextOptions.TextHintingMode="Fixed" Focusable="True"/>
-        <TextBox x:Name="outputPanel" Margin="34,442,34,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="124" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False"/>
-
+        <TextBox x:Name="outputPanel" Margin="34,488,34,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="78" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0"/>
+        <Rectangle Fill="#FF272932" Height="51" Margin="34,437,34,0" VerticalAlignment="Top" Stroke="Black"/>
+        <ProgressBar x:Name="healthBar" HorizontalAlignment="Left" Height="28" Margin="104,447,0,0" VerticalAlignment="Top" Width="491" Background="#FF8F8F8F" BorderBrush="#FF252525" Value="100">
+            <ProgressBar.Foreground>
+                <SolidColorBrush Color="#FFAC0404"/>
+            </ProgressBar.Foreground>
+        </ProgressBar>
+        <Label Content="Health:" HorizontalAlignment="Left" Margin="50,447,0,0" VerticalAlignment="Top" Height="28" Width="49" Foreground="White"/>
+        <ProgressBar x:Name="levelBar" Height="28" Margin="674,447,55,0" VerticalAlignment="Top" Background="#FF8F8F8F" Foreground="#FF05891D" BorderBrush="#FF232323" SmallChange="1"/>
+        <Label Content="Experience:" HorizontalAlignment="Left" Margin="600,447,0,0" VerticalAlignment="Top" Height="28" Width="69" Foreground="White"/>
     </Grid>
 </Window>

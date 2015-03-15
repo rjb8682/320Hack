@@ -35,9 +35,11 @@ namespace _320Hack
         public const int INVALID_POSITION = -1;
 
         public static Char floor = '·';
-        public static Char player = '@';
+        public static Char playerChar = '@';
         public static Char horizWall = '—';
         public static Char door = '#';
+
+        public Player player;
 
         public static Boolean LookingAtHelpMenu = false;
         private HelpMenu help;
@@ -53,8 +55,6 @@ namespace _320Hack
             gameArea.FontSize = titleFontSize;
             Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
-
-            Player player;
 
             using (var db = new DbModel())
             {
@@ -77,6 +77,9 @@ namespace _320Hack
         public void update()
         {
             gameArea.Text = gameLevel.printMap();
+            healthBar.Value = player.Health;
+            levelBar.Value = 100 * player.getFracToNextLevel();
+            outputPanel.Text = player.getInfo();
         }
 
         private void keyPressed(object sender, KeyEventArgs e)

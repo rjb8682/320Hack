@@ -61,6 +61,8 @@ namespace _320Hack
             {
                 Console.WriteLine("You killed the " + Symbol + "!");
 
+                player.Experience += Power;
+
                 Row = MainWindow.INVALID_POSITION;
                 Col = MainWindow.INVALID_POSITION;
 
@@ -87,6 +89,10 @@ namespace _320Hack
                     // Save the state of this monster instance.
                     db.MonsterInstances.Attach(this);
                     db.Entry(this).State = System.Data.Entity.EntityState.Modified;
+
+                    // Save the updated player experience.
+                    db.Player.Attach(player);
+                    db.Entry(player).State = System.Data.Entity.EntityState.Modified;
 
                     db.SaveChanges();
                 }
