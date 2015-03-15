@@ -40,12 +40,16 @@ namespace _320Hack.Migrations
                 if (!line.StartsWith(COMMENT))
                 {
                     String[] tokens = line.Split(delimiters);
-                    context.Monsters.AddOrUpdate(new Monster
+                    Monster monster = new Monster
                     {
                         Id = id++,
                         Symbol = tokens[0],
-                        HP = Convert.ToInt32(tokens[1])
-                    });
+                        HP = Convert.ToInt32(tokens[1]),
+                        Color = tokens[2]
+                    };
+                    context.Monsters.AddOrUpdate(monster);
+
+
                 }
                 line = monsterReader.ReadLine();
             }
@@ -55,6 +59,7 @@ namespace _320Hack.Migrations
                 Id = 1,
                 MonsterId = 1,
                 CurrentHP = 20,
+                Color = "#FF00FF00",
                 RoomId = 1,
                 Row = 9,
                 Col = 7,
@@ -67,6 +72,7 @@ namespace _320Hack.Migrations
                 Id = 2,
                 MonsterId = 2,
                 CurrentHP = 200,
+                Color = "#FFFF0000",
                 RoomId = 2,
                 Row = 5,
                 Col = 32,

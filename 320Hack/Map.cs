@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace _320Hack
 {
@@ -48,10 +51,12 @@ namespace _320Hack
             room.setupMap();
         }
 
-        public String printMap()
+        public void printMap(TextBlock gameArea)
         {
-            String resultLevel = "";
+            gameArea.Text = "";
+            gameArea.Inlines.Clear();
 
+            String inlineBuffer = "";
             updateSeen();
 
             int maxRows = room.LevelTiles.Count;
@@ -60,40 +65,47 @@ namespace _320Hack
                 int maxCols = room.LevelTiles[row].Count;
                 for (int col = 0; col < maxCols; col++)
                 {
-                    resultLevel += findChar(row, col);
+                    inlineBuffer = processChar(row, col, inlineBuffer, gameArea);
                 }
-                resultLevel += '\n';
+                inlineBuffer += '\n';
             }
-            return resultLevel;
+
+            gameArea.Inlines.Add(new Run(inlineBuffer));
         }
 
-        // Returns the appropriate character to be printed at row, col.
-        private char findChar(int row, int col)
+
+        private String processChar(int row, int col, String buffer, TextBlock gameArea)
         {
             if (row == player.Row && col == player.Col)
             {
-                return MainWindow.playerChar;
+                gameArea.Inlines.Add(new Run(buffer));
+                gameArea.Inlines.Add(new Run(Convert.ToString(MainWindow.playerChar)) { Foreground = Brushes.Gold });
+                return "";
             }
 
             Tile current = room.LevelTiles[row][col];
             if (!current.Seen)
             {
-                return ' ';
+                return buffer + " ";
             }
 
             Door door = doors.Find(d => d.Row == row && d.Col == col);
             if (door != null)
             {
-                return MainWindow.door;
+                return buffer + Convert.ToString(MainWindow.door);
             }
 
             MonsterInstance monster = monsters.Find(m => m.Row == row && m.Col == col);
             if (monster != null)
             {
-                return Convert.ToChar(monster.Symbol);
+                gameArea.Inlines.Add(new Run(buffer));
+                gameArea.Inlines.Add(new Run(monster.Symbol) { 
+                    Foreground = new SolidColorBrush((Color) ColorConverter.ConvertFromString(monster.Color))
+                });
+                return "";
             }
 
-            return current.Symbol;
+            return buffer + Convert.ToString(current.Symbol);
         }
 
         // Given a row delta and col delta, moves the player if the new tile is valid.
@@ -105,8 +117,6 @@ namespace _320Hack
             MonsterInstance monsterToAttack = monsters.Find(m => m.Row == newRow && m.Col == newCol);
             if (monsterToAttack != null)
             {
-                // attack
-                Console.WriteLine("Attacking!");
                 monsterToAttack.attack(player);
             }
             else if (walkTiles.Contains(room.LevelTiles[newRow][newCol].Symbol))

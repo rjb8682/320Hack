@@ -76,7 +76,7 @@ namespace _320Hack
 
         public void update()
         {
-            gameArea.Text = gameLevel.printMap();
+            gameLevel.printMap(gameArea);
             healthBar.Value = player.Health;
             levelBar.Value = 100 * player.getFracToNextLevel();
             outputPanel.Text = player.getInfo();

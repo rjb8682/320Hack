@@ -14,6 +14,8 @@ namespace _320Hack
 
         public String Symbol { get; set; }
 
+        public String Color { get; set; }
+
         public int HP { get; set; }
     }
 
@@ -35,6 +37,8 @@ namespace _320Hack
         public int MonsterId { get; set; }
 
         public int CurrentHP { get; set; }
+
+        public String Color { get; set; }
 
         public int RoomId { get; set; }
 
@@ -61,7 +65,7 @@ namespace _320Hack
             {
                 Console.WriteLine("You killed the " + Symbol + "!");
 
-                player.Experience += Power;
+                player.awardExperience(Power);
 
                 Row = MainWindow.INVALID_POSITION;
                 Col = MainWindow.INVALID_POSITION;

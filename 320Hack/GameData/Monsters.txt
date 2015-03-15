@@ -1,5 +1,5 @@
 ﻿// One monster per line
-// symbol (char) health (int)
-o 20
-D 9002
-k 8
+// symbol (char) health (int) color(hexstring)
+o 20 #FF00FF00
+D 9002 #FFFF0000
+k 8 #FF0000FF

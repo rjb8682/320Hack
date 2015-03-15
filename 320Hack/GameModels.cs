@@ -63,11 +63,26 @@ namespace _320Hack
             int damage = monster.getAttackPower();
             Health -= damage;
             Console.WriteLine("The " + monster.Symbol + " dealt " + damage + " damage to you!");
+
+            if (Health <= 0)
+            {
+                Console.WriteLine("The " + monster.Symbol + " killed you!");
+            }
         }
 
         public int getAttackPower()
         {
-            return (int) (Experience * 1.25) + 5;
+            return (int) (getLevel() * 1.25) + 5;
+        }
+
+        public void awardExperience(int exp)
+        {
+            int level = getLevel();
+            Experience += exp;
+            if (getLevel() > level)
+            {
+                Console.WriteLine("Congratulations! You are now level " + getLevel() + ".");
+            }
         }
     }
 
