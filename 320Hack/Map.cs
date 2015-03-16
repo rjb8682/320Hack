@@ -16,7 +16,7 @@ namespace _320Hack
         private char[] walkTiles;
         private char[] seeTiles;
 
-        private List<Door> doors;
+        private List<Stair> stairs;
         private List<MonsterInstance> monsters;
         private Room room;
 
@@ -39,7 +39,7 @@ namespace _320Hack
                         where r.Id == player.CurrentRoom
                         select r).Single();
 
-                doors = (from d in db.Doors
+                stairs = (from d in db.Stairs
                          where d.LivesIn == player.CurrentRoom
                          select d).ToList();
 
@@ -99,10 +99,10 @@ namespace _320Hack
                 return "";
             }
 
-            Door door = doors.Find(d => d.Row == row && d.Col == col);
-            if (door != null)
+            Stair stair = stairs.Find(d => d.Row == row && d.Col == col);
+            if (stair != null)
             {
-                return buffer + door.getChar();
+                return buffer + stair.getChar();
             }
 
 
@@ -131,12 +131,12 @@ namespace _320Hack
                 monster.move(room, player, walkTiles);
             }
 
-            Door door = doors.Find(d => d.Row == player.Row && d.Col == player.Col);
-            if (door != null && goInDoor)
+            Stair stair = stairs.Find(d => d.Row == player.Row && d.Col == player.Col);
+            if (stair != null && goInDoor)
             {
-                if ((up && door.isUp()) || (!up && !door.isUp()))
+                if ((up && stair.isUp()) || (!up && !stair.isUp()))
                 {
-                    reloadMap(door);
+                    reloadMap(stair);
                 }
             }
 
@@ -165,10 +165,10 @@ namespace _320Hack
         }
 
         // Reloads the map given the door the player stood on.
-        public void reloadMap(Door door)
+        public void reloadMap(Stair stair)
         {
-            setupState(door.ConnectsTo);
-            Door newDoor = doors.Find(d => d.ConnectsTo == door.LivesIn);
+            setupState(stair.ConnectsTo);
+            Stair newDoor = stairs.Find(d => d.ConnectsTo == stair.LivesIn);
             if (newDoor == null) { throw new Exception("No corresponding door in the new room! newRoom=" + room.Id); }
 
             player.Row = newDoor.Row;
@@ -213,14 +213,6 @@ namespace _320Hack
             {
                 return false;
             }
-
-            //double distance = (Math.Sqrt(
-            //    Math.Pow((r - player.Row) * 0.9, 2) +
-            //    Math.Pow((c - player.Col) * 0.70, 2)));
-            //if (distance > 4)
-            //{
-            //    return false;
-            //}
 
             int rowSign = player.Row - r > 0 ? -1 : 1;
             int colSign = player.Col - c > 0 ? -1 : 1;

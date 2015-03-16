@@ -23,6 +23,6 @@ namespace _320Hack
         public virtual DbSet<MonsterHistory> MonsterHistory { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<Player> Player { get; set; }
-        public virtual DbSet<Door> Doors { get; set; }
+        public virtual DbSet<Stair> Stairs { get; set; }
     }
 }

@@ -49,6 +49,7 @@ namespace _320Hack
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow main;
             if (e.Source.Equals(newGameButton))
             {
                 // Start new game
@@ -102,10 +103,13 @@ namespace _320Hack
                     }
 
                     db.SaveChanges();
+                    main = new MainWindow(player, true);
                 }
             }
-
-            MainWindow main = new MainWindow(player);
+            else
+            {
+                main = new MainWindow(player, false);
+            }
             this.Close();
             main.Show();
         }

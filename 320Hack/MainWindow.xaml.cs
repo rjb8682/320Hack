@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Reflection;
 
 namespace _320Hack
 {
@@ -42,12 +43,13 @@ namespace _320Hack
         public Player player;
 
         public static Boolean LookingAtHelpMenu = false;
+        public bool newGame;
         private HelpMenu help;
 
         public double mainLeft = (System.Windows.SystemParameters.PrimaryScreenWidth - MAINWIDTH) / 2;
         public double mainTop = (System.Windows.SystemParameters.PrimaryScreenHeight - MAINHEIGHT) / 2;
 
-        public MainWindow(Player player)
+        public MainWindow(Player player, bool newGame)
         {
             // This is for making the splash screen appear for longer
             // System.Threading.Thread.Sleep(2000);
@@ -55,18 +57,26 @@ namespace _320Hack
             gameArea.FontSize = titleFontSize;
             Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
+            this.newGame = newGame;
 
             this.player = player;
 
-            // TODO delete the player.Id check for release
-            if (player.isDead() || player.Id == TEST_PLAYER_ID)
-            {
-                // TODO If no player is available, dialog for adding one (plus add to database etc.)
-                Console.WriteLine("You need a new player");
-            }
-
             gameLevel = new Map(player);
-            update();
+            if (this.newGame)
+            {
+                startGameSequence();
+            }
+            else
+            {
+                update();
+            }
+        }
+
+        public void startGameSequence()
+        {
+            // This will be for the "story" of the game
+            Console.WriteLine("Story Sequence");
+            gameArea.Text = new StreamReader("../../GameData/beginning.txt").ReadToEnd();
         }
 
         public void update()
@@ -141,6 +151,10 @@ namespace _320Hack
             else if (e.Key == Key.OemComma)
             {
                 gameLevel.movePlayer(0, 0, true, true);
+                update();
+            }
+            else if (newGame && (e.Key == Key.Space))
+            {
                 update();
             }
         }

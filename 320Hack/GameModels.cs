@@ -86,7 +86,7 @@ namespace _320Hack
         }
     }
 
-    public class Door
+    public class Stair
     {
         public int Id { get; set; }
 
