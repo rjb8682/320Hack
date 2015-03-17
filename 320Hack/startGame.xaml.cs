@@ -95,9 +95,7 @@ namespace _320Hack
                 Random random = new Random();
                 foreach (MonsterInstance m in monsters)
                 {
-                    m.reset(db, random);
-                    db.MonsterInstances.Attach(m);
-                    db.Entry(m).State = System.Data.Entity.EntityState.Modified;
+                    m.place(db, random);
                 }
 
                 db.SaveChanges();

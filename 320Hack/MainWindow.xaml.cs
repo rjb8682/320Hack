@@ -40,6 +40,8 @@ namespace _320Hack
         public static Char horizWall = '—';
         public static Char door = '#';
 
+        public const int monsterModifier = 3;
+
         public Player player;
 
         public static Boolean LookingAtHelpMenu = false;
@@ -61,7 +63,7 @@ namespace _320Hack
 
             this.player = player;
 
-            if (player.isDead())
+            if (player.isDead() || this.newGame)
             {
                 revive();
             }
@@ -187,13 +189,34 @@ namespace _320Hack
                 db.Player.Attach(player);
                 db.Entry(player).State = System.Data.Entity.EntityState.Modified;
 
-                List<MonsterInstance> monsters = (from ms in db.MonsterInstances select ms).ToList();
+                List<Monster> monsters = (from ms in db.Monsters select ms).ToList();
+                List<Room> rooms = (from r in db.Rooms select r).ToList();
                 Random random = new Random();
-                foreach (MonsterInstance m in monsters)
+
+                List<MonsterInstance> otherMonsters = (from ms in db.MonsterInstances select ms).ToList();
+                foreach (MonsterInstance m in otherMonsters)
                 {
-                    m.reset(db, random);
                     db.MonsterInstances.Attach(m);
-                    db.Entry(m).State = System.Data.Entity.EntityState.Modified;
+                    db.Entry(m).State = System.Data.Entity.EntityState.Deleted;
+                }
+                db.SaveChanges();
+
+                foreach (Room r in rooms)
+                {
+                    for (int i = 0; i < monsterModifier * r.Id; i++)
+                    {
+                        Monster template = monsters[random.Next(0, monsters.Count)];
+                        MonsterInstance m = new MonsterInstance()
+                        {
+                            Color = template.Color,
+                            Name = template.Name,
+                            Symbol = template.Symbol,
+                            MonsterId = template.Id,
+                            RoomId = r.Id,
+                            Power = (int)(player.getLevel() * 1.25 * r.Id) + 5
+                        };
+                        m.place(db, random);
+                    }
                 }
 
                 db.SaveChanges();

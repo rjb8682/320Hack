@@ -55,33 +55,33 @@ namespace _320Hack.Migrations
                 line = monsterReader.ReadLine();
             }
 
-            context.MonsterInstances.AddOrUpdate(new MonsterInstance
-            {
-                Id = 1,
-                MonsterId = 1,
-                CurrentHP = 20,
-                Color = "#FF00FF00",
-                Name = "orc",
-                RoomId = 1,
-                Row = 9,
-                Col = 7,
-                Symbol = "o",
-                Power = 5
-            });
+            //context.MonsterInstances.AddOrUpdate(new MonsterInstance
+            //{
+            //    Id = 1,
+            //    MonsterId = 1,
+            //    CurrentHP = 20,
+            //    Color = "#FF00FF00",
+            //    Name = "orc",
+            //    RoomId = 1,
+            //    Row = 9,
+            //    Col = 7,
+            //    Symbol = "o",
+            //    Power = 5
+            //});
 
-            context.MonsterInstances.AddOrUpdate(new MonsterInstance
-            {
-                Id = 2,
-                MonsterId = 2,
-                CurrentHP = 200,
-                Color = "#FFFF0000",
-                Name = "FUCKING DRAGONS HOW DO THEY WORK",
-                RoomId = 2,
-                Row = 5,
-                Col = 32,
-                Symbol = "D",
-                Power = 1
-            });
+            //context.MonsterInstances.AddOrUpdate(new MonsterInstance
+            //{
+            //    Id = 2,
+            //    MonsterId = 2,
+            //    CurrentHP = 200,
+            //    Color = "#FFFF0000",
+            //    Name = "FUCKING DRAGONS HOW DO THEY WORK",
+            //    RoomId = 2,
+            //    Row = 5,
+            //    Col = 32,
+            //    Symbol = "D",
+            //    Power = 1
+            //});
         }
 
         private void AddItems(_320Hack.DbModel context)

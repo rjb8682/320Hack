@@ -77,7 +77,7 @@ namespace _320Hack
 
         public int getAttackPower()
         {
-            return (int) (getLevel() * 1.25) + 5;
+            return (int) Math.Pow(getLevel(), 1.5) + 5;
         }
 
         public void awardExperience(int exp)

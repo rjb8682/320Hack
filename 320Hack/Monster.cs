@@ -59,23 +59,32 @@ namespace _320Hack
             return Power;
         }
 
-        public void reset(DbModel db, Random random)
+        public void place(DbModel db, Random random)
         {
-            CurrentHP = (from n in db.Monsters where n.Id == MonsterId select n.HP).Single();
+            CurrentHP = (int)((from n in db.Monsters where n.Id == MonsterId select n.HP).Single() * 1.25 * RoomId);
             Room room = (from r in db.Rooms where RoomId == r.Id select r).Single();
             room.setupMap();
 
-            int row, col;
+            List<MonsterInstance> otherMonsters = (from ms in db.MonsterInstances where RoomId == ms.RoomId select ms).ToList();
+
+            int row = 0;
+            int col = 0;
+            Predicate<MonsterInstance> pred = m => m.Row == row && m.Col == col;
 
             do
             {
                 row = random.Next(0, room.LevelChars.Count);
                 col = random.Next(0, room.LevelChars[row].Count);
             }
-            while (room.LevelChars[row][col] != MainWindow.floor);
+            while (room.LevelChars[row][col] != MainWindow.floor && 
+                otherMonsters.Find(pred) == null);
 
             Row = row;
             Col = col;
+
+            db.MonsterInstances.Attach(this);
+            db.Entry(this).State = System.Data.Entity.EntityState.Added;
+            db.SaveChanges();
         }
 
         public void attack(Player player)

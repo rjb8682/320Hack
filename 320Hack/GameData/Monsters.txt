@@ -1,5 +1,5 @@
 ﻿// One monster per line
 // symbol (char) health (int) color(hexstring)
 o 20 #FF00FF00 orc
-D 9002 #FFFF0000 DRAGON
+D 90 #FFFF0000 DRAGON
 k 8 #FF0000FF kobold
