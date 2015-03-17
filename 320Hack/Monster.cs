@@ -171,6 +171,7 @@ namespace _320Hack
          * Returns all tiles neighboring row and col. Only counts 'floor' or the player as reachable.
          * Result if of form (int[] {row, col}).
          * TODO loop around the 9 square block so we don't have these ifs?
+         * TODO Make it so monsters can't walk on other monsters
          */
         public List<Coordinate> neighborCoordinates(Room room, int r, int c, char[] validTypes)
         {

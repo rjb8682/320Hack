@@ -45,7 +45,7 @@ namespace _320Hack
 
         public int getLevel()
         {
-            if (Experience > 0) { return (int)Math.Log(Experience, 2); }
+            if (Experience > 0) { return (int)Math.Sqrt(Experience); }
             return 0;
         }
 
@@ -58,6 +58,9 @@ namespace _320Hack
         {
             int currLevel = getLevel();
             double expForNext = expRequired(currLevel + 1) - expRequired(currLevel);
+            Console.WriteLine("Current Experience: " + Experience);
+            Console.WriteLine("Needed Experience: " + expRequired(currLevel + 1));
+            Console.WriteLine("Percent there: " + (Experience - expRequired(currLevel)) / expForNext);
             return (Experience - expRequired(currLevel)) / expForNext;
         }
 

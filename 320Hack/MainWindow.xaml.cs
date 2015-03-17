@@ -157,6 +157,11 @@ namespace _320Hack
                     this.Close();
                 }
             }
+            else if (e.Key == Key.OemTilde)
+            {
+                player.awardExperience(1);
+                update();
+            }
             else if (keys.Contains(e.Key) && !textEntry.IsFocused && !player.isDead())
             {
                 movePlayer(e.Key);
@@ -193,13 +198,7 @@ namespace _320Hack
                 List<Room> rooms = (from r in db.Rooms select r).ToList();
                 Random random = new Random();
 
-                List<MonsterInstance> otherMonsters = (from ms in db.MonsterInstances select ms).ToList();
-                foreach (MonsterInstance m in otherMonsters)
-                {
-                    db.MonsterInstances.Attach(m);
-                    db.Entry(m).State = System.Data.Entity.EntityState.Deleted;
-                }
-                db.SaveChanges();
+                deleteMonsters(db);
 
                 foreach (Room r in rooms)
                 {
@@ -221,6 +220,17 @@ namespace _320Hack
 
                 db.SaveChanges();
             }
+        }
+
+        public void deleteMonsters(DbModel db)
+        {
+            List<MonsterInstance> otherMonsters = (from ms in db.MonsterInstances select ms).ToList();
+            foreach (MonsterInstance m in otherMonsters)
+            {
+                db.MonsterInstances.Attach(m);
+                db.Entry(m).State = System.Data.Entity.EntityState.Deleted;
+            }
+            db.SaveChanges();
         }
 
         public void movePlayer(Key k)
