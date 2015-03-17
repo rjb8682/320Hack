@@ -59,6 +59,25 @@ namespace _320Hack
             return Power;
         }
 
+        public void reset(DbModel db, Random random)
+        {
+            CurrentHP = (from n in db.Monsters where n.Id == MonsterId select n.HP).Single();
+            Room room = (from r in db.Rooms where RoomId == r.Id select r).Single();
+            room.setupMap();
+
+            int row, col;
+
+            do
+            {
+                row = random.Next(0, room.LevelChars.Count);
+                col = random.Next(0, room.LevelChars[row].Count);
+            }
+            while (room.LevelChars[row][col] != MainWindow.floor);
+
+            Row = row;
+            Col = col;
+        }
+
         public void attack(Player player)
         {
             int damage = player.getAttackPower();

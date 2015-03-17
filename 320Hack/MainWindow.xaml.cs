@@ -61,6 +61,11 @@ namespace _320Hack
 
             this.player = player;
 
+            if (player.isDead())
+            {
+                revive();
+            }
+
             gameLevel = new Map(player);
             if (this.newGame)
             {
@@ -131,11 +136,26 @@ namespace _320Hack
                     }
                 }
             }
+            gameArea.Text += "\n\nWould you like to continue your adventure? (y/n)";
         }
 
         private void keyPressed(object sender, KeyEventArgs e)
         {
-            if (keys.Contains(e.Key) && !textEntry.IsFocused)
+            if (player.isDead())
+            {
+                if (e.Key == Key.Y)
+                {
+                    revive();
+                    gameLevel.setupState(player.CurrentRoom);
+                    update();
+                }
+                else if (e.Key == Key.N)
+                {
+                    new startGame().Show();
+                    this.Close();
+                }
+            }
+            else if (keys.Contains(e.Key) && !textEntry.IsFocused && !player.isDead())
             {
                 movePlayer(e.Key);
                 update();
@@ -143,12 +163,12 @@ namespace _320Hack
             else if (e.Key == Key.OemQuestion) {
                 Keyboard.Focus(textEntry);
             }
-            else if (e.Key == Key.OemPeriod)
+            else if (e.Key == Key.OemPeriod && !player.isDead())
             {
                 gameLevel.movePlayer(0,0, true, false);
                 update();
             }
-            else if (e.Key == Key.OemComma)
+            else if (e.Key == Key.OemComma && !player.isDead())
             {
                 gameLevel.movePlayer(0, 0, true, true);
                 update();
@@ -156,6 +176,27 @@ namespace _320Hack
             else if (newGame && (e.Key == Key.Space))
             {
                 update();
+            }
+        }
+
+        public void revive()
+        {
+            using (var db = new DbModel())
+            {
+                player.revive();
+                db.Player.Attach(player);
+                db.Entry(player).State = System.Data.Entity.EntityState.Modified;
+
+                List<MonsterInstance> monsters = (from ms in db.MonsterInstances select ms).ToList();
+                Random random = new Random();
+                foreach (MonsterInstance m in monsters)
+                {
+                    m.reset(db, random);
+                    db.MonsterInstances.Attach(m);
+                    db.Entry(m).State = System.Data.Entity.EntityState.Modified;
+                }
+
+                db.SaveChanges();
             }
         }
 

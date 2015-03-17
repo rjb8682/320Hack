@@ -36,7 +36,7 @@ namespace _320Hack
             newPlayerId = player.Id + 1;
 
             // TODO delete the player.Id check for release
-            if (player.isDead() || player.Id == MainWindow.TEST_PLAYER_ID)
+            if (player.Id == MainWindow.TEST_PLAYER_ID)
             {
                 // TODO If no player is available, dialog for adding one (plus add to database etc.)
                 continueButton.Width = 0;
@@ -52,59 +52,7 @@ namespace _320Hack
             MainWindow main;
             if (e.Source.Equals(newGameButton))
             {
-                // Start new game
-                Console.WriteLine("Starting New Game");
-
-                player = new Player
-                {
-                    Id = newPlayerId,
-                    Name = playerNameTextBox.Text,
-                    CurrentRoom = 1,
-                    Row = 4,
-                    Col = 48,
-                    Experience = 0,
-                    Health = 100
-                };
-
-                using (var db = new DbModel()) {
-                    db.Player.Attach(player);
-                    db.Entry(player).State = System.Data.Entity.EntityState.Added;
-
-                    List<Room> allRooms = (from r in db.Rooms select r).ToList();
-                    foreach (Room r in allRooms)
-                    {
-                        r.reset();
-                        db.Rooms.Attach(r);
-                        db.Entry(r).State = System.Data.Entity.EntityState.Modified;
-                    }
-
-                    List<MonsterInstance> monsters = (from ms in db.MonsterInstances select ms).ToList();
-                    Random random = new Random();
-                    foreach (MonsterInstance m in monsters)
-                    {
-                        m.CurrentHP = (from n in db.Monsters where n.Id == m.MonsterId select n.HP).Single();
-                        Room room = (from r in db.Rooms where m.RoomId == r.Id select r).Single();
-                        room.setupMap();
-
-                        int row, col;
-
-                        do
-                        {
-                            row = random.Next(0, room.LevelChars.Count);
-                            col = random.Next(0, room.LevelChars[row].Count);
-                        }
-                        while (room.LevelChars[row][col] != MainWindow.floor);
-
-                        m.Row = row;
-                        m.Col = col;
-
-                        db.MonsterInstances.Attach(m);
-                        db.Entry(m).State = System.Data.Entity.EntityState.Modified;
-                    }
-
-                    db.SaveChanges();
-                    main = new MainWindow(player, true);
-                }
+                main = genNewPlayer();
             }
             else
             {
@@ -112,6 +60,49 @@ namespace _320Hack
             }
             this.Close();
             main.Show();
+        }
+
+        private MainWindow genNewPlayer()
+        {
+            // Start new game
+            Console.WriteLine("Starting New Game");
+
+            player = new Player
+            {
+                Id = newPlayerId,
+                Name = playerNameTextBox.Text,
+                CurrentRoom = Player.startRoomId,
+                Row = Player.startRow,
+                Col = Player.startCol,
+                Experience = 0,
+                Health = Player.maxHealth
+            };
+
+            using (var db = new DbModel())
+            {
+                db.Player.Attach(player);
+                db.Entry(player).State = System.Data.Entity.EntityState.Added;
+
+                List<Room> allRooms = (from r in db.Rooms select r).ToList();
+                foreach (Room r in allRooms)
+                {
+                    r.reset();
+                    db.Rooms.Attach(r);
+                    db.Entry(r).State = System.Data.Entity.EntityState.Modified;
+                }
+
+                List<MonsterInstance> monsters = (from ms in db.MonsterInstances select ms).ToList();
+                Random random = new Random();
+                foreach (MonsterInstance m in monsters)
+                {
+                    m.reset(db, random);
+                    db.MonsterInstances.Attach(m);
+                    db.Entry(m).State = System.Data.Entity.EntityState.Modified;
+                }
+
+                db.SaveChanges();
+                return new MainWindow(player, true);
+            }
         }
 
         private void focused(object sender, RoutedEventArgs e)

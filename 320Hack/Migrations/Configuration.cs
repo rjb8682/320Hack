@@ -142,11 +142,11 @@ namespace _320Hack.Migrations
             context.Player.AddOrUpdate(new Player { 
                 Id = MainWindow.TEST_PLAYER_ID, 
                 Name = "testPlayer", 
-                CurrentRoom = 1, 
-                Row = 4,
-                Col = 48,
+                CurrentRoom = Player.startRoomId, 
+                Row = Player.startRow,
+                Col = Player.startCol,
                 Experience = 0, 
-                Health = 100 });
+                Health = Player.maxHealth });
         }
 
         // Gets us relative paths even though we're in a different directory.

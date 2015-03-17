@@ -10,6 +10,11 @@ namespace _320Hack
 {
     public class Player
     {
+        public const int startCol = 48;
+        public const int startRow = 4;
+        public const int startRoomId = 1;
+        public const int maxHealth = 100;
+
         public int Id { get; set; }
 
         public int CurrentRoom { get; set; }
@@ -83,6 +88,14 @@ namespace _320Hack
             {
                 Console.WriteLine("Congratulations! You are now level " + getLevel() + ".");
             }
+        }
+
+        public void revive()
+        {
+            Row = startRow;
+            Col = startCol;
+            CurrentRoom = startRoomId;
+            Health = maxHealth;
         }
     }
 
