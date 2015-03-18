@@ -48,7 +48,8 @@ namespace _320Hack.Migrations
                         Color = tokens[2],
                         MinimumRoom = Convert.ToInt32(tokens[3]),
                         Name = tokens[4],
-                        Speed = Convert.ToInt32(tokens[5])
+                        Speed = Convert.ToInt32(tokens[5]),
+                        Attack = Convert.ToInt32(tokens[6])
                     };
                     context.Monsters.AddOrUpdate(monster);
 

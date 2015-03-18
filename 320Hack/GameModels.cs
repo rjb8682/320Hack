@@ -27,6 +27,8 @@ namespace _320Hack
 
         public int Health { get; set; }
 
+        public int Speed { get; set; }
+
         public String Name { get; set; }
 
         public String getInfo()

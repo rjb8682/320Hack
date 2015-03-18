@@ -75,7 +75,8 @@ namespace _320Hack
                 Row = Player.startRow,
                 Col = Player.startCol,
                 Experience = 0,
-                Health = Player.maxHealth
+                Health = Player.maxHealth,
+                Speed = Map.BASE_TURN_SPEED
             };
 
             using (var db = new DbModel())

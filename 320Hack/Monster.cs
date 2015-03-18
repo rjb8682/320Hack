@@ -23,6 +23,8 @@ namespace _320Hack
         public int MinimumRoom { get; set; }
 
         public int Speed { get; set; }
+
+        public int Attack { get; set; }
     }
 
     public class MonsterHistory
@@ -57,6 +59,8 @@ namespace _320Hack
         public int Power { get; set; }
 
         public int Speed { get; set; }
+
+        public int SpeedTowardNextTurn { get; set; }
 
         public String Symbol { get; set; }
 
@@ -150,27 +154,32 @@ namespace _320Hack
 
         public void move(Room room, Player player, char[] validSpaces, Predicate<Coordinate> monsterTest)
         {
-            Coordinate start = new Coordinate(Row, Col);
-            Coordinate target = new Coordinate(player.Row, player.Col);
+            SpeedTowardNextTurn += player.Speed;
 
-            if (neighborCoordinates(room, start, validSpaces).Contains(target))
+            // Take turns until we've used up all of our game time (e.g. if speed is 200, loop 5 times)
+            for (; SpeedTowardNextTurn - Speed >= 0; SpeedTowardNextTurn -= Speed)
             {
-                player.attack(this);
-                return;
-            }
+                Coordinate start = new Coordinate(Row, Col);
+                Coordinate target = new Coordinate(player.Row, player.Col);
 
-            Coordinate result = shortestPathTo(room,
-                start,
-                target,
-                validSpaces);
+                if (neighborCoordinates(room, start, validSpaces).Contains(target))
+                {
+                    player.attack(this);
+                    continue;
+                }
 
-            // Don't move on top of another monster.
-            if (!monsterTest(result))
-            {
-                Row = result.row;
-                Col = result.col;
+                Coordinate result = shortestPathTo(room,
+                    start,
+                    target,
+                    validSpaces);
+
+                // Don't move on top of another monster.
+                if (!monsterTest(result))
+                {
+                    Row = result.row;
+                    Col = result.col;
+                }
             }
-            
         }
 
         /**

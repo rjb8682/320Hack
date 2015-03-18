@@ -11,6 +11,8 @@ namespace _320Hack
 {
     class Map
     {
+        public const int BASE_TURN_SPEED = 1000;
+
         private Player player;
 
         private char[] walkTiles;

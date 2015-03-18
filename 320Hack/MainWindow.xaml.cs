@@ -218,8 +218,9 @@ namespace _320Hack
                             Symbol = template.Symbol,
                             MonsterId = template.Id,
                             RoomId = r.Id,
-                            Power = (int)(player.getLevel() * 0.75) + (5 * r.Id),
-                            Speed = template.Speed
+                            Power = (int) (template.Attack + player.getLevel() * 0.75) + (5 * r.Id),
+                            Speed = template.Speed,
+                            SpeedTowardNextTurn = 0
                         };
                         m.place(db, random);
                     }
