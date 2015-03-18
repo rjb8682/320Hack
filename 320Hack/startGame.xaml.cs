@@ -75,7 +75,8 @@ namespace _320Hack
                 Row = Player.startRow,
                 Col = Player.startCol,
                 Experience = 0,
-                Health = Player.maxHealth,
+                Health = 100,
+                maxHealth = 100,
                 Speed = Map.BASE_TURN_SPEED
             };
 

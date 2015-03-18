@@ -202,7 +202,6 @@ namespace _320Hack
         // Returns true if the player is able to see the title at r, c.
         private bool canSeeTile(int r, int c)
         {
-            return true;
             if (player.Row == r && player.Col == c) return true;
             int dr = r - player.Row;
             int dc = c - player.Col;
@@ -216,6 +215,7 @@ namespace _320Hack
             {
                 distance -= 1;
             }
+
             if (distance > 7)
             {
                 return false;

@@ -13,7 +13,8 @@ namespace _320Hack
         public const int startCol = 48;
         public const int startRow = 4;
         public const int startRoomId = 1;
-        public const int maxHealth = 100;
+
+        public int maxHealth { get; set; }
 
         public int Id { get; set; }
 
@@ -85,6 +86,7 @@ namespace _320Hack
         public void awardExperience(int exp)
         {
             int level = getLevel();
+            Console.WriteLine("You got " + exp + " experience.");
             Experience += exp;
             if (getLevel() > level)
             {
@@ -95,7 +97,8 @@ namespace _320Hack
         public void levelUp()
         {
             Console.WriteLine("Congratulations! You are now level " + getLevel() + ".");
-            Health = 100;
+            maxHealth = (int)(maxHealth * 1.25);
+            Health = maxHealth;
         }
 
         public void revive()

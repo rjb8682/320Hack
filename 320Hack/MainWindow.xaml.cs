@@ -90,6 +90,7 @@ namespace _320Hack
         {
             gameLevel.printMap(gameArea);
             healthBar.Value = player.Health;
+            healthBar.Maximum = player.maxHealth;
             if (player.isDead())
             {
                 showDeathStuff();
@@ -114,7 +115,7 @@ namespace _320Hack
                 {
                     sum += m.Count;
                 }
-                deathArea.Text += "\nYou have killed " + sum + " monster" + (sum > 0 ? "s" : "") + ":\n\n";
+                deathArea.Text += "\nYou have killed " + sum + " monster" + (sum != 1 ? "s" : "") + ":\n\n";
 
                 int count = 0;
                 foreach (MonsterHistory killedMonster in killedMonsters)

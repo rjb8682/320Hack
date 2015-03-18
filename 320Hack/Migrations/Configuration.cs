@@ -121,7 +121,7 @@ namespace _320Hack.Migrations
                 Row = Player.startRow,
                 Col = Player.startCol,
                 Experience = 0, 
-                Health = Player.maxHealth });
+                Health = 100 });
         }
 
         // Gets us relative paths even though we're in a different directory.

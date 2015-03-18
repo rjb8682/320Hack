@@ -64,6 +64,8 @@ namespace _320Hack
 
         public String Symbol { get; set; }
 
+        public int MaxHealth { get; set; }
+
         public MonsterInstance() { }
 
         public MonsterInstance(Monster template, int playerLevel, int roomId)
@@ -76,6 +78,7 @@ namespace _320Hack
             Power = (int) (template.Attack + playerLevel * 0.75) + (5 * roomId);
             Speed = template.Speed;
             SpeedTowardNextTurn = 0;
+            MaxHealth = template.HP;
         }
 
         public int getAttackPower()
@@ -123,7 +126,7 @@ namespace _320Hack
             {
                 Console.WriteLine("You killed the " + Name + "!");
 
-                player.awardExperience(Power);
+                player.awardExperience((MaxHealth / 10) + (Power * 50 / Speed) + 1);
 
                 Row = MainWindow.INVALID_POSITION;
                 Col = MainWindow.INVALID_POSITION;
