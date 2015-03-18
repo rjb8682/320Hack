@@ -110,7 +110,7 @@ namespace _320Hack
         }
 
         // Given a row delta and col delta, moves the player if the new tile is valid.
-        public void movePlayer(int dRow, int dCol, bool goInDoor = false, bool up = false)
+        public void movePlayer(int dRow, int dCol, TextBox output, bool goInDoor = false, bool up = false)
         {
             int newRow = player.Row + dRow;
             int newCol = player.Col + dCol;
@@ -118,7 +118,7 @@ namespace _320Hack
             MonsterInstance monsterToAttack = monsters.Find(m => m.Row == newRow && m.Col == newCol);
             if (monsterToAttack != null)
             {
-                monsterToAttack.attack(player);
+                monsterToAttack.attack(player, output);
             }
             else if (walkTiles.Contains(room.LevelTiles[newRow][newCol].Symbol))
             {
@@ -128,7 +128,7 @@ namespace _320Hack
 
             foreach (MonsterInstance monster in monsters)
             {
-                monster.move(room, player, walkTiles);
+                monster.move(room, player, walkTiles, isMonsterOnSpace);
             }
 
             Stair stair = stairs.Find(d => d.Row == player.Row && d.Col == player.Col);
@@ -264,6 +264,11 @@ namespace _320Hack
         public Boolean isValidCoordinate(int r, int c)
         {
             return r > 0 && r < room.LevelTiles.Count && c > 0 && c < room.LevelTiles[r].Count;
+        }
+
+        public Boolean isMonsterOnSpace(Coordinate c)
+        {
+            return monsters.Find(m => m.Row == c.row && m.Col == c.col) != null;
         }
     }
 }

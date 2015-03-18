@@ -140,7 +140,7 @@ namespace _320Hack
             return CurrentHP <= 0;
         }
 
-        public void move(Room room, Player player, char[] validSpaces)
+        public void move(Room room, Player player, char[] validSpaces, Predicate<Coordinate> monsterTest)
         {
             Coordinate start = new Coordinate(Row, Col);
             Coordinate target = new Coordinate(player.Row, player.Col);
@@ -155,8 +155,14 @@ namespace _320Hack
                 start,
                 target,
                 validSpaces);
-            Row = result.row;
-            Col = result.col;
+
+            // Don't move on top of another monster.
+            if (!monsterTest(result))
+            {
+                Row = result.row;
+                Col = result.col;
+            }
+            
         }
 
         /**

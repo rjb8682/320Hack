@@ -95,9 +95,10 @@ namespace _320Hack
                 showDeathStuff();
             }
             levelBar.Value = 100 * player.getFracToNextLevel();
-            outputPanel.Text = player.getInfo();
+            statPanel.Text = player.getInfo();
         }
 
+        // TODO Make monster history taly up as you go
         public void showDeathStuff()
         {
             using (var db = new DbModel())
@@ -113,7 +114,7 @@ namespace _320Hack
                 {
                     sum += m.Count;
                 }
-                gameArea.Text += "\nYou have killed " + sum + " monster" + (sum > 0 ? "s" : "") + ":\n";
+                deathArea.Text += "\nYou have killed " + sum + " monster" + (sum > 0 ? "s" : "") + ":\n\n";
 
                 int count = 0;
                 foreach (MonsterHistory killedMonster in killedMonsters)
@@ -124,7 +125,7 @@ namespace _320Hack
 
                     for (int i = 0; i < killedMonster.Count; i++)
                     {
-                        gameArea.Inlines.Add(new Run(monster.Symbol)
+                        deathArea.Inlines.Add(new Run(monster.Symbol)
                         {
                             Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(monster.Color))
                         });
@@ -132,13 +133,13 @@ namespace _320Hack
                         count++;
                         if (count == 10)
                         {
-                            gameArea.Text += "\n";
+                            deathArea.Inlines.Add("\n");
                             count = 0;
                         }
                     }
                 }
             }
-            gameArea.Text += "\n\nWould you like to continue your adventure? (y/n)";
+            outputPanel.Text += "Would you like to continue your adventure? (y/n)";
         }
 
         private void keyPressed(object sender, KeyEventArgs e)
@@ -149,6 +150,8 @@ namespace _320Hack
                 {
                     revive();
                     gameLevel.setupState(player.CurrentRoom);
+                    outputPanel.Text = "";
+                    deathArea.Text = "";
                     update();
                 }
                 else if (e.Key == Key.N)

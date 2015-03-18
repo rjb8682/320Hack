@@ -4,18 +4,27 @@
         Title="MainWindow" Height="682.091" Width="1050"
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="keyPressed" Closed="isClosed">
     <Grid Background="#FF595D72">
-        <TextBox x:Name="textEntry" Margin="34,603,34,10" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam"/>
-        <Label Content="Console" HorizontalAlignment="Left" Margin="34,571,0,0" VerticalAlignment="Top" Width="122" FontSize="18" Height="32"/>
-        <TextBlock x:Name="gameArea" Margin="34,13,34,0" VerticalAlignment="Top" Height="424" Background="Black" FontSize="20" IsEnabled="False" FontFamily="MS Mincho" Foreground="#FFB8B8B8" Padding="200,10,0,0" TextOptions.TextHintingMode="Fixed" Focusable="True"/>
-        <TextBox x:Name="outputPanel" Margin="34,488,34,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="78" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0"/>
-        <Rectangle Fill="#FF272932" Height="51" Margin="34,437,34,0" VerticalAlignment="Top" Stroke="Black"/>
-        <ProgressBar x:Name="healthBar" HorizontalAlignment="Left" Height="28" Margin="104,447,0,0" VerticalAlignment="Top" Width="491" Background="#FF8F8F8F" BorderBrush="#FF252525" Value="100">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="textEntry" Margin="113,0,34,14" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam" Height="46" VerticalAlignment="Bottom"/>
+        <Label Content="Console:" HorizontalAlignment="Left" Margin="34,0,0,14" Width="79" FontSize="14" VerticalContentAlignment="Center" Background="#FFACADB6" BorderBrush="Black" BorderThickness="2,2,0,2" HorizontalContentAlignment="Center" Height="46" VerticalAlignment="Bottom"/>
+        <TextBlock x:Name="gameArea" Margin="34,13,230,0" VerticalAlignment="Top" Height="440" Background="Black" FontSize="20" IsEnabled="False" FontFamily="MS Mincho" Foreground="#FFB8B8B8" Padding="9,10,0,0" TextOptions.TextHintingMode="Fixed" Focusable="True"/>
+        <TextBox x:Name="statPanel" Margin="0,510,34,65" TextWrapping="Wrap" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="#FF171717" BorderThickness="0" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0" HorizontalAlignment="Right" Width="490"/>
+        <Rectangle Fill="#FF272932" Height="51" Margin="34,458,34,0" VerticalAlignment="Top" StrokeThickness="2">
+            <Rectangle.Stroke>
+                <SolidColorBrush Color="Black" Opacity="0.5"/>
+            </Rectangle.Stroke>
+        </Rectangle>
+        <ProgressBar x:Name="healthBar" HorizontalAlignment="Left" Height="28" Margin="104,468,0,0" VerticalAlignment="Top" Width="491" Background="#FF8F8F8F" BorderBrush="#FF252525" Value="100">
             <ProgressBar.Foreground>
                 <SolidColorBrush Color="#FFAC0404"/>
             </ProgressBar.Foreground>
         </ProgressBar>
-        <Label Content="Health:" HorizontalAlignment="Left" Margin="50,447,0,0" VerticalAlignment="Top" Height="28" Width="49" Foreground="White"/>
-        <ProgressBar x:Name="levelBar" Height="28" Margin="674,447,55,0" VerticalAlignment="Top" Background="#FF8F8F8F" Foreground="#FF05891D" BorderBrush="#FF232323" SmallChange="1"/>
-        <Label Content="Experience:" HorizontalAlignment="Left" Margin="600,447,0,0" VerticalAlignment="Top" Height="28" Width="69" Foreground="White"/>
+        <Label Content="Health:" HorizontalAlignment="Left" Margin="50,468,0,0" VerticalAlignment="Top" Height="28" Width="49" Foreground="White"/>
+        <ProgressBar x:Name="levelBar" Height="28" Margin="674,468,55,0" VerticalAlignment="Top" Background="#FF8F8F8F" Foreground="#FF05891D" BorderBrush="#FF232323" SmallChange="1"/>
+        <Label Content="Experience:" HorizontalAlignment="Left" Margin="600,468,0,0" VerticalAlignment="Top" Height="28" Width="69" Foreground="White"/>
+        <TextBox x:Name="outputPanel" Margin="34,510,0,65" TextWrapping="Wrap" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="#FF171717" BorderThickness="0" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0" HorizontalAlignment="Left" Width="481"/>
+        <TextBlock x:Name="deathArea" Margin="814,13,34,0" VerticalAlignment="Top" Height="440" Background="Black" FontSize="16" IsEnabled="False" FontFamily="MS Mincho" Foreground="#FFB8B8B8" Padding="9,10,0,0" TextOptions.TextHintingMode="Fixed" Focusable="True" TextWrapping="WrapWithOverflow"/>
     </Grid>
 </Window>
