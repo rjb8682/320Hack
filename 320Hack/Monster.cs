@@ -21,6 +21,8 @@ namespace _320Hack
         public int HP { get; set; }
 
         public int MinimumRoom { get; set; }
+
+        public int Speed { get; set; }
     }
 
     public class MonsterHistory
@@ -53,6 +55,8 @@ namespace _320Hack
         public int Col { get; set; }
 
         public int Power { get; set; }
+
+        public int Speed { get; set; }
 
         public String Symbol { get; set; }
 
