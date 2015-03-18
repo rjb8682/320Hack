@@ -32,7 +32,7 @@ namespace _320Hack
         public String getInfo()
         {
             String toReturn = "";
-
+            toReturn += Name + " - ";
             toReturn += "Level: " + getLevel();
 
             return toReturn;
@@ -58,9 +58,6 @@ namespace _320Hack
         {
             int currLevel = getLevel();
             double expForNext = expRequired(currLevel + 1) - expRequired(currLevel);
-            Console.WriteLine("Current Experience: " + Experience);
-            Console.WriteLine("Needed Experience: " + expRequired(currLevel + 1));
-            Console.WriteLine("Percent there: " + (Experience - expRequired(currLevel)) / expForNext);
             return (Experience - expRequired(currLevel)) / expForNext;
         }
 
@@ -89,8 +86,14 @@ namespace _320Hack
             Experience += exp;
             if (getLevel() > level)
             {
-                Console.WriteLine("Congratulations! You are now level " + getLevel() + ".");
+                levelUp();
             }
+        }
+
+        public void levelUp()
+        {
+            Console.WriteLine("Congratulations! You are now level " + getLevel() + ".");
+            Health = 100;
         }
 
         public void revive()

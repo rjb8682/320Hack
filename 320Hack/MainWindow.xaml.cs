@@ -40,7 +40,7 @@ namespace _320Hack
         public static Char horizWall = '—';
         public static Char door = '#';
 
-        public const int monsterModifier = 3;
+        public const int monsterModifier = 5;
 
         public Player player;
 
@@ -137,6 +137,8 @@ namespace _320Hack
                             count = 0;
                         }
                     }
+                    deathArea.Inlines.Add("\n");
+                    count = 0;
                 }
             }
             outputPanel.Text += "Would you like to continue your adventure? (y/n)";
@@ -197,7 +199,7 @@ namespace _320Hack
                 db.Player.Attach(player);
                 db.Entry(player).State = System.Data.Entity.EntityState.Modified;
 
-                List<Monster> monsters = (from ms in db.Monsters select ms).ToList();
+                List<Monster> monsters;
                 List<Room> rooms = (from r in db.Rooms select r).ToList();
                 Random random = new Random();
 
@@ -205,6 +207,7 @@ namespace _320Hack
 
                 foreach (Room r in rooms)
                 {
+                    monsters = (from ms in db.Monsters where ms.MinimumRoom <= r.Id select ms).ToList();
                     for (int i = 0; i < monsterModifier * r.Id; i++)
                     {
                         Monster template = monsters[random.Next(0, monsters.Count)];
@@ -215,7 +218,7 @@ namespace _320Hack
                             Symbol = template.Symbol,
                             MonsterId = template.Id,
                             RoomId = r.Id,
-                            Power = (int)(player.getLevel() * 1.25 * r.Id) + 5
+                            Power = (int)(player.getLevel() * 0.75) + (5 * r.Id)
                         };
                         m.place(db, random);
                     }

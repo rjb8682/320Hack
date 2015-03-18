@@ -19,6 +19,8 @@ namespace _320Hack
         public String Name { get; set; }
 
         public int HP { get; set; }
+
+        public int MinimumRoom { get; set; }
     }
 
     public class MonsterHistory
@@ -61,7 +63,7 @@ namespace _320Hack
 
         public void place(DbModel db, Random random)
         {
-            CurrentHP = (int)((from n in db.Monsters where n.Id == MonsterId select n.HP).Single() * 1.25 * RoomId);
+            CurrentHP = (int)((from n in db.Monsters where n.Id == MonsterId select n.HP).Single() * 0.75 * RoomId);
             Room room = (from r in db.Rooms where RoomId == r.Id select r).Single();
             room.setupMap();
 
@@ -81,6 +83,8 @@ namespace _320Hack
 
             Row = row;
             Col = col;
+
+            Console.WriteLine("Placed: " + Symbol + " with Hp: " + CurrentHP);
 
             db.MonsterInstances.Attach(this);
             db.Entry(this).State = System.Data.Entity.EntityState.Added;

@@ -46,7 +46,8 @@ namespace _320Hack.Migrations
                         Symbol = tokens[0],
                         HP = Convert.ToInt32(tokens[1]),
                         Color = tokens[2],
-                        Name = tokens[3]
+                        MinimumRoom = Convert.ToInt32(tokens[3]),
+                        Name = tokens[4]
                     };
                     context.Monsters.AddOrUpdate(monster);
 
