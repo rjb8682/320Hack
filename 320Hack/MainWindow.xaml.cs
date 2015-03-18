@@ -211,17 +211,7 @@ namespace _320Hack
                     for (int i = 0; i < monsterModifier * r.Id; i++)
                     {
                         Monster template = monsters[random.Next(0, monsters.Count)];
-                        MonsterInstance m = new MonsterInstance()
-                        {
-                            Color = template.Color,
-                            Name = template.Name,
-                            Symbol = template.Symbol,
-                            MonsterId = template.Id,
-                            RoomId = r.Id,
-                            Power = (int) (template.Attack + player.getLevel() * 0.75) + (5 * r.Id),
-                            Speed = template.Speed,
-                            SpeedTowardNextTurn = 0
-                        };
+                        MonsterInstance m = new MonsterInstance(template, player.getLevel(), r.Id);
                         m.place(db, random);
                     }
                 }

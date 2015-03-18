@@ -64,6 +64,20 @@ namespace _320Hack
 
         public String Symbol { get; set; }
 
+        public MonsterInstance() { }
+
+        public MonsterInstance(Monster template, int playerLevel, int roomId)
+        {
+            Color = template.Color;
+            Name = template.Name;
+            Symbol = template.Symbol;
+            MonsterId = template.Id;
+            RoomId = roomId;
+            Power = (int) (template.Attack + playerLevel * 0.75) + (5 * roomId);
+            Speed = template.Speed;
+            SpeedTowardNextTurn = 0;
+        }
+
         public int getAttackPower()
         {
             return Power;
@@ -152,14 +166,33 @@ namespace _320Hack
             return CurrentHP <= 0;
         }
 
-        public void move(Room room, Player player, char[] validSpaces, Predicate<Coordinate> monsterTest)
+        private bool canSeePlayer(Player player)
         {
+            double distance = Math.Sqrt(Math.Pow(Row - player.Row, 2) + Math.Pow(Col - player.Col, 2));
+            return distance <= 6;
+        }
+
+        public void move(Room room, Player player, char[] validSpaces, Predicate<Coordinate> monsterTest, Random random)
+        {
+            if (isDead()) return;
             SpeedTowardNextTurn += player.Speed;
 
             // Take turns until we've used up all of our game time (e.g. if speed is 200, loop 5 times)
             for (; SpeedTowardNextTurn - Speed >= 0; SpeedTowardNextTurn -= Speed)
             {
                 Coordinate start = new Coordinate(Row, Col);
+                if (!canSeePlayer(player))
+                {
+                    // wander
+                    List<Coordinate> neighbors = neighborCoordinates(room, start, validSpaces);
+                    Coordinate moveTo = neighbors[random.Next(neighbors.Count)];
+                    if (!monsterTest(moveTo))
+                    {
+                        Row = moveTo.row;
+                        Col = moveTo.col;
+                    }
+                    continue;
+                }
                 Coordinate target = new Coordinate(player.Row, player.Col);
 
                 if (neighborCoordinates(room, start, validSpaces).Contains(target))

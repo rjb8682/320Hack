@@ -22,12 +22,15 @@ namespace _320Hack
         private List<MonsterInstance> monsters;
         private Room room;
 
+        public Random random;
+
         public Map(Player p)
         {
             player = p;
             setupState(p.CurrentRoom);
             this.walkTiles = new char[] { MainWindow.floor, MainWindow.door };
             this.seeTiles = new char[] { MainWindow.floor, MainWindow.door};
+            random = new Random();
         }
 
         // Sets up the game state in the given room.
@@ -121,6 +124,7 @@ namespace _320Hack
             if (monsterToAttack != null)
             {
                 monsterToAttack.attack(player);
+                if (monsterToAttack.isDead()) monsters.Remove(monsterToAttack);
             }
             else if (walkTiles.Contains(room.LevelTiles[newRow][newCol].Symbol))
             {
@@ -130,7 +134,7 @@ namespace _320Hack
 
             foreach (MonsterInstance monster in monsters)
             {
-                monster.move(room, player, walkTiles, isMonsterOnSpace);
+                monster.move(room, player, walkTiles, isMonsterOnSpace, random);
             }
 
             Stair stair = stairs.Find(d => d.Row == player.Row && d.Col == player.Col);
@@ -198,6 +202,7 @@ namespace _320Hack
         // Returns true if the player is able to see the title at r, c.
         private bool canSeeTile(int r, int c)
         {
+            return true;
             if (player.Row == r && player.Col == c) return true;
             int dr = r - player.Row;
             int dc = c - player.Col;
