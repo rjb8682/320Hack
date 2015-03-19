@@ -299,6 +299,12 @@ namespace _320Hack
                     help.Owner = Application.Current.MainWindow;
                     help.ShowDialog();
                 }
+                else if (text == "/quit")
+                {
+                    textEntry.Clear();
+                    new startGame().Show();
+                    this.Close();
+                }
                 return "";
             }
         }
