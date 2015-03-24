@@ -7,7 +7,7 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="textEntry" Margin="113,0,34,14" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam" Height="46" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="textEntry" Margin="113,0,34,14" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam" Height="46" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Padding="5,0,0,0"/>
         <Label Content="Console:" HorizontalAlignment="Left" Margin="34,0,0,14" Width="79" FontSize="14" VerticalContentAlignment="Center" Background="#FFACADB6" BorderBrush="Black" BorderThickness="2,2,0,2" HorizontalContentAlignment="Center" Height="46" VerticalAlignment="Bottom"/>
         <TextBlock x:Name="gameArea" Margin="34,13,230,0" VerticalAlignment="Top" Height="440" Background="Black" FontSize="20" IsEnabled="False" FontFamily="MS Mincho" Foreground="#FFB8B8B8" Padding="10" TextOptions.TextHintingMode="Fixed" Focusable="True"/>
         <TextBox x:Name="statPanel" Margin="0,510,34,65" TextWrapping="Wrap" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="#FF171717" BorderThickness="0" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0" HorizontalAlignment="Right" Width="490"/>
