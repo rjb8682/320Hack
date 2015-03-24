@@ -24,6 +24,8 @@ namespace _320Hack
 
         public Random random;
 
+        public bool degbugSeen = false;
+
         public Map(Player p)
         {
             player = p;
@@ -202,6 +204,8 @@ namespace _320Hack
         // Returns true if the player is able to see the title at r, c.
         private bool canSeeTile(int r, int c)
         {
+            if (degbugSeen) return true;
+
             if (player.Row == r && player.Col == c) return true;
             int dr = r - player.Row;
             int dc = c - player.Col;

@@ -106,10 +106,13 @@ namespace _320Hack.Migrations
                 Map = level3,
                 Seen = new byte[level3.Length]
             });
+
             context.Stairs.AddOrUpdate(new Stair { Id = 1, LivesIn = 1, ConnectsTo = 2, Row = 2, Col = 37 });
             context.Stairs.AddOrUpdate(new Stair { Id = 2, LivesIn = 2, ConnectsTo = 1, Row = 2, Col = 8 });
             context.Stairs.AddOrUpdate(new Stair { Id = 3, LivesIn = 2, ConnectsTo = 3, Row = 3, Col = 23 });
             context.Stairs.AddOrUpdate(new Stair { Id = 4, LivesIn = 3, ConnectsTo = 2, Row = 3, Col = 23 });
+            //context.Stairs.AddOrUpdate(new Stair { Id = 5, LivesIn = 2, ConnectsTo = 3, Row = 5, Col = 72 });
+            //context.Stairs.AddOrUpdate(new Stair { Id = 6, LivesIn = 3, ConnectsTo = 2, Row = 5, Col = 72 });
         }
 
         private void AddTestPlayer(_320Hack.DbModel context)
