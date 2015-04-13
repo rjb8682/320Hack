@@ -1,0 +1,20 @@
+﻿<Window x:Class="AsciiLevelEditor.ConfirmationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ConfirmationDialog" Height="159.574" Width="421.277">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="80*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" HorizontalAlignment="Center" Content="Are you sure you want to clear the level?"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="CLEAR" Margin="35" Click="Button_Click"/>
+            <Button Grid.Column="1" Content="CANCEL" Margin="35" Click="CancelButton"/>
+        </Grid>
+    </Grid>
+</Window>
