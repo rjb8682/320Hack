@@ -176,7 +176,7 @@ namespace _320Hack
         public void reloadMap(Stair stair)
         {
             setupState(stair.ConnectsTo);
-            Stair newDoor = stairs.Find(d => d.ConnectsTo == stair.LivesIn);
+            Stair newDoor = stairs.Find(d => (d.ConnectsTo == stair.LivesIn) && (Math.Ceiling(d.Id / 2.0) == Math.Ceiling(stair.Id / 2.0)));
             if (newDoor == null) { throw new Exception("No corresponding door in the new room! newRoom=" + room.Id); }
 
             player.Row = newDoor.Row;
