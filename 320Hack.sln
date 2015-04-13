@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "320Hack", "320Hack\320Hack.csproj", "{09ED5439-1BD1-4F5C-8EBF-3F17A307F995}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsciiLevelEditor", "..\..\..\Documents\Visual Studio 2013\Projects\AsciiLevelEditor\AsciiLevelEditor\AsciiLevelEditor.csproj", "{4B83020C-0E3F-49B6-B01A-154EA7C104CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsciiLevelEditor", "AsciiLevelEditor\AsciiLevelEditor.csproj", "{4B83020C-0E3F-49B6-B01A-154EA7C104CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
