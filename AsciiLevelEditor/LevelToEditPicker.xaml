@@ -1,0 +1,17 @@
+﻿<Window x:Class="AsciiLevelEditor.LevelToEditPicker"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="LevelToEditPicker" Height="175.373" Width="287.313">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40*"/>
+            <ColumnDefinition Width="60*"/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0" Content="Select level:"/>
+
+        <Menu x:Name="levelMenu" Grid.Column="1" Width="100" Height="30" HorizontalAlignment="Center">
+            <MenuItem x:Name="Level" Header="Level"/>
+        </Menu>
+
+    </Grid>
+</Window>
