@@ -92,6 +92,9 @@ namespace AsciiLevelEditor
         public void importFile(String file)
         {
             // Read a file from the database
+            var db = new _320Hack.DbModel();
+            List<_320Hack.Room> rooms = (from r in db.Rooms select r).ToList();
+            
         }
 
         private void keyPressed(object sender, KeyEventArgs e)
