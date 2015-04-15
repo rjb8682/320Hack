@@ -6,6 +6,6 @@
         <TextBox Margin="10,10,10,94" TextWrapping="Wrap" Text="Start a New Game or Continue?" Background="#FFA5A6B8" FontSize="16" TextAlignment="Center" VerticalContentAlignment="Center" IsReadOnly="True"/>
         <Button x:Name="newGameButton" Content="New Game" Margin="10,163,255,10" Click="Button_Click"/>
         <Button x:Name="continueButton" Content="Continue Game" Margin="254,163,10,10" Click="Button_Click"/>
-        <TextBox x:Name="playerNameTextBox" Margin="10,123,255,54" Text="Enter Player Name" VerticalContentAlignment="Center" GotFocus="focused" />
+        <TextBox x:Name="playerNameTextBox" Margin="10,123,255,54" Text="Enter Player Name" VerticalContentAlignment="Center" GotFocus="focused" KeyDown="keyPressed" />
     </Grid>
 </Window>

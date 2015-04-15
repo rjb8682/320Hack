@@ -109,5 +109,15 @@ namespace _320Hack
         {
             playerNameTextBox.Text = "";
         }
+
+        private void keyPressed(object sender, KeyEventArgs e)
+        {
+            if (playerNameTextBox.IsFocused && e.Key == Key.Enter)
+            {
+                MainWindow main = genNewPlayer();
+                main.Show();
+                this.Close();
+            }
+        }
     }
 }
