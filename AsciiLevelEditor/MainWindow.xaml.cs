@@ -148,9 +148,17 @@ namespace AsciiLevelEditor
             }
         }
 
-        public void clearLevel(object sender, RoutedEventArgs e)
+        public void clearLevel(object sender, RoutedEventArgs f)
         {
-            Console.WriteLine("You cleared");
+            for (int i = 0; i < MAX_ROWS; i++)
+            {
+                for (int j = 0; j < MAX_COLS; j++)
+                {
+                    Button button = buttonGrid.Children.Cast<UIElement>().First(e => Grid.GetRow(e) == i && Grid.GetColumn(e) == j) as Button;
+
+                    button.Background = new SolidColorBrush(Colors.Black);
+                }
+            }
         }
     }
 }
