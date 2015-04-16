@@ -29,9 +29,14 @@ namespace AsciiLevelEditor
         private int currentlySelectedColor = 0;
         private Color[] colors = { Colors.Blue, Colors.Red, Colors.Yellow, Colors.Gray, Colors.Black, Colors.LawnGreen };
 
+        // Edit this collection and it will effect the view as well
+        public List<List<Button>> buttonsInGrid;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            buttonsInGrid = new List<List<Button>>();
         }
 
         private UIElement getButton() { return buttonGrid.Children.Cast<UIElement>().First(e => Grid.GetRow(e) == currentlyFocusedRow && Grid.GetColumn(e) == currentlyFocusedCol); }
@@ -41,6 +46,7 @@ namespace AsciiLevelEditor
         {
             for (int i = 0; i < MAX_ROWS; i++)
             {
+                buttonsInGrid.Add(new List<Button>());
                 for (int j = 0; j < MAX_COLS; j++)
                 {
                     RowDefinition rowDef = new RowDefinition();
@@ -61,6 +67,7 @@ namespace AsciiLevelEditor
 
                     Grid.SetRow(newButton, i);
                     Grid.SetColumn(newButton, j);
+                    buttonsInGrid[i].Add(newButton);
                     buttonGrid.Children.Add(newButton);
                 }
             }
@@ -151,9 +158,7 @@ namespace AsciiLevelEditor
             {
                 for (int j = 0; j < MAX_COLS; j++)
                 {
-                    Button button = buttonGrid.Children.Cast<UIElement>().First(e => Grid.GetRow(e) == i && Grid.GetColumn(e) == j) as Button;
-
-                    button.Background = new SolidColorBrush(Colors.Black);
+                    buttonsInGrid[i][j].Background = new SolidColorBrush(Colors.Black);
                 }
             }
         }
