@@ -27,7 +27,10 @@ namespace AsciiLevelEditor
         private int currentlyFocusedCol = 0;
 
         private int currentlySelectedColor = 0;
-        private Color[] colors = { Colors.Blue, Colors.Red, Colors.Yellow, Colors.Gray, Colors.Black, Colors.LawnGreen };
+        private List<Color> colors = new List<Color>()  { Colors.Blue, Colors.Red, Colors.Yellow, Colors.Gray, Colors.Black, Colors.LawnGreen };
+        private List<char> tileChars = new List<char>() { '|', '—', '+', '·', ' ', '\n' };
+
+        public int currentlySelectedRoom = -1;
 
         // Edit this collection and it will effect the view as well
         public List<List<Button>> buttonsInGrid;
@@ -38,9 +41,6 @@ namespace AsciiLevelEditor
 
             buttonsInGrid = new List<List<Button>>();
         }
-
-        private UIElement getButton() { return buttonGrid.Children.Cast<UIElement>().First(e => Grid.GetRow(e) == currentlyFocusedRow && Grid.GetColumn(e) == currentlyFocusedCol); }
-        private UIElement getButton(int row, int col) { return buttonGrid.Children.Cast<UIElement>().First(e => Grid.GetRow(e) == row && Grid.GetColumn(e) == col); }
 
         private void ButtonGrid_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -71,7 +71,12 @@ namespace AsciiLevelEditor
                     buttonGrid.Children.Add(newButton);
                 }
             }
-            getButton().Focus();
+        }
+
+        private void colorSelector(object sender, RoutedEventArgs e)
+        {
+            Button selectedColor = sender as Button;
+            currentlySelectedColor = colors.IndexOf((selectedColor.Background as SolidColorBrush).Color);
         }
 
         private void GridClick(object sender, RoutedEventArgs e)
@@ -79,29 +84,73 @@ namespace AsciiLevelEditor
             (sender as Button).Background = new SolidColorBrush(colors[currentlySelectedColor]);
         }
 
-        private void exportLevel(object sender, RoutedEventArgs e)
+        private void saveLevel(object sender, RoutedEventArgs e)
         {
-            FileDialog dialog = new FileDialog(this, "Export");
-            dialog.Show();
-        }
+            if (currentlySelectedRoom == -1)
+            {
+                // No room imported
 
-        public void exportFile(String file)
-        {
-            // Write the file to database
+            }
+            else
+            {
+                String theMap = "";
+                for (int i = 0; i < MAX_ROWS; i++)
+                {
+                    for (int j = 0; j < MAX_COLS; j++)
+                    {
+                        char newChar = tileChars[colors.IndexOf((buttonsInGrid[i][j].Background as SolidColorBrush).Color)];
+                        if (newChar == '\n')
+                        {
+                            theMap += '\r';
+                            theMap += '\n';
+                            break;
+                        }
+                        else
+                        {
+                            theMap += newChar;
+                        }
+                    }
+                }
+
+
+                using (var db = new _320Hack.DbModel())
+                {
+                    _320Hack.Room room = (from r in db.Rooms where r.Id == currentlySelectedRoom select r).Single();
+                    room.Map = theMap;
+                    db.SaveChanges();
+                }
+            }
         }
 
         private void importLevel(object sender, RoutedEventArgs e)
         {
-            FileDialog dialog = new FileDialog(this, "Import");
+            var db = new _320Hack.DbModel();
+            List<_320Hack.Room> rooms = (from r in db.Rooms select r).ToList();
+
+            FileDialog dialog = new FileDialog(this, "Import", rooms);
             dialog.Show();
         }
 
-        public void importFile(String file)
+        public void importFile(int roomId)
         {
-            // Read a file from the database
+            currentlySelectedRoom = roomId;
             var db = new _320Hack.DbModel();
-            List<_320Hack.Room> rooms = (from r in db.Rooms select r).ToList();
-            
+            _320Hack.Room level = (from r in db.Rooms where r.Id == roomId select r).Single();
+            level.buildLevelChars();
+
+            clearLevel(null, null);
+
+            for (int i = 0; i < MAX_ROWS; i++)
+            {
+                if (i == level.LevelChars.Count) break;
+                for (int j = 0; j < MAX_COLS; j++)
+                {
+                    if (j == level.LevelChars[i].Count) break;
+                    char currentChar = level.LevelChars[i][j];
+                    buttonsInGrid[i][j].Background = new SolidColorBrush(colors[tileChars.IndexOf(currentChar)]);
+                    if (currentChar == '\n') break;
+                }
+            }
         }
 
         private void keyPressed(object sender, KeyEventArgs e)
@@ -111,25 +160,25 @@ namespace AsciiLevelEditor
             switch (code) {
                 case (int)Key.Up:
                     currentlyFocusedRow =  currentlyFocusedRow < 0 ? currentlyFocusedRow = 0 : currentlyFocusedRow--;
-                    getButton().Focus();
+                    buttonsInGrid[currentlyFocusedRow][currentlyFocusedCol].Focus();
                     break;
                 case (int)Key.Down:
                     currentlyFocusedRow = currentlyFocusedRow == MAX_ROWS - 1 ? currentlyFocusedRow = MAX_ROWS - 1 : currentlyFocusedRow++;
-                    getButton().Focus();
+                    buttonsInGrid[currentlyFocusedRow][currentlyFocusedCol].Focus();
                     break;
                 case (int)Key.Left:
                     currentlyFocusedCol = currentlyFocusedCol < 0 ? currentlyFocusedCol = 0 : currentlyFocusedCol--;
-                    getButton().Focus();
+                    buttonsInGrid[currentlyFocusedRow][currentlyFocusedCol].Focus();
                     break;
                 case (int)Key.Right:
                     currentlyFocusedCol = currentlyFocusedCol == MAX_COLS - 1 ? currentlyFocusedCol = MAX_COLS - 1 : currentlyFocusedCol++;
-                    getButton().Focus();
+                    buttonsInGrid[currentlyFocusedRow][currentlyFocusedCol].Focus();
                     break;
                 case (int)Key.I:
                     importLevel(null, null);
                     break;
-                case (int)Key.E:
-                    exportLevel(null, null);
+                case (int)Key.S:
+                    saveLevel(null, null);
                     break;
                 case (int)Key.C:
                     clearLevel(null, null);

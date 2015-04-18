@@ -44,7 +44,7 @@ namespace _320Hack
             buildLevelTiles();
         }
 
-        private void buildLevelChars()
+        public void buildLevelChars()
         {
             LevelChars = new List<List<Char>>();
             List<Char> currentRow = new List<Char>();
@@ -53,10 +53,11 @@ namespace _320Hack
             {
                 if (c == '\n')
                 {
+                    currentRow.Add(c);
                     LevelChars.Add(currentRow);
                     currentRow = new List<Char>();
                 }
-                else
+                else if(c != '\r')
                 {
                     currentRow.Add(c);
                 }

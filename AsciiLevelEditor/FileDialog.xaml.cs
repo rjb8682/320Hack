@@ -21,20 +21,39 @@ namespace AsciiLevelEditor
     {
         private MainWindow mainRef;
         private String which;
+        private List<_320Hack.Room> rooms;
 
-        public FileDialog(MainWindow main, String which)
+        public FileDialog(MainWindow main, String which, List<_320Hack.Room> rooms)
         {
             InitializeComponent();
             mainRef = main;
             this.which = which;
+
+            if (this.which == "Export")
+            {
+                FileTextBox.Visibility = Visibility.Visible;
+                LevelListBox.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                this.rooms = rooms;
+
+                foreach (_320Hack.Room room in rooms)
+                {
+                    LevelListBox.Items.Add("Level " + room.Id);
+                }
+            }
         }
 
         private void sendFileName(object sender, RoutedEventArgs e)
         {
-            if (fileInput.Text != "")
+            if (which == "Export")
             {
-                if (which == "Export") mainRef.exportFile(fileInput.Text);
-                else if (which == "Import") mainRef.importFile(fileInput.Text);
+
+            }
+            else
+            {
+                mainRef.importFile(LevelListBox.SelectedIndex + 1);
             }
             this.Close();
         }
