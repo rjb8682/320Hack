@@ -1,104 +1,126 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AsciiLevelEditor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private int MAX_ROWS = 26;
-        private int MAX_COLS = 93;
+        private const int MaxRows = 26;
+        private const int MaxCols = 93;
 
-        private int currentlyFocusedRow = 0;
-        private int currentlyFocusedCol = 0;
+        private int _currentRow;
+        private int _currentCol;
 
-        private int currentlySelectedColor = 0;
-        private List<Color> colors = new List<Color>()  { Colors.Blue, Colors.Red, Colors.Yellow, Colors.Gray, Colors.Black, Colors.LawnGreen };
-        private List<char> tileChars = new List<char>() { '|', '—', '+', '·', ' ', '\n' };
+        private int _currentColor;
+        private readonly List<Color> _colors = new List<Color>() { Colors.Blue, Colors.Red, Colors.Yellow, Colors.Gray, Colors.Black, Colors.LawnGreen, Colors.Orange, Colors.Purple };
+        private readonly List<char> _tileChars = new List<char>() { '|', '—', '+', '·', ' ', '\n' };
+        private const int FloorIndex = 3;
 
-        public int currentlySelectedRoom = -1;
+        public int CurrentRoom = -1;
 
         // Edit this collection and it will effect the view as well
-        public List<List<Button>> buttonsInGrid;
+        public List<List<Button>> ButtonsInGrid;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            buttonsInGrid = new List<List<Button>>();
+            ButtonsInGrid = new List<List<Button>>();
         }
 
         private void ButtonGrid_OnLoaded(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < MAX_ROWS; i++)
+            for (var i = 0; i < MaxRows; i++)
             {
-                buttonsInGrid.Add(new List<Button>());
-                for (int j = 0; j < MAX_COLS; j++)
+                ButtonsInGrid.Add(new List<Button>());
+                for (var j = 0; j < MaxCols; j++)
                 {
-                    RowDefinition rowDef = new RowDefinition();
-                    rowDef.Height = new GridLength(Math.Floor(buttonGrid.ActualHeight) / MAX_ROWS);
-                    buttonGrid.RowDefinitions.Add(rowDef);
+                    var rowDef = new RowDefinition
+                    {
+                        Height = new GridLength(Math.Floor(ButtonGrid.ActualHeight)/MaxRows)
+                    };
+                    ButtonGrid.RowDefinitions.Add(rowDef);
 
-                    ColumnDefinition colDef = new ColumnDefinition();
-                    colDef.Width = new GridLength(Math.Floor(buttonGrid.ActualWidth) / MAX_COLS);
-                    buttonGrid.ColumnDefinitions.Add(colDef);
+                    var colDef = new ColumnDefinition
+                    {
+                        Width = new GridLength(Math.Floor(ButtonGrid.ActualWidth)/MaxCols)
+                    };
+                    ButtonGrid.ColumnDefinitions.Add(colDef);
 
-                    Button newButton = new Button();
-                    newButton.HorizontalAlignment = HorizontalAlignment.Stretch;
-                    newButton.VerticalAlignment = VerticalAlignment.Stretch;
-                    newButton.Background = new SolidColorBrush(Colors.Black);
+                    var newButton = new Button
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        VerticalAlignment = VerticalAlignment.Stretch,
+                        Background = new SolidColorBrush(Colors.Black)
+                    };
                     newButton.Click += GridClick;
                     newButton.SetValue(ToolTipService.IsEnabledProperty, false);
                     newButton.ToolTip = i + "," + j;
 
                     Grid.SetRow(newButton, i);
                     Grid.SetColumn(newButton, j);
-                    buttonsInGrid[i].Add(newButton);
-                    buttonGrid.Children.Add(newButton);
+                    ButtonsInGrid[i].Add(newButton);
+                    ButtonGrid.Children.Add(newButton);
                 }
             }
         }
 
-        private void colorSelector(object sender, RoutedEventArgs e)
+        private void ColorSelector(object sender, RoutedEventArgs e)
         {
-            Button selectedColor = sender as Button;
-            currentlySelectedColor = colors.IndexOf((selectedColor.Background as SolidColorBrush).Color);
+            var selectedColor = sender as Button;
+            if (selectedColor == null) return;
+            var background = selectedColor.Background as SolidColorBrush;
+            if (background != null) _currentColor = _colors.IndexOf(background.Color);
         }
 
         private void GridClick(object sender, RoutedEventArgs e)
         {
-            (sender as Button).Background = new SolidColorBrush(colors[currentlySelectedColor]);
+            var button = sender as Button;
+            if (button != null) button.Background = new SolidColorBrush(_colors[_currentColor]);
         }
 
-        private void saveLevel(object sender, RoutedEventArgs e)
+        private void SaveLevel(object sender, RoutedEventArgs e)
         {
-            if (currentlySelectedRoom == -1)
+            var db = new _320Hack.DbModel();
+
+            if (CurrentRoom == -1)
             {
-                // No room imported
+                // TODO: Implement the ability to add another level into the game 
 
             }
             else
             {
-                String theMap = "";
-                for (int i = 0; i < MAX_ROWS; i++)
+                var stairs = (from s in db.Stairs where s.LivesIn == CurrentRoom select s).ToList();
+                foreach (var s in stairs)
                 {
-                    for (int j = 0; j < MAX_COLS; j++)
+                    db.Stairs.Remove(s);
+                }
+
+                var theMap = "";
+                for (var i = 0; i < MaxRows; i++)
+                {
+                    for (var j = 0; j < MaxCols; j++)
                     {
-                        char newChar = tileChars[colors.IndexOf((buttonsInGrid[i][j].Background as SolidColorBrush).Color)];
+                        var solidColorBrush = ButtonsInGrid[i][j].Background as SolidColorBrush;
+                        if (solidColorBrush == null) continue;
+                        var colorIndex = _colors.IndexOf(solidColorBrush.Color);
+
+                        if (solidColorBrush.Color == Colors.Orange || solidColorBrush.Color == Colors.Purple)
+                        {
+                            // Found a door on the map. Figure out which direction and go from there
+                            theMap += _tileChars[FloorIndex];
+                            continue;
+                        }
+
+                        var newChar = _tileChars[colorIndex];
                         if (newChar == '\n')
                         {
                             theMap += '\r';
@@ -112,105 +134,110 @@ namespace AsciiLevelEditor
                     }
                 }
 
-
-                using (var db = new _320Hack.DbModel())
-                {
-                    _320Hack.Room room = (from r in db.Rooms where r.Id == currentlySelectedRoom select r).Single();
-                    room.Map = theMap;
-                    db.SaveChanges();
-                }
+                var room = (from r in db.Rooms where r.Id == CurrentRoom select r).Single();
+                room.Map = theMap;
+                db.SaveChanges();
             }
         }
 
-        private void importLevel(object sender, RoutedEventArgs e)
+        private void ImportLevel(object sender, RoutedEventArgs e)
         {
             var db = new _320Hack.DbModel();
-            List<_320Hack.Room> rooms = (from r in db.Rooms select r).ToList();
+            var rooms = (from r in db.Rooms select r).ToList();
 
-            FileDialog dialog = new FileDialog(this, "Import", rooms);
+            var dialog = new FileDialog(this, rooms);
             dialog.Show();
         }
 
-        public void importFile(int roomId)
+        public void ImportFile(int roomId)
         {
-            currentlySelectedRoom = roomId;
+            CurrentRoom = roomId;
             var db = new _320Hack.DbModel();
-            _320Hack.Room level = (from r in db.Rooms where r.Id == roomId select r).Single();
+            var level = (from r in db.Rooms where r.Id == roomId select r).Single();
             level.buildLevelChars();
 
-            clearLevel(null, null);
+            ClearLevel(null, null);
 
-            for (int i = 0; i < MAX_ROWS; i++)
+            for (var i = 0; i < MaxRows; i++)
             {
                 if (i == level.LevelChars.Count) break;
-                for (int j = 0; j < MAX_COLS; j++)
+                for (var j = 0; j < MaxCols; j++)
                 {
                     if (j == level.LevelChars[i].Count) break;
                     char currentChar = level.LevelChars[i][j];
-                    buttonsInGrid[i][j].Background = new SolidColorBrush(colors[tileChars.IndexOf(currentChar)]);
+                    ButtonsInGrid[i][j].Background = new SolidColorBrush(_colors[_tileChars.IndexOf(currentChar)]);
                     if (currentChar == '\n') break;
                 }
             }
+            var query = (from s in db.Stairs where s.LivesIn == roomId select s);
+            var stairs = query.ToList();
+
+            foreach (_320Hack.Stair s in stairs)
+            {
+                int stairIndex = (s.LivesIn < s.ConnectsTo) ? 0 : 1;
+                ButtonsInGrid[s.Row][s.Col].Background = new SolidColorBrush(_colors[stairIndex + 6]);
+            }
         }
 
-        private void keyPressed(object sender, KeyEventArgs e)
+        private void KeyPressed(object sender, KeyEventArgs e)
         {
             int code = (int) e.Key;
 
             switch (code) {
                 case (int)Key.Up:
-                    currentlyFocusedRow =  currentlyFocusedRow < 0 ? currentlyFocusedRow = 0 : currentlyFocusedRow--;
-                    buttonsInGrid[currentlyFocusedRow][currentlyFocusedCol].Focus();
+                    _currentRow =  _currentRow < 0 ? _currentRow = 0 : _currentRow--;
+                    ButtonsInGrid[_currentRow][_currentCol].Focus();
                     break;
                 case (int)Key.Down:
-                    currentlyFocusedRow = currentlyFocusedRow == MAX_ROWS - 1 ? currentlyFocusedRow = MAX_ROWS - 1 : currentlyFocusedRow++;
-                    buttonsInGrid[currentlyFocusedRow][currentlyFocusedCol].Focus();
+                    _currentRow = _currentRow == MaxRows - 1 ? _currentRow = MaxRows - 1 : _currentRow++;
+                    ButtonsInGrid[_currentRow][_currentCol].Focus();
                     break;
                 case (int)Key.Left:
-                    currentlyFocusedCol = currentlyFocusedCol < 0 ? currentlyFocusedCol = 0 : currentlyFocusedCol--;
-                    buttonsInGrid[currentlyFocusedRow][currentlyFocusedCol].Focus();
+                    _currentCol = _currentCol < 0 ? _currentCol = 0 : _currentCol--;
+                    ButtonsInGrid[_currentRow][_currentCol].Focus();
                     break;
                 case (int)Key.Right:
-                    currentlyFocusedCol = currentlyFocusedCol == MAX_COLS - 1 ? currentlyFocusedCol = MAX_COLS - 1 : currentlyFocusedCol++;
-                    buttonsInGrid[currentlyFocusedRow][currentlyFocusedCol].Focus();
+                    _currentCol = _currentCol == MaxCols - 1 ? _currentCol = MaxCols - 1 : _currentCol++;
+                    ButtonsInGrid[_currentRow][_currentCol].Focus();
                     break;
                 case (int)Key.I:
-                    importLevel(null, null);
+                    ImportLevel(null, null);
                     break;
                 case (int)Key.S:
-                    saveLevel(null, null);
+                    SaveLevel(null, null);
                     break;
                 case (int)Key.C:
-                    clearLevel(null, null);
+                    ClearLevel(null, null);
                     break;
                 case 1:
-                    currentlySelectedColor = 0;
+                    _currentColor = 0;
                     break;
                 case 2:
-                    currentlySelectedColor = 1;
+                    _currentColor = 1;
                     break;
                 case 3:
-                    currentlySelectedColor = 2;
+                    _currentColor = 2;
                     break;
                 case 4:
-                    currentlySelectedColor = 3;
+                    _currentColor = 3;
                     break;
                 case 5:
-                    currentlySelectedColor = 4;
+                    _currentColor = 4;
                     break;
                 case 6:
-                    currentlySelectedColor = 5;
+                    _currentColor = 5;
                     break;
             }
         }
 
-        public void clearLevel(object sender, RoutedEventArgs f)
+        public void ClearLevel(object sender, RoutedEventArgs f)
         {
-            for (int i = 0; i < MAX_ROWS; i++)
+            CurrentRoom = -1;
+            for (var i = 0; i < MaxRows; i++)
             {
-                for (int j = 0; j < MAX_COLS; j++)
+                for (var j = 0; j < MaxCols; j++)
                 {
-                    buttonsInGrid[i][j].Background = new SolidColorBrush(Colors.Black);
+                    ButtonsInGrid[i][j].Background = new SolidColorBrush(Colors.Black);
                 }
             }
         }

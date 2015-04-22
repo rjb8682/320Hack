@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace AsciiLevelEditor
 {
@@ -19,48 +8,23 @@ namespace AsciiLevelEditor
     /// </summary>
     public partial class FileDialog : Window
     {
-        private MainWindow mainRef;
-        private String which;
-        private List<_320Hack.Room> rooms;
+        private readonly MainWindow _mainRef;
 
-        public FileDialog(MainWindow main, String which, List<_320Hack.Room> rooms)
+        public FileDialog(MainWindow main, List<_320Hack.Room> rooms)
         {
             InitializeComponent();
-            mainRef = main;
-            this.which = which;
+            _mainRef = main;
 
-            if (this.which == "Export")
+            foreach (var room in rooms)
             {
-                FileTextBox.Visibility = Visibility.Visible;
-                LevelListBox.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                this.rooms = rooms;
-
-                foreach (_320Hack.Room room in rooms)
-                {
-                    LevelListBox.Items.Add("Level " + room.Id);
-                }
+                LevelListBox.Items.Add("Level " + room.Id);
             }
         }
 
-        private void sendFileName(object sender, RoutedEventArgs e)
+        private void SendFileName(object sender, RoutedEventArgs e)
         {
-            if (which == "Export")
-            {
-
-            }
-            else
-            {
-                mainRef.importFile(LevelListBox.SelectedIndex + 1);
-            }
+            _mainRef.ImportFile(LevelListBox.SelectedIndex + 1);
             this.Close();
-        }
-
-        private void keyPressedInputBox(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter) sendFileName(null, null);
         }
     }
 }
