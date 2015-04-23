@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "320Hack", "320Hack\320Hack.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsciiLevelEditor", "AsciiLevelEditor\AsciiLevelEditor.csproj", "{4B83020C-0E3F-49B6-B01A-154EA7C104CE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonsterEditor", "MonsterEditor\MonsterEditor.csproj", "{EBE85CC0-2463-494D-8601-8875EDAE1BDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,16 @@ Global
 		{4B83020C-0E3F-49B6-B01A-154EA7C104CE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4B83020C-0E3F-49B6-B01A-154EA7C104CE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4B83020C-0E3F-49B6-B01A-154EA7C104CE}.Release|x86.ActiveCfg = Release|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{EBE85CC0-2463-494D-8601-8875EDAE1BDF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

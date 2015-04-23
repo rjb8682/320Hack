@@ -24,6 +24,9 @@ namespace AsciiLevelEditor
         private readonly List<char> _tileChars = new List<char>() { '|', '—', '+', '·', ' ', '\n' };
         private const int FloorIndex = 3;
 
+        private readonly Color _selector = Colors.Yellow;
+        private readonly Color _unSelector = Colors.Gray;
+
         public int CurrentRoom = -1;
 
         // Edit this collection and it will effect the view as well
@@ -59,11 +62,10 @@ namespace AsciiLevelEditor
                     {
                         HorizontalAlignment = HorizontalAlignment.Stretch,
                         VerticalAlignment = VerticalAlignment.Stretch,
-                        Background = new SolidColorBrush(Colors.Black)
+                        Background = new SolidColorBrush(Colors.Black),
                     };
                     newButton.Click += GridClick;
                     newButton.SetValue(ToolTipService.IsEnabledProperty, false);
-                    newButton.ToolTip = i + "," + j;
 
                     Grid.SetRow(newButton, i);
                     Grid.SetColumn(newButton, j);
@@ -71,6 +73,7 @@ namespace AsciiLevelEditor
                     ButtonGrid.Children.Add(newButton);
                 }
             }
+            ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_selector);
         }
 
         private void ColorSelector(object sender, RoutedEventArgs e)
@@ -172,33 +175,37 @@ namespace AsciiLevelEditor
             var query = (from s in db.Stairs where s.LivesIn == roomId select s);
             var stairs = query.ToList();
 
-            foreach (_320Hack.Stair s in stairs)
+            foreach (var s in stairs)
             {
-                int stairIndex = (s.LivesIn < s.ConnectsTo) ? 0 : 1;
+                var stairIndex = (s.LivesIn < s.ConnectsTo) ? 0 : 1;
                 ButtonsInGrid[s.Row][s.Col].Background = new SolidColorBrush(_colors[stairIndex + 6]);
             }
         }
 
         private void KeyPressed(object sender, KeyEventArgs e)
         {
-            int code = (int) e.Key;
+            var code = (int) e.Key;
 
             switch (code) {
                 case (int)Key.Up:
-                    _currentRow =  _currentRow < 0 ? _currentRow = 0 : _currentRow--;
-                    ButtonsInGrid[_currentRow][_currentCol].Focus();
+                    ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_unSelector);
+                    _currentRow =  _currentRow <= 0 ? 0 : _currentRow - 1;
+                    ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_selector);
                     break;
                 case (int)Key.Down:
-                    _currentRow = _currentRow == MaxRows - 1 ? _currentRow = MaxRows - 1 : _currentRow++;
-                    ButtonsInGrid[_currentRow][_currentCol].Focus();
+                    ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_unSelector);
+                    _currentRow = _currentRow == MaxRows - 1 ?  MaxRows - 1 : _currentRow + 1;
+                    ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_selector);
                     break;
                 case (int)Key.Left:
-                    _currentCol = _currentCol < 0 ? _currentCol = 0 : _currentCol--;
-                    ButtonsInGrid[_currentRow][_currentCol].Focus();
+                    ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_unSelector);
+                    _currentCol = _currentCol <= 0 ? 0 : _currentCol - 1;
+                    ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_selector);
                     break;
                 case (int)Key.Right:
-                    _currentCol = _currentCol == MaxCols - 1 ? _currentCol = MaxCols - 1 : _currentCol++;
-                    ButtonsInGrid[_currentRow][_currentCol].Focus();
+                    ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_unSelector);
+                    _currentCol = _currentCol == MaxCols - 1 ? MaxCols - 1 : _currentCol + 1;
+                    ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_selector);
                     break;
                 case (int)Key.I:
                     ImportLevel(null, null);
@@ -208,6 +215,9 @@ namespace AsciiLevelEditor
                     break;
                 case (int)Key.C:
                     ClearLevel(null, null);
+                    break;
+                case (int)Key.Z:
+                    ButtonsInGrid[_currentRow][_currentCol].Background = new SolidColorBrush(_colors[_currentColor]);
                     break;
                 case 1:
                     _currentColor = 0;

@@ -1,0 +1,41 @@
+﻿<Window x:Class="MonsterEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Monster Editor" Height="525" Width="675">
+    <Grid x:Name="AppGrid" Background="#FF858585">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="85*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="Edit the type of monters in the game" FontSize="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="#FF3E3E3E"/>
+        <Grid Grid.Row="1" x:Name="MonsterGrid" Margin="10" Background="#FFEAEAEA" ShowGridLines="True" Loaded="OnLoaded">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="90*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="7*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="Name" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="1" Content="Symbol" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="2" Content="Color" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="3" Content="Health" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="4" Content="MinRoom" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="5" Content="Speed" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="6" Content="Attack" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <ListBox x:Name="NameCol"  Grid.Row="1" Grid.Column="0" Background="#FFEAEAEA"/>
+            <ListBox x:Name="SymbolCol"  Grid.Row="1" Grid.Column="1" Background="#FFEAEAEA"/>
+            <ListBox x:Name="ColorCol"  Grid.Row="1" Grid.Column="2" Background="#FFEAEAEA"/>
+            <ListBox x:Name="HealthCol"  Grid.Row="1" Grid.Column="3" Background="#FFEAEAEA"/>
+            <ListBox x:Name="MinRoomCol"  Grid.Row="1" Grid.Column="4" Background="#FFEAEAEA"/>
+            <ListBox x:Name="SpeedCol"  Grid.Row="1" Grid.Column="5" Background="#FFEAEAEA"/>
+            <ListBox x:Name="AttackCol"  Grid.Row="1" Grid.Column="6" Background="#FFEAEAEA"/>
+        </Grid>
+    </Grid>
+</Window>
