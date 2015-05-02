@@ -8,12 +8,11 @@ namespace AsciiLevelEditor
     /// </summary>
     public partial class FileDialog : Window
     {
-        private readonly MainWindow _mainRef;
-
-        public FileDialog(MainWindow main, List<_320Hack.Room> rooms)
+        private MainWindow _mainRef;
+        public FileDialog(List<_320Hack.Room> rooms, MainWindow _mainRef)
         {
             InitializeComponent();
-            _mainRef = main;
+            this._mainRef = _mainRef;
 
             foreach (var room in rooms)
             {

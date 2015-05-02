@@ -27,7 +27,7 @@ namespace AsciiLevelEditor
         private readonly Color _selector = Colors.Yellow;
         private readonly Color _unSelector = Colors.Gray;
 
-        public int CurrentRoom = -1;
+        public static int CurrentRoom = -1;
 
         // Edit this collection and it will effect the view as well
         public List<List<Button>> ButtonsInGrid;
@@ -97,7 +97,7 @@ namespace AsciiLevelEditor
             if (CurrentRoom == -1)
             {
                 // TODO: Implement the ability to add another level into the game 
-
+                Console.WriteLine("No imported level selected");
             }
             else
             {
@@ -120,6 +120,17 @@ namespace AsciiLevelEditor
                         {
                             // Found a door on the map. Figure out which direction and go from there
                             theMap += _tileChars[FloorIndex];
+
+                            _320Hack.Stair newStair = new _320Hack.Stair {
+                                Row = i,
+                                Col = j,
+                                LivesIn = CurrentRoom,
+                                ConnectsTo = CurrentRoom + (solidColorBrush.Color == Colors.Orange ? 1 : -1)
+                            };
+
+                            db.Entry(newStair).State = System.Data.Entity.EntityState.Added;
+                            db.SaveChanges();
+
                             continue;
                         }
 
@@ -148,7 +159,7 @@ namespace AsciiLevelEditor
             var db = new _320Hack.DbModel();
             var rooms = (from r in db.Rooms select r).ToList();
 
-            var dialog = new FileDialog(this, rooms);
+            var dialog = new FileDialog(rooms, this);
             dialog.Show();
         }
 
@@ -159,7 +170,7 @@ namespace AsciiLevelEditor
             var level = (from r in db.Rooms where r.Id == roomId select r).Single();
             level.buildLevelChars();
 
-            ClearLevel(null, null);
+            clear(false);
 
             for (var i = 0; i < MaxRows; i++)
             {
@@ -242,7 +253,12 @@ namespace AsciiLevelEditor
 
         public void ClearLevel(object sender, RoutedEventArgs f)
         {
-            CurrentRoom = -1;
+            clear(true);
+        }
+
+        private void clear(bool clearButton)
+        {
+            if (clearButton) CurrentRoom = -1;
             for (var i = 0; i < MaxRows; i++)
             {
                 for (var j = 0; j < MaxCols; j++)

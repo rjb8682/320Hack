@@ -177,7 +177,8 @@ namespace _320Hack
         {
             setupState(stair.ConnectsTo);
             Stair newDoor = stairs.Find(d => (d.ConnectsTo == stair.LivesIn) && (Math.Ceiling(d.Id / 2.0) == Math.Ceiling(stair.Id / 2.0)));
-            if (newDoor == null) { throw new Exception("No corresponding door in the new room! newRoom=" + room.Id); }
+            if (newDoor == null) { Console.WriteLine("No corresponding door in the new room! newRoom=" + room.Id); }
+            newDoor = stairs.Find(d => d.ConnectsTo == stair.LivesIn);
 
             player.Row = newDoor.Row;
             player.Col = newDoor.Col;
