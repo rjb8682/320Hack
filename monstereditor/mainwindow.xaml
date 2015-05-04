@@ -24,21 +24,38 @@
                 <ColumnDefinition Width="7*"/>
                 <ColumnDefinition Width="3*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="Name" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
-            <Label Grid.Row="0" Grid.Column="1" Content="Symbol" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
-            <Label Grid.Row="0" Grid.Column="2" Content="Color" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
-            <Label Grid.Row="0" Grid.Column="3" Content="Health" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
-            <Label Grid.Row="0" Grid.Column="4" Content="MinRoom" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
-            <Label Grid.Row="0" Grid.Column="5" Content="Speed" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
-            <Label Grid.Row="0" Grid.Column="6" Content="Attack" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
-            <Grid x:Name="NameCol"  Grid.Row="1" Grid.Column="0" Background="#FFEAEAEA"/>
-            <Grid x:Name="SymbolCol"  Grid.Row="1" Grid.Column="1" Background="#FFEAEAEA"/>
-            <Grid x:Name="ColorCol"  Grid.Row="1" Grid.Column="2" Background="#FFEAEAEA"/>
-            <Grid x:Name="HealthCol"  Grid.Row="1" Grid.Column="3" Background="#FFEAEAEA"/>
-            <Grid x:Name="MinRoomCol"  Grid.Row="1" Grid.Column="4" Background="#FFEAEAEA"/>
-            <Grid x:Name="SpeedCol"  Grid.Row="1" Grid.Column="5" Background="#FFEAEAEA"/>
-            <Grid x:Name="AttackCol"  Grid.Row="1" Grid.Column="6" Background="#FFEAEAEA"/>
-            <Grid x:Name="DeleteCol"  Grid.Row="1" Grid.Column="7" Background="#FFEAEAEA"/>
+            <Label Grid.Row="0" Grid.Column="0" ToolTip="The name of the monster" Content="Name" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="1" ToolTip="A one-character symbol for the monster" Content="Symbol" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="2" ToolTip="The color of the monster" Content="Color" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="3" ToolTip="The health of the monster" Content="Health" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="4" ToolTip="The minimum room where the monster will appear. Must be within the amount of levels there are in the game"
+                   Content="MinRoom" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="5" ToolTip="The speed of the monster. 1000 is the base value and the lower it is the faster the monster" Content="Speed" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <Label Grid.Row="0" Grid.Column="6" ToolTip="The attack of the monster. How much damage they do to you" Content="Attack" Foreground="#FF6E6E6E" FontSize="18" HorizontalContentAlignment="Center" VerticalContentAlignment="Bottom"/>
+            <ScrollViewer x:Name="NameColumn"  Grid.Row="1" Grid.Column="0" Background="#FFEAEAEA" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="NameCol"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="SymbolColumn"  Grid.Row="1" Grid.Column="1" Background="#FFEAEAEA" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="SymbolCol"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="ColorColumn"  Grid.Row="1" Grid.Column="2" Background="#FFEAEAEA" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="ColorCol"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="HealthColumn"  Grid.Row="1" Grid.Column="3" Background="#FFEAEAEA" VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="HealthCol"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="MinRoomColumn"  Grid.Row="1" Grid.Column="4" Background="#FFEAEAEA" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="MinRoomCol"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="SpeedColumn"  Grid.Row="1" Grid.Column="5" Background="#FFEAEAEA" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="SpeedCol"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="AttackColumn"  Grid.Row="1" Grid.Column="6" Background="#FFEAEAEA" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="AttackCol"/>
+            </ScrollViewer>
+            <ScrollViewer x:Name="DeleteColumn"  Grid.Row="1" Grid.Column="7" Background="#FFEAEAEA" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="DeleteCol"/>
+            </ScrollViewer>
         </Grid>
         <Grid Grid.Row="2" x:Name="SaveRow">
             <Grid.ColumnDefinitions>
@@ -51,7 +68,7 @@
                     <ColumnDefinition Width="30*"/>
                     <ColumnDefinition Width="70*"/>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="SaveButton" Grid.Column="0" Margin="7" Content="Save"/>
+                <Button x:Name="SaveButton" Grid.Column="0" Margin="7" Content="Save" Click="saveDb"/>
                 <Border x:Name="SaveBorder" Background="Green" Grid.Column="1" Opacity="0.5" Margin="0 7"/>
                 <Label x:Name="ErrorLabel" Grid.Column="1" Content="Errors: No Errors" VerticalAlignment="Center"/>
             </Grid>
