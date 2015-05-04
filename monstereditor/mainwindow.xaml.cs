@@ -117,14 +117,18 @@ namespace MonsterEditor
             rowDef.Height = new GridLength(rowHeight);
             NameCol.RowDefinitions.Add(rowDef);
             TextBox nameTextBox = new TextBox() { Text = monster.Name };
+            nameTextBox.KeyUp += keyPressed;
             NameCol.Children.Add(nameTextBox);
+            nameTextBox.Tag = "NameCol " + (NameCol.Children.Count - 1);
             Grid.SetRow(nameTextBox, NameCol.Children.Count - 1);
 
             rowDef = new RowDefinition();
             rowDef.Height = new GridLength(rowHeight);
             SymbolCol.RowDefinitions.Add(rowDef);
             TextBox symbolTextBox = new TextBox() { Text = monster.Symbol };
+            symbolTextBox.KeyUp += keyPressed;
             SymbolCol.Children.Add(symbolTextBox);
+            symbolTextBox.Tag = "SymbolCol " + (SymbolCol.Children.Count - 1);
             Grid.SetRow(symbolTextBox, SymbolCol.Children.Count - 1);
 
             var convertFromString = ColorConverter.ConvertFromString(monster.Color);
@@ -149,28 +153,36 @@ namespace MonsterEditor
             rowDef.Height = new GridLength(rowHeight);
             HealthCol.RowDefinitions.Add(rowDef);
             TextBox healthTextBox = new TextBox() { Text = monster.HP.ToString() };
+            healthTextBox.KeyUp += keyPressed;
             HealthCol.Children.Add(healthTextBox);
+            healthTextBox.Tag = "HealthCol " + (HealthCol.Children.Count - 1);
             Grid.SetRow(healthTextBox, HealthCol.Children.Count - 1);
 
             rowDef = new RowDefinition();
             rowDef.Height = new GridLength(rowHeight);
             MinRoomCol.RowDefinitions.Add(rowDef);
             TextBox minRoomTextBox = new TextBox() { Text = monster.MinimumRoom.ToString() };
+            minRoomTextBox.KeyUp += keyPressed;
             MinRoomCol.Children.Add(minRoomTextBox);
+            minRoomTextBox.Tag = "MinRoomCol " + (MinRoomCol.Children.Count - 1);
             Grid.SetRow(minRoomTextBox, MinRoomCol.Children.Count - 1);
 
             rowDef = new RowDefinition();
             rowDef.Height = new GridLength(rowHeight);
             SpeedCol.RowDefinitions.Add(rowDef);
             TextBox speedTextBox = new TextBox() { Text = monster.Speed.ToString() };
+            speedTextBox.KeyUp += keyPressed;
             SpeedCol.Children.Add(speedTextBox);
+            speedTextBox.Tag = "SpeedCol " + (SpeedCol.Children.Count - 1);
             Grid.SetRow(speedTextBox, SpeedCol.Children.Count - 1);
 
             rowDef = new RowDefinition();
             rowDef.Height = new GridLength(rowHeight);
             AttackCol.RowDefinitions.Add(rowDef);
             TextBox attackTextBox = new TextBox() { Text = monster.Attack.ToString() };
+            attackTextBox.KeyUp += keyPressed;
             AttackCol.Children.Add(attackTextBox);
+            attackTextBox.Tag = "AttackCol " + (AttackCol.Children.Count - 1);
             Grid.SetRow(attackTextBox, AttackCol.Children.Count - 1);
 
             rowDef = new RowDefinition();
@@ -229,6 +241,210 @@ namespace MonsterEditor
             SpeedCol.RowDefinitions.RemoveAt(rowToDelete);
             AttackCol.RowDefinitions.RemoveAt(rowToDelete);
             DeleteCol.RowDefinitions.RemoveAt(rowToDelete);
+        }
+
+        public bool validateRow(int row)
+        {
+            if (!validateName((NameCol.Children[row] as TextBox).Text))
+            {
+                // TODO: Throw Name Error
+                return false;
+            }
+            if (!validateSymbol((SymbolCol.Children[row] as TextBox).Text))
+            {
+                // TODO: Throw Symbol Error
+                return false;
+            }
+            if (!validateNum((HealthCol.Children[row] as TextBox).Text))
+            {
+                // TODO: Throw Health Error
+                return false;
+            }
+            if (!validateMinRoom((MinRoomCol.Children[row] as TextBox).Text))
+            {
+                // TODO: Throw MinimumRoom Error
+                return false;
+            }
+            if (!validateNum((SpeedCol.Children[row] as TextBox).Text))
+            {
+                // TODO: Throw Speed Error
+                return false;
+            }
+            if (!validateNum((AttackCol.Children[row] as TextBox).Text))
+            {
+                // TODO: Throw AttackError
+                return false;
+            }
+            return true;
+        }
+
+        private bool validateName(String name)
+        {
+            return name != null && name != "";
+        }
+
+        private bool validateSymbol(String sym)
+        {
+            return sym != null && sym.Count() == 1;
+        }
+
+        private bool validateMinRoom(String room)
+        {
+            try
+            {
+                int roomNum = Convert.ToInt32(room);
+                using (var db = new _320Hack.DbModel())
+                {
+                    int numRoomsInGame = db.Rooms.Count();
+                    return roomNum >= 1 && roomNum <= numRoomsInGame;
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        private bool validateNum(String num)
+        {
+            try
+            {
+                int numConverted = Convert.ToInt32(num);
+                return numConverted >= 1;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        private void keyPressed(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            var castToTextBox = sender as TextBox;
+            if (castToTextBox != null)
+            {
+                if (castToTextBox.IsFocused)
+                {
+                    String tag = castToTextBox.Tag.ToString();
+                    String[] tokens = tag.Split(' ');
+                    int row = Convert.ToInt32(tokens[1]);
+
+                    if (tokens[0] == "NameCol")
+                    {
+                        if (!validateName(castToTextBox.Text))
+                        {
+                            // Error in your validation. Change something on UI and disable save button eventually
+                            castToTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                            SaveBorder.Background = new SolidColorBrush(Colors.Red);
+                            castToTextBox.BorderThickness = new Thickness(1);
+                            ErrorLabel.Content = "Errors: Please correct your errors before saving.";
+                            SaveButton.IsEnabled = false;
+                        }
+                        else
+                        {
+                            castToTextBox.BorderThickness = new Thickness(0);
+                            ErrorLabel.Content = "Errors: No Errors";
+                            SaveBorder.Background = new SolidColorBrush(Colors.Green);
+                            SaveButton.IsEnabled = true;
+                        }
+                    }
+                    else if (tokens[0] == "SymbolCol")
+                    {
+                        if (!validateSymbol(castToTextBox.Text))
+                        {
+                            // Error in your validation. Change something on UI and disable save button eventually
+                            castToTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                            SaveBorder.Background = new SolidColorBrush(Colors.Red);
+                            castToTextBox.BorderThickness = new Thickness(1);
+                            ErrorLabel.Content = "Errors: Please correct your errors before saving.";
+                            SaveButton.IsEnabled = false;
+                        }
+                        else
+                        {
+                            castToTextBox.BorderThickness = new Thickness(0);
+                            ErrorLabel.Content = "Errors: No Errors";
+                            SaveBorder.Background = new SolidColorBrush(Colors.Green);
+                            SaveButton.IsEnabled = true;
+                        }
+                    }
+                    else if (tokens[0] == "HealthCol")
+                    {
+                        if (!validateNum(castToTextBox.Text))
+                        {
+                            // Error in your validation. Change something on UI and disable save button eventually
+                            castToTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                            SaveBorder.Background = new SolidColorBrush(Colors.Red);
+                            castToTextBox.BorderThickness = new Thickness(1);
+                            ErrorLabel.Content = "Errors: Please correct your errors before saving.";
+                            SaveButton.IsEnabled = false;
+                        }
+                        else
+                        {
+                            castToTextBox.BorderThickness = new Thickness(0);
+                            ErrorLabel.Content = "Errors: No Errors";
+                            SaveBorder.Background = new SolidColorBrush(Colors.Green);
+                            SaveButton.IsEnabled = true;
+                        }
+                    }
+                    else if (tokens[0] == "MinRoomCol")
+                    {
+                        if (!validateMinRoom(castToTextBox.Text))
+                        {
+                            // Error in your validation. Change something on UI and disable save button eventually
+                            castToTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                            castToTextBox.BorderThickness = new Thickness(1);
+                            SaveBorder.Background = new SolidColorBrush(Colors.Red);
+                            ErrorLabel.Content = "Errors: Please correct your errors before saving.";
+                            SaveButton.IsEnabled = false;
+                        }
+                        else
+                        {
+                            castToTextBox.BorderThickness = new Thickness(0);
+                            ErrorLabel.Content = "Errors: No Errors";
+                            SaveBorder.Background = new SolidColorBrush(Colors.Green);
+                            SaveButton.IsEnabled = true;
+                        }
+                    }
+                    else if (tokens[0] == "SpeedCol")
+                    {
+                        if (!validateNum(castToTextBox.Text))
+                        {
+                            // Error in your validation. Change something on UI and disable save button eventually
+                            castToTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                            castToTextBox.BorderThickness = new Thickness(1);
+                            SaveBorder.Background = new SolidColorBrush(Colors.Red);
+                            ErrorLabel.Content = "Errors: Please correct your errors before saving.";
+                            SaveButton.IsEnabled = false;
+                        }
+                        else
+                        {
+                            castToTextBox.BorderThickness = new Thickness(0);
+                            ErrorLabel.Content = "Errors: No Errors";
+                            SaveBorder.Background = new SolidColorBrush(Colors.Green);
+                            SaveButton.IsEnabled = true;
+                        }
+                    }
+                    else if (tokens[0] == "AttackCol")
+                    {
+                        if (!validateNum(castToTextBox.Text))
+                        {
+                            // Error in your validation. Change something on UI and disable save button eventually
+                            castToTextBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                            SaveBorder.Background = new SolidColorBrush(Colors.Red);
+                            castToTextBox.BorderThickness = new Thickness(1);
+                            ErrorLabel.Content = "Errors: Please correct your errors before saving.";
+                            SaveButton.IsEnabled = false;
+                        }
+                        else
+                        {
+                            castToTextBox.BorderThickness = new Thickness(0);
+                            ErrorLabel.Content = "Errors: No Errors";
+                            SaveBorder.Background = new SolidColorBrush(Colors.Green);
+                            SaveButton.IsEnabled = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }

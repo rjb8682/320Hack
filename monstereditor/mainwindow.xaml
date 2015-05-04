@@ -5,7 +5,8 @@
     <Grid x:Name="AppGrid" Background="#FF858585">
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
-            <RowDefinition Height="85*"/>
+            <RowDefinition Height="75*"/>
+            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="Edit the type of monters in the game" FontSize="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Foreground="#FF3E3E3E"/>
         <Grid Grid.Row="1" x:Name="MonsterGrid" Margin="10" Background="#FFEAEAEA" ShowGridLines="True" Loaded="OnLoaded">
@@ -38,6 +39,22 @@
             <Grid x:Name="SpeedCol"  Grid.Row="1" Grid.Column="5" Background="#FFEAEAEA"/>
             <Grid x:Name="AttackCol"  Grid.Row="1" Grid.Column="6" Background="#FFEAEAEA"/>
             <Grid x:Name="DeleteCol"  Grid.Row="1" Grid.Column="7" Background="#FFEAEAEA"/>
+        </Grid>
+        <Grid Grid.Row="2" x:Name="SaveRow">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="70*"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="70*"/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="SaveButton" Grid.Column="0" Margin="7" Content="Save"/>
+                <Border x:Name="SaveBorder" Background="Green" Grid.Column="1" Opacity="0.5" Margin="0 7"/>
+                <Label x:Name="ErrorLabel" Grid.Column="1" Content="Errors: No Errors" VerticalAlignment="Center"/>
+            </Grid>
         </Grid>
     </Grid>
 </Window>
