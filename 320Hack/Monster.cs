@@ -103,7 +103,7 @@ namespace _320Hack
                 row = random.Next(0, room.LevelChars.Count);
                 col = random.Next(0, room.LevelChars[row].Count);
             }
-            while (room.LevelChars[row][col] != MainWindow.floor && 
+            while (room.LevelChars[row].Count > 0 && room.LevelChars[row][col] != MainWindow.floor && 
                 otherMonsters.Find(pred) == null);
 
             Row = row;

@@ -25,7 +25,7 @@ namespace AsciiLevelEditor
         private const int FloorIndex = 3;
 
         private readonly Color _selector = Colors.Yellow;
-        private readonly Color _unSelector = Colors.Gray;
+        private readonly Color _unSelector = (Color)ColorConverter.ConvertFromString("#FF707070");
 
         public static int CurrentRoom = -1;
 
@@ -74,6 +74,7 @@ namespace AsciiLevelEditor
                 }
             }
             ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_selector);
+            Console.WriteLine((ButtonsInGrid[2][3].BorderBrush as SolidColorBrush).Color);
         }
 
         private void ColorSelector(object sender, RoutedEventArgs e)
