@@ -101,7 +101,7 @@ namespace AsciiLevelEditor
             bool isNewRoom = (CurrentRoom == -1);
             if (isNewRoom)
             {
-                CurrentRoom = db.Rooms.Count();
+                CurrentRoom = db.Rooms.Count() + 1;
             }
 
             var stairs = (from s in db.Stairs where s.LivesIn == CurrentRoom select s).ToList();
