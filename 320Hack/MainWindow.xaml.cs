@@ -55,6 +55,9 @@ namespace _320Hack
         {
             // This is for making the splash screen appear for longer
             // System.Threading.Thread.Sleep(2000);
+            //this.Height = 0.9 * System.Windows.SystemParameters.PrimaryScreenHeight;
+            //this.Width = 0.9 * System.Windows.SystemParameters.PrimaryScreenWidth;
+
             InitializeComponent();
             gameArea.FontSize = titleFontSize;
             Application.Current.MainWindow.Left = mainLeft + 200;
