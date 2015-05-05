@@ -34,6 +34,8 @@ namespace AsciiLevelEditor
 
         public MainWindow()
         {
+            this.Height = 0.75 * System.Windows.SystemParameters.PrimaryScreenHeight;
+            this.Width = 0.75 * System.Windows.SystemParameters.PrimaryScreenWidth;
             InitializeComponent();
 
             ButtonsInGrid = new List<List<Button>>();
@@ -95,64 +97,78 @@ namespace AsciiLevelEditor
         {
             var db = new _320Hack.DbModel();
 
-            if (CurrentRoom == -1)
+            _320Hack.Room room;
+            bool isNewRoom = (CurrentRoom == -1);
+            if (isNewRoom)
             {
-                // TODO: Implement the ability to add another level into the game 
-                Console.WriteLine("No imported level selected");
+                CurrentRoom = db.Rooms.Count();
+            }
+
+            var stairs = (from s in db.Stairs where s.LivesIn == CurrentRoom select s).ToList();
+            foreach (var s in stairs)
+            {
+                db.Stairs.Remove(s);
+            }
+
+            var theMap = "";
+            for (var i = 0; i < MaxRows; i++)
+            {
+                for (var j = 0; j < MaxCols; j++)
+                {
+                    var solidColorBrush = ButtonsInGrid[i][j].Background as SolidColorBrush;
+                    if (solidColorBrush == null) continue;
+                    var colorIndex = _colors.IndexOf(solidColorBrush.Color);
+
+                    if (solidColorBrush.Color == Colors.Orange || solidColorBrush.Color == Colors.Purple)
+                    {
+                        // Found a door on the map. Figure out which direction and go from there
+                        theMap += _tileChars[FloorIndex];
+
+                        _320Hack.Stair newStair = new _320Hack.Stair {
+                            Row = i,
+                            Col = j,
+                            LivesIn = CurrentRoom,
+                            ConnectsTo = CurrentRoom + (solidColorBrush.Color == Colors.Orange ? 1 : -1)
+                        };
+
+                        db.Entry(newStair).State = System.Data.Entity.EntityState.Added;
+                        db.SaveChanges();
+
+                        continue;
+                    }
+
+                    var newChar = _tileChars[colorIndex];
+                    if (newChar == '\n')
+                    {
+                        theMap += '\r';
+                        theMap += '\n';
+                        break;
+                    }
+                    else
+                    {
+                        theMap += newChar;
+                    }
+                }
+            }
+
+            // Do we need to attach this room to the database, or just update the map?
+            if (isNewRoom)
+            {
+                room = new _320Hack.Room
+                {
+                    Id = CurrentRoom,
+                    Seen = new byte[theMap.Length],
+                    Map = theMap
+                };
+                db.Entry(room).State = System.Data.Entity.EntityState.Added;
             }
             else
             {
-                var stairs = (from s in db.Stairs where s.LivesIn == CurrentRoom select s).ToList();
-                foreach (var s in stairs)
-                {
-                    db.Stairs.Remove(s);
-                }
-
-                var theMap = "";
-                for (var i = 0; i < MaxRows; i++)
-                {
-                    for (var j = 0; j < MaxCols; j++)
-                    {
-                        var solidColorBrush = ButtonsInGrid[i][j].Background as SolidColorBrush;
-                        if (solidColorBrush == null) continue;
-                        var colorIndex = _colors.IndexOf(solidColorBrush.Color);
-
-                        if (solidColorBrush.Color == Colors.Orange || solidColorBrush.Color == Colors.Purple)
-                        {
-                            // Found a door on the map. Figure out which direction and go from there
-                            theMap += _tileChars[FloorIndex];
-
-                            _320Hack.Stair newStair = new _320Hack.Stair {
-                                Row = i,
-                                Col = j,
-                                LivesIn = CurrentRoom,
-                                ConnectsTo = CurrentRoom + (solidColorBrush.Color == Colors.Orange ? 1 : -1)
-                            };
-
-                            db.Entry(newStair).State = System.Data.Entity.EntityState.Added;
-                            db.SaveChanges();
-
-                            continue;
-                        }
-
-                        var newChar = _tileChars[colorIndex];
-                        if (newChar == '\n')
-                        {
-                            theMap += '\r';
-                            theMap += '\n';
-                            break;
-                        }
-                        else
-                        {
-                            theMap += newChar;
-                        }
-                    }
-                }
-
-                var room = (from r in db.Rooms where r.Id == CurrentRoom select r).Single();
+                room = (from r in db.Rooms where r.Id == CurrentRoom select r).Single();
                 room.Map = theMap;
-                db.SaveChanges();
             }
+            
+            db.SaveChanges();
         }
 
         private void ImportLevel(object sender, RoutedEventArgs e)
@@ -166,6 +182,12 @@ namespace AsciiLevelEditor
 
         public void ImportFile(int roomId)
         {
+            if (roomId == 0)
+            {
+                // Room wasn't selected. Don't bother.
+                return;
+            }
+
             CurrentRoom = roomId;
             var db = new _320Hack.DbModel();
             var level = (from r in db.Rooms where r.Id == roomId select r).Single();
