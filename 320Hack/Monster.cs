@@ -188,6 +188,14 @@ namespace _320Hack
                 {
                     // wander
                     List<Coordinate> neighbors = neighborCoordinates(room, start, validSpaces);
+
+                    // If we are stuck on a bad square, don't attempt to move.
+                    // TODO why are we stuck on bad squares?
+                    if (neighbors.Count == 0)
+                    {
+                        return;
+                    }
+
                     Coordinate moveTo = neighbors[random.Next(neighbors.Count)];
                     if (!monsterTest(moveTo))
                     {
