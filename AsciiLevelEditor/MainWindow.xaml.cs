@@ -22,6 +22,7 @@ namespace AsciiLevelEditor
         private int _currentColor;
         private readonly List<Color> _colors = new List<Color>() { Colors.Blue, Colors.Red, Colors.Yellow, Colors.Gray, Colors.Black, Colors.LawnGreen, Colors.Orange, Colors.Purple };
         private readonly List<char> _tileChars = new List<char>() { '|', '—', '+', '·', ' ', '\n' };
+        private readonly char[] whitespace = new char[] {'\r', '\n', ' '};
         private const int FloorIndex = 3;
 
         private readonly Color _selector = Colors.Yellow;
@@ -113,6 +114,7 @@ namespace AsciiLevelEditor
             var theMap = "";
             for (var i = 0; i < MaxRows; i++)
             {
+                bool wasNewLineInRow = false;
                 for (var j = 0; j < MaxCols; j++)
                 {
                     var solidColorBrush = ButtonsInGrid[i][j].Background as SolidColorBrush;
@@ -140,14 +142,26 @@ namespace AsciiLevelEditor
                     var newChar = _tileChars[colorIndex];
                     if (newChar == '\n')
                     {
-                        theMap += '\r';
+                        theMap = theMap.TrimEnd(whitespace);
+                        theMap += ' ';
+                        //theMap += '\r';
                         theMap += '\n';
+                        wasNewLineInRow = true;
                         break;
                     }
                     else
                     {
                         theMap += newChar;
                     }
+                }
+
+                // Add a newline if none were entered.
+                if (!wasNewLineInRow)
+                {
+                    theMap = theMap.TrimEnd(whitespace);
+                    theMap += ' ';
+                    //theMap += '\r';
+                    theMap += '\n';
                 }
             }
 

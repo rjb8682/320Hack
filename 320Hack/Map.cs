@@ -128,7 +128,8 @@ namespace _320Hack
                 monsterToAttack.attack(player);
                 if (monsterToAttack.isDead()) monsters.Remove(monsterToAttack);
             }
-            else if (walkTiles.Contains(room.LevelTiles[newRow][newCol].Symbol))
+            else if (newCol < room.LevelTiles[newRow].Count &&
+                walkTiles.Contains(room.LevelTiles[newRow][newCol].Symbol))
             {
                 player.Row = newRow;
                 player.Col = newCol;
