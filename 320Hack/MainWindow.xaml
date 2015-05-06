@@ -5,26 +5,67 @@
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="keyPressed" Closed="isClosed">
     <Grid Background="#FF595D72">
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="70*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="textEntry" Margin="113,0,34,14" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam" Height="46" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Padding="5,0,0,0"/>
-        <Label Content="Console:" HorizontalAlignment="Left" Margin="34,0,0,14" Width="79" FontSize="14" VerticalContentAlignment="Center" Background="#FFACADB6" BorderBrush="Black" BorderThickness="2,2,0,2" HorizontalContentAlignment="Center" Height="46" VerticalAlignment="Bottom"/>
-        <TextBlock x:Name="gameArea" Margin="34,13,230,0" VerticalAlignment="Top" Height="440" Background="Black" FontSize="20" IsEnabled="False" Foreground="#FFB8B8B8" Padding="10" TextOptions.TextHintingMode="Fixed" Focusable="True" FontFamily="Courier New"/>
-        <TextBox x:Name="statPanel" Margin="0,510,34,65" TextWrapping="Wrap" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="#FF171717" BorderThickness="0" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0" HorizontalAlignment="Right" Width="490"/>
-        <Rectangle Fill="#FF272932" Height="51" Margin="34,458,34,0" VerticalAlignment="Top" StrokeThickness="2">
+        <Grid x:Name="MainPanel" Grid.Row="0" Margin="0 10 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="34"/>
+                <ColumnDefinition Width="85*"/>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="34"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="gameArea" Grid.Column="1" VerticalAlignment="Top" Height="440" Background="Black" FontSize="20" IsEnabled="False" Foreground="#FFB8B8B8" Padding="10" TextOptions.TextHintingMode="Fixed" Focusable="True" FontFamily="Courier New"/>
+            <TextBlock x:Name="deathArea" Grid.Column="2" VerticalAlignment="Top" Height="440" Background="Black" FontSize="16" IsEnabled="False" FontFamily="MS Mincho" Foreground="#FFB8B8B8" Padding="9,10,0,0" TextOptions.TextHintingMode="Fixed" Focusable="True" TextWrapping="WrapWithOverflow"/>
+        </Grid>
+        <Rectangle Grid.Row="1" Fill="#FF272932" VerticalAlignment="Stretch" Margin="34 0" StrokeThickness="2">
             <Rectangle.Stroke>
                 <SolidColorBrush Color="Black" Opacity="0.5"/>
             </Rectangle.Stroke>
         </Rectangle>
-        <ProgressBar x:Name="healthBar" HorizontalAlignment="Left" Height="28" Margin="104,468,0,0" VerticalAlignment="Top" Width="491" Background="#FF8F8F8F" BorderBrush="#FF252525" Value="100">
-            <ProgressBar.Foreground>
-                <SolidColorBrush Color="#FFAC0404"/>
-            </ProgressBar.Foreground>
-        </ProgressBar>
-        <Label Content="Health:" HorizontalAlignment="Left" Margin="50,468,0,0" VerticalAlignment="Top" Height="28" Width="49" Foreground="White"/>
-        <ProgressBar x:Name="levelBar" Height="28" Margin="674,468,55,0" VerticalAlignment="Top" Background="#FF8F8F8F" Foreground="#FF05891D" BorderBrush="#FF232323" SmallChange="1"/>
-        <Label Content="Experience:" HorizontalAlignment="Left" Margin="600,468,0,0" VerticalAlignment="Top" Height="28" Width="69" Foreground="White"/>
-        <TextBox x:Name="outputPanel" Margin="34,510,0,65" TextWrapping="Wrap" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="#FF171717" BorderThickness="0" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0" HorizontalAlignment="Left" Width="481"/>
-        <TextBlock x:Name="deathArea" Margin="814,13,34,0" VerticalAlignment="Top" Height="440" Background="Black" FontSize="16" IsEnabled="False" FontFamily="MS Mincho" Foreground="#FFB8B8B8" Padding="9,10,0,0" TextOptions.TextHintingMode="Fixed" Focusable="True" TextWrapping="WrapWithOverflow"/>
+        <Grid x:Name="HPandXPPanels" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="34"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="34" />
+            </Grid.ColumnDefinitions>
+            <Grid x:Name="HealthBarGrid" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="85*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Health:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="28" Width="49" Foreground="White"/>
+                <ProgressBar x:Name="healthBar" Grid.Column="1" Height="28" Margin="0, 0, 10, 0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="#FF8F8F8F" BorderBrush="#FF252525" Value="100">
+                    <ProgressBar.Foreground>
+                        <SolidColorBrush Color="#FFAC0404"/>
+                    </ProgressBar.Foreground>
+                </ProgressBar>
+            </Grid>
+            <Grid x:Name="XPBarGrid" Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="85*"/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Experience:" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Height="28" Width="69" Foreground="White"/>
+                <ProgressBar x:Name="levelBar" Grid.Column="1"  Height="28" Margin="0 0 10 0" VerticalAlignment="Center" Background="#FF8F8F8F" Foreground="#FF05891D" BorderBrush="#FF232323" SmallChange="1"/>
+            </Grid>
+        </Grid>
+        <Grid x:Name="OutputPanels" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="34"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="34" />
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="statPanel" Grid.Column="1" TextWrapping="Wrap" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="#FF171717" BorderThickness="0" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0" HorizontalAlignment="Stretch"/>
+            <TextBox x:Name="outputPanel" Grid.Column="2" TextWrapping="Wrap" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="#FF171717" BorderThickness="0" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0" HorizontalAlignment="Stretch"/>
+        </Grid>
+        <Grid x:Name="ConsolePanel" Grid.Row="3">
+            <TextBox x:Name="textEntry" Margin="113,0,34,14" TextWrapping="Wrap" FontSize="16" Background="#FFCECFDA" Foreground="#FF131313" BorderBrush="Black" BorderThickness="2" KeyDown="textEntered" Cursor="IBeam" Height="46" VerticalAlignment="Bottom" VerticalContentAlignment="Center" Padding="5,0,0,0"/>
+            <Label Content="Console:" HorizontalAlignment="Left" Margin="34,0,0,14" Width="79" FontSize="14" VerticalContentAlignment="Center" Background="#FFACADB6" BorderBrush="Black" BorderThickness="2,2,0,2" HorizontalContentAlignment="Center" Height="46" VerticalAlignment="Bottom"/>
+        </Grid>
     </Grid>
 </Window>
