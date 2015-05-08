@@ -29,9 +29,6 @@ namespace _320Hack
         public Key[] keys = {Key.NumPad8, Key.NumPad2, Key.NumPad4, Key.NumPad6, Key.NumPad7, Key.NumPad9, Key.NumPad1, Key.NumPad3,
                                 Key.K, Key.J, Key.H, Key.L, Key.Y, Key.U, Key.B, Key.N,};
 
-        public static double MAINHEIGHT = 926;
-        public static double MAINWIDTH = 1050;
-
         public const int TEST_PLAYER_ID = 1;
         public const int INVALID_POSITION = -1;
 
@@ -48,18 +45,17 @@ namespace _320Hack
         public bool newGame;
         private HelpMenu help;
 
-        public double mainLeft = (System.Windows.SystemParameters.PrimaryScreenWidth - MAINWIDTH) / 2;
-        public double mainTop = (System.Windows.SystemParameters.PrimaryScreenHeight - MAINHEIGHT) / 2;
+        public double mainTop;
+        public double mainLeft;
+        public double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
+        public double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
 
         public MainWindow(Player player, bool newGame)
         {
-            // This is for making the splash screen appear for longer
-            // System.Threading.Thread.Sleep(2000);
-            //this.Height = 0.9 * System.Windows.SystemParameters.PrimaryScreenHeight;
-            //this.Width = 0.9 * System.Windows.SystemParameters.PrimaryScreenWidth;
-
             InitializeComponent();
             gameArea.FontSize = titleFontSize;
+            mainLeft = ((screenWidth - this.ActualWidth) / 2);
+            mainTop = ((screenHeight - this.ActualHeight) / 2);
             Application.Current.MainWindow.Left = mainLeft + 200;
             Application.Current.MainWindow.Top = mainTop;
             this.newGame = newGame;
@@ -297,9 +293,8 @@ namespace _320Hack
                     textEntry.Clear();
                     help = new HelpMenu();
                     help.ShowInTaskbar = false;
-                    help.Left = mainLeft - (help.Width / 2);
+                    help.Left = mainLeft - (help.ActualWidth / 2);
                     help.Top = mainTop;
-                    help.Owner = Application.Current.MainWindow;
                     help.ShowDialog();
                 }
                 else if (text == "/quit")
@@ -314,9 +309,7 @@ namespace _320Hack
 
         private String getHelpString()
         {
-            String result = "";
-
-            result += "Movement:\n";
+            String result = "Movement:\n";
             result += "\t WASD or Arrow Keys to move the player\n";
             
             return result;
