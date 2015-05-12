@@ -116,15 +116,16 @@ namespace _320Hack
             db.SaveChanges();
         }
 
-        public void attack(Player player)
+        public String attack(Player player)
         {
             int damage = player.getAttackPower();
+            String consoleText = "";
             CurrentHP -= damage;
-            Console.WriteLine("You dealt " + damage + " damage to the " + Name + "!");
+            consoleText += "You dealt " + damage + " damage to the " + Name + "!";
 
             if (isDead())
             {
-                Console.WriteLine("You killed the " + Name + "!");
+                consoleText += "\nYou killed the " + Name + "!";
 
                 player.awardExperience((MaxHealth / 10) + (Power * 50 / Speed) + 1);
 
@@ -162,6 +163,7 @@ namespace _320Hack
                     db.SaveChanges();
                 }
             }
+            return consoleText;
         }
 
         public bool isDead()

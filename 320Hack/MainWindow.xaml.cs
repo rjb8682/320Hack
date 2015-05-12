@@ -141,7 +141,7 @@ namespace _320Hack
                     count = 0;
                 }
             }
-            outputPanel.Text += "Would you like to continue your adventure? (y/n)";
+            outputPanel.Text = "Would you like to continue your adventure? (y/n)";
         }
 
         private void keyPressed(object sender, KeyEventArgs e)
@@ -233,38 +233,40 @@ namespace _320Hack
 
         public void movePlayer(Key k)
         {
+            String responseFromMoving = "";
             if (k == Key.K || k == Key.NumPad8)
             {
-                gameLevel.movePlayer(-1, 0);
+                responseFromMoving = gameLevel.movePlayer(-1, 0);
             }
             else if (k == Key.J || k == Key.NumPad2)
             {
-                gameLevel.movePlayer(+1, 0);
+                responseFromMoving = gameLevel.movePlayer(+1, 0);
             }
             else if (k == Key.H || k == Key.NumPad4)
             {
-                gameLevel.movePlayer(0, -1);
+                responseFromMoving = gameLevel.movePlayer(0, -1);
             }
             else if (k == Key.L || k == Key.NumPad6)
             {
-                gameLevel.movePlayer(0, +1);
+                responseFromMoving = gameLevel.movePlayer(0, +1);
             }
             else if (k == Key.Y || k == Key.NumPad7)
             {
-                gameLevel.movePlayer(-1, -1);
+                responseFromMoving = gameLevel.movePlayer(-1, -1);
             }
             else if (k == Key.U || k == Key.NumPad9)
             {
-                gameLevel.movePlayer(-1, +1);
+                responseFromMoving = gameLevel.movePlayer(-1, +1);
             }
             else if (k == Key.B || k == Key.NumPad1)
             {
-                gameLevel.movePlayer(+1, -1);
+                responseFromMoving = gameLevel.movePlayer(+1, -1);
             }
             else if (k == Key.N || k == Key.NumPad3)
             {
-                gameLevel.movePlayer(+1, +1);
+                responseFromMoving = gameLevel.movePlayer(+1, +1);
             }
+            if (responseFromMoving != "") outputPanel.Text = responseFromMoving;
         }
 
         private void textEntered(object sender, KeyEventArgs e)

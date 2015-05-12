@@ -117,15 +117,16 @@ namespace _320Hack
         }
 
         // Given a row delta and col delta, moves the player if the new tile is valid.
-        public void movePlayer(int dRow, int dCol, bool goInDoor = false, bool up = false)
+        public String movePlayer(int dRow, int dCol, bool goInDoor = false, bool up = false)
         {
             int newRow = player.Row + dRow;
             int newCol = player.Col + dCol;
+            String consoleText = "";
 
             MonsterInstance monsterToAttack = monsters.Find(m => m.Row == newRow && m.Col == newCol);
             if (monsterToAttack != null)
             {
-                monsterToAttack.attack(player);
+                consoleText = monsterToAttack.attack(player);
                 if (monsterToAttack.isDead()) monsters.Remove(monsterToAttack);
             }
             else if (newCol < room.LevelTiles[newRow].Count &&
@@ -150,6 +151,7 @@ namespace _320Hack
             }
 
             save();
+            return consoleText;
         }
 
         // Saves all game state.

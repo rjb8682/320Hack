@@ -72,12 +72,12 @@ namespace AsciiLevelEditor
 
                     Grid.SetRow(newButton, i);
                     Grid.SetColumn(newButton, j);
+                    newButton.Tag = i + "," + j;
                     ButtonsInGrid[i].Add(newButton);
                     ButtonGrid.Children.Add(newButton);
                 }
             }
             ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_selector);
-            Console.WriteLine((ButtonsInGrid[2][3].BorderBrush as SolidColorBrush).Color);
         }
 
         private void ColorSelector(object sender, RoutedEventArgs e)
@@ -90,8 +90,16 @@ namespace AsciiLevelEditor
 
         private void GridClick(object sender, RoutedEventArgs e)
         {
+            ButtonsInGrid[_currentRow][_currentCol].BorderBrush = new SolidColorBrush(_unSelector);
+
             var button = sender as Button;
             if (button != null) button.Background = new SolidColorBrush(_colors[_currentColor]);
+
+            button.BorderBrush = new SolidColorBrush(_selector);
+            String[] rowCol = button.Tag.ToString().Split(',');
+            _currentRow = Convert.ToInt32(rowCol[0]);
+            _currentCol = Convert.ToInt32(rowCol[1]);
+            Coord.Content = "(" + button.Tag.ToString() + ")";
         }
 
         private void SaveLevel(object sender, RoutedEventArgs e)
@@ -286,6 +294,7 @@ namespace AsciiLevelEditor
                     _currentColor = 5;
                     break;
             }
+            Coord.Content = "(" + _currentRow + "," + _currentCol + ")";
         }
 
         public void ClearLevel(object sender, RoutedEventArgs f)

@@ -32,11 +32,20 @@ namespace _320Hack
 
         public String Name { get; set; }
 
+        public double Strength { get; set; }
+
+        public double Defense { get; set; }
+
+        public double Dodge { get; set; }
+
         public String getInfo()
         {
             String toReturn = "";
             toReturn += Name + " - ";
             toReturn += "Level: " + getLevel();
+            toReturn += " Strength: " + Strength;
+            toReturn += " Defense: " + Defense;
+            toReturn += " Dodge: " + Dodge;
 
             return toReturn;
         }
@@ -80,7 +89,7 @@ namespace _320Hack
 
         public int getAttackPower()
         {
-            return (int) Math.Pow(getLevel(), 1.5) + 5;
+            return (int) Math.Pow(Strength, 1.5) + 5;
         }
 
         public void awardExperience(int exp)
@@ -98,6 +107,7 @@ namespace _320Hack
         {
             Console.WriteLine("Congratulations! You are now level " + getLevel() + ".");
             maxHealth = (int)(maxHealth * 1.25);
+            Strength *= 1.05;
             Health = maxHealth;
         }
 
@@ -130,6 +140,74 @@ namespace _320Hack
         public bool isUp()
         {
             return LivesIn > ConnectsTo;
+        }
+    }
+
+    public class Item
+    {
+        public int Id { get; set; }
+
+        public String Name { get; set; }
+
+        public String Type { get; set; }
+
+        public int AmountToHeal { get; set; }
+
+        public String Stat { get; set; }
+
+        public int Effect { get; set; }
+    }
+
+    public class ItemSpawnPoint
+    {
+        public int Id { get; set; }
+
+        public int Row { get; set; }
+
+        public int Col { get; set; }
+
+        public int RoomId { get; set; }
+
+        public ItemInstance Item { get; set; }
+    }
+
+    public class ItemInstance
+    {
+        public int Id { get; set; }
+
+        public String Name { get; set; }
+
+        public String Type { get; set; }
+
+        public int AmountToHeal { get; set; }
+
+        public String Stat { get; set; }
+
+        public int Effect { get; set; }
+
+        public int RoomId { get; set; }
+
+        public int Row { get; set; }
+
+        public int Col { get; set; }
+
+        public ItemInstance() { }
+
+        public ItemInstance(Item itemTemp, int roomId)
+        {
+            Name = itemTemp.Name;
+            Type = itemTemp.Type;
+            RoomId = roomId;
+
+            if (Type == "Health")
+            {
+                AmountToHeal = itemTemp.AmountToHeal;
+            }
+            else if (Type == "Stat")
+            {
+                Stat = itemTemp.Stat;
+                Effect = itemTemp.Effect;
+            }
         }
     }
 }
