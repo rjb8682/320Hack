@@ -127,7 +127,7 @@ namespace _320Hack
             {
                 consoleText += "You killed the " + Name + ".";
 
-                player.awardExperience((MaxHealth / 10) + (Power * 50 / Speed) + 1);
+                consoleText += player.awardExperience((MaxHealth / 10) + (Power * 50 / Speed) + 1);
 
                 Row = MainWindow.INVALID_POSITION;
                 Col = MainWindow.INVALID_POSITION;

@@ -164,7 +164,7 @@ namespace _320Hack
             }
             else if (e.Key == Key.OemTilde)
             {
-                player.awardExperience(1);
+                outputPanel.Children.Add(getTextBox(player.awardExperience(1)));
                 update();
             }
             else if (keys.Contains(e.Key) && !textEntry.IsFocused && !player.isDead())
@@ -271,7 +271,11 @@ namespace _320Hack
             {
                 foreach (String s in responseFromMoving.Split('.'))
                 {
-                    if (s != "") outputPanel.Children.Add(getTextBox(s));
+                    if (s != "")
+                    {
+                        outputPanel.Children.Add(getTextBox(s));
+                        OutputScrollViewer.ScrollToBottom();
+                    }
                 }
             }
         }
@@ -336,7 +340,7 @@ namespace _320Hack
                 Text = text,
                 Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF")),
                 FontSize = 14,
-                Foreground = new SolidColorBrush(Colors.AntiqueWhite),
+                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE6E6E6")),
                 BorderThickness = new Thickness(0),
                 IsReadOnly = true
             };

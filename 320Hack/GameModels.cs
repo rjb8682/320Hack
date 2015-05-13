@@ -32,9 +32,9 @@ namespace _320Hack
 
         public String Name { get; set; }
 
-        public int Strength { get; set; }
+        public double Strength { get; set; }
 
-        public int Defense { get; set; }
+        public double Defense { get; set; }
 
         public int Dodge { get; set; }
 
@@ -43,9 +43,8 @@ namespace _320Hack
             String toReturn = "";
             toReturn += Name + " - ";
             toReturn += "Level: " + getLevel();
-            toReturn += " Strength: " + Strength;
-            toReturn += " Defense: " + Defense;
-            toReturn += " Dodge: " + Dodge;
+            toReturn += " Strength: " + (int)(Strength + 0.5);
+            toReturn += " Defense: " + (int)(Defense + 0.5);
 
             return toReturn;
         }
@@ -77,7 +76,9 @@ namespace _320Hack
         {
             // TODO function of level + armor + chance
             // return some string "glancing blow" "beheaded you" etc
-            int damage = (int)(monster.getAttackPower() / (Defense / 2));
+            int incomingDamage = monster.getAttackPower();
+            int damage = (int)(incomingDamage * (1 - ((Defense * 1.125) / (incomingDamage * 2)))) + 1;
+            if (damage < 1) damage = 1;
             Health -= damage;
             return damage;
         }
@@ -87,22 +88,25 @@ namespace _320Hack
             return (int) Math.Pow((Strength / 10), 1.5) + 5;
         }
 
-        public void awardExperience(int exp)
+        public String awardExperience(int exp)
         {
             int level = getLevel();
-            Console.WriteLine("You got " + exp + " experience.");
+            String consoleText = "";
+            consoleText += "You got " + exp + " experience.";
             Experience += exp;
             if (getLevel() > level)
             {
                 levelUp();
             }
+            return consoleText;
         }
 
         public void levelUp()
         {
             Console.WriteLine("Congratulations! You are now level " + getLevel() + ".");
             maxHealth = (int)(maxHealth * 1.25);
-            Strength = (int)(Strength * 1.05);
+            Strength = Strength * 1.125;
+            if (getLevel() % 3 == 0) Defense = Defense * 1.5;
             Health = maxHealth;
         }
 

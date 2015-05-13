@@ -61,7 +61,7 @@
                 <ColumnDefinition Width="34" />
             </Grid.ColumnDefinitions>
             <TextBox x:Name="statPanel" Grid.Column="1" TextWrapping="Wrap" FontSize="16" Background="Black" Foreground="#FFE6E6E6" BorderBrush="#FF171717" BorderThickness="0" KeyDown="textEntered" Cursor="Arrow" IsEnabled="False" Padding="15,10,0,0" HorizontalAlignment="Stretch"/>
-            <ScrollViewer Grid.Column="2" Background="#FF272932" Foreground="#FFE6E6E6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer x:Name="OutputScrollViewer" Grid.Column="2" Background="#FF272932" Foreground="#FFE6E6E6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto">
                 <StackPanel x:Name="outputPanel"/>
             </ScrollViewer>
         </Grid>
