@@ -32,11 +32,11 @@ namespace _320Hack
 
         public String Name { get; set; }
 
-        public double Strength { get; set; }
+        public int Strength { get; set; }
 
-        public double Defense { get; set; }
+        public int Defense { get; set; }
 
-        public double Dodge { get; set; }
+        public int Dodge { get; set; }
 
         public String getInfo()
         {
@@ -73,23 +73,18 @@ namespace _320Hack
             return (Experience - expRequired(currLevel)) / expForNext;
         }
 
-        public void attack(MonsterInstance monster)
+        public int attack(MonsterInstance monster)
         {
             // TODO function of level + armor + chance
             // return some string "glancing blow" "beheaded you" etc
-            int damage = monster.getAttackPower();
+            int damage = (int)(monster.getAttackPower() / (Defense / 2));
             Health -= damage;
-            Console.WriteLine("The " + monster.Name + " dealt " + damage + " damage to you!");
-
-            if (Health <= 0)
-            {
-                Console.WriteLine("The " + monster.Name + " killed you!");
-            }
+            return damage;
         }
 
         public int getAttackPower()
         {
-            return (int) Math.Pow(Strength, 1.5) + 5;
+            return (int) Math.Pow((Strength / 10), 1.5) + 5;
         }
 
         public void awardExperience(int exp)
@@ -107,7 +102,7 @@ namespace _320Hack
         {
             Console.WriteLine("Congratulations! You are now level " + getLevel() + ".");
             maxHealth = (int)(maxHealth * 1.25);
-            Strength *= 1.05;
+            Strength = (int)(Strength * 1.05);
             Health = maxHealth;
         }
 

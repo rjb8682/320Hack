@@ -27,170 +27,170 @@ namespace _320Hack.Migrations
             AddItems(context);
             AddRoomsAndDoors(context);
             AddTestPlayer(context);
-            SetItemSpawns(context);
+            //SetItemSpawns(context);
             base.Seed(context);
         }
 
-        private void SetItemSpawns(_320Hack.DbModel context)
-        {
-            ItemSpawnPoint sp = new ItemSpawnPoint();
+        //private void SetItemSpawns(_320Hack.DbModel context)
+        //{
+        //    ItemSpawnPoint sp = new ItemSpawnPoint();
 
-            // Long list of adding spawn points
-            sp.Row = 2;
-            sp.Col = 25;
-            sp.RoomId = 1;
+        //    // Long list of adding spawn points
+        //    sp.Row = 2;
+        //    sp.Col = 25;
+        //    sp.RoomId = 1;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 8;
-            sp.Col = 35;
-            sp.RoomId = 1;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 8;
+        //    sp.Col = 35;
+        //    sp.RoomId = 1;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 12;
-            sp.Col = 6;
-            sp.RoomId = 1;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 12;
+        //    sp.Col = 6;
+        //    sp.RoomId = 1;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 16;
-            sp.Col = 25;
-            sp.RoomId = 1;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 16;
+        //    sp.Col = 25;
+        //    sp.RoomId = 1;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 3;
-            sp.Col = 38;
-            sp.RoomId = 2;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 3;
+        //    sp.Col = 38;
+        //    sp.RoomId = 2;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 1;
-            sp.Col = 77;
-            sp.RoomId = 2;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 1;
+        //    sp.Col = 77;
+        //    sp.RoomId = 2;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 7;
-            sp.Col = 2;
-            sp.RoomId = 2;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 7;
+        //    sp.Col = 2;
+        //    sp.RoomId = 2;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 6;
-            sp.Col = 44;
-            sp.RoomId = 2;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 6;
+        //    sp.Col = 44;
+        //    sp.RoomId = 2;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 14;
-            sp.Col = 72;
-            sp.RoomId = 2;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 14;
+        //    sp.Col = 72;
+        //    sp.RoomId = 2;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 17;
-            sp.Col = 9;
-            sp.RoomId = 2;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 17;
+        //    sp.Col = 9;
+        //    sp.RoomId = 2;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 1;
-            sp.Col = 61;
-            sp.RoomId = 3;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 1;
+        //    sp.Col = 61;
+        //    sp.RoomId = 3;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 6;
-            sp.Col = 57;
-            sp.RoomId = 3;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 6;
+        //    sp.Col = 57;
+        //    sp.RoomId = 3;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 7;
-            sp.Col = 19;
-            sp.RoomId = 3;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 7;
+        //    sp.Col = 19;
+        //    sp.RoomId = 3;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 13;
-            sp.Col = 60;
-            sp.RoomId = 3;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 13;
+        //    sp.Col = 60;
+        //    sp.RoomId = 3;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 19;
-            sp.Col = 33;
-            sp.RoomId = 3;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 19;
+        //    sp.Col = 33;
+        //    sp.RoomId = 3;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 19;
-            sp.Col = 60;
-            sp.RoomId = 3;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 19;
+        //    sp.Col = 60;
+        //    sp.RoomId = 3;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            sp = new ItemSpawnPoint();
-            sp.Row = 21;
-            sp.Col = 55;
-            sp.RoomId = 3;
+        //    sp = new ItemSpawnPoint();
+        //    sp.Row = 21;
+        //    sp.Col = 55;
+        //    sp.RoomId = 3;
 
-            context.ItemSpawns.AddOrUpdate(sp);
+        //    context.ItemSpawns.AddOrUpdate(sp);
 
-            addItems(context);
-        }
+        //    addItems(context);
+        //}
 
-        private void addItems(_320Hack.DbModel context)
-        {
-            StreamReader itemReader = new StreamReader(SourceCodePath("../../GameData/Items.txt"));
-            int id = 1;
-            String line = itemReader.ReadLine();
-            while (line != null)
-            {
-                if (!line.StartsWith(COMMENT))
-                {
-                    String[] tempTokens = line.Split(',');
-                    String name = tempTokens[0];
-                    String[] tokens = tempTokens[1].Split(' ');
-                    String type = tokens[0];
+        //private void addItems(_320Hack.DbModel context)
+        //{
+        //    StreamReader itemReader = new StreamReader(SourceCodePath("../../GameData/Items.txt"));
+        //    int id = 1;
+        //    String line = itemReader.ReadLine();
+        //    while (line != null)
+        //    {
+        //        if (!line.StartsWith(COMMENT))
+        //        {
+        //            String[] tempTokens = line.Split(',');
+        //            String name = tempTokens[0];
+        //            String[] tokens = tempTokens[1].Split(' ');
+        //            String type = tokens[0];
 
-                    Item item = new Item
-                    {
-                        Id = id++,
-                        Name = name
-                    };
+        //            Item item = new Item
+        //            {
+        //                Id = id++,
+        //                Name = name
+        //            };
 
-                    if (type == "Health")
-                    {
-                        item.AmountToHeal = Convert.ToInt32(tokens[1]);
-                    }
-                    else if (type == "Stat")
-                    {
-                        item.Stat = tokens[1];
-                        item.Effect = Convert.ToInt32(tokens[2]);
-                    }
-                    context.Items.AddOrUpdate(item);
-                }
-                line = itemReader.ReadLine();
-            }
-        }
+        //            if (type == "Health")
+        //            {
+        //                item.AmountToHeal = Convert.ToInt32(tokens[1]);
+        //            }
+        //            else if (type == "Stat")
+        //            {
+        //                item.Stat = tokens[1];
+        //                item.Effect = Convert.ToInt32(tokens[2]);
+        //            }
+        //            context.Items.AddOrUpdate(item);
+        //        }
+        //        line = itemReader.ReadLine();
+        //    }
+        //}
 
         private void AddMonsters(_320Hack.DbModel context)
         {

@@ -121,11 +121,11 @@ namespace _320Hack
             int damage = player.getAttackPower();
             String consoleText = "";
             CurrentHP -= damage;
-            consoleText += "You dealt " + damage + " damage to the " + Name + "!";
+            consoleText += "You dealt " + damage + " damage to the " + Name + ".";
 
             if (isDead())
             {
-                consoleText += "\nYou killed the " + Name + "!";
+                consoleText += "You killed the " + Name + ".";
 
                 player.awardExperience((MaxHealth / 10) + (Power * 50 / Speed) + 1);
 
@@ -177,10 +177,12 @@ namespace _320Hack
             return distance <= 6;
         }
 
-        public void move(Room room, Player player, char[] validSpaces, Predicate<Coordinate> monsterTest, Random random)
+        public String move(Room room, Player player, char[] validSpaces, Predicate<Coordinate> monsterTest, Random random)
         {
-            if (isDead()) return;
+            if (isDead()) return "";
             SpeedTowardNextTurn += player.Speed;
+            int toReturn = 0;
+            String text = "";
 
             // Take turns until we've used up all of our game time (e.g. if speed is 200, loop 5 times)
             for (; SpeedTowardNextTurn - Speed >= 0; SpeedTowardNextTurn -= Speed)
@@ -195,7 +197,7 @@ namespace _320Hack
                     // TODO why are we stuck on bad squares?
                     if (neighbors.Count == 0)
                     {
-                        return;
+                        return "";
                     }
 
                     Coordinate moveTo = neighbors[random.Next(neighbors.Count)];
@@ -210,7 +212,7 @@ namespace _320Hack
 
                 if (neighborCoordinates(room, start, validSpaces).Contains(target))
                 {
-                    player.attack(this);
+                    toReturn += player.attack(this);
                     continue;
                 }
 
@@ -226,6 +228,16 @@ namespace _320Hack
                     Col = result.col;
                 }
             }
+            if (toReturn != 0)
+            {
+                text = "The " + Name + " attacked you for " + toReturn + " damage.";
+
+                if (player.isDead())
+                {
+                    text += "The " + Name + " killed you.";
+                }
+            }
+            return text;
         }
 
         /**

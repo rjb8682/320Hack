@@ -25,7 +25,7 @@ namespace _320Hack
         public virtual DbSet<Player> Player { get; set; }
         public virtual DbSet<Stair> Stairs { get; set; }
         public virtual DbSet<Item> Items { get; set; }
-        public virtual DbSet<ItemInstance> ItemInstances { get; set; }
-        public virtual DbSet<ItemSpawnPoint> ItemSpawns { get; set; }
+        //public virtual DbSet<ItemInstance> ItemInstances { get; set; }
+        //public virtual DbSet<ItemSpawnPoint> ItemSpawns { get; set; }
     }
 }

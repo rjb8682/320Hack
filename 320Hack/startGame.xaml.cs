@@ -77,7 +77,10 @@ namespace _320Hack
                 Experience = 0,
                 Health = 100,
                 maxHealth = 100,
-                Speed = Map.BASE_TURN_SPEED
+                Speed = Map.BASE_TURN_SPEED,
+                Strength = 8,
+                Defense = 7,
+                Dodge = 2
             };
 
             using (var db = new DbModel())

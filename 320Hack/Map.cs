@@ -126,7 +126,7 @@ namespace _320Hack
             MonsterInstance monsterToAttack = monsters.Find(m => m.Row == newRow && m.Col == newCol);
             if (monsterToAttack != null)
             {
-                consoleText = monsterToAttack.attack(player);
+                consoleText += monsterToAttack.attack(player);
                 if (monsterToAttack.isDead()) monsters.Remove(monsterToAttack);
             }
             else if (newCol < room.LevelTiles[newRow].Count &&
@@ -138,7 +138,7 @@ namespace _320Hack
 
             foreach (MonsterInstance monster in monsters)
             {
-                monster.move(room, player, walkTiles, isMonsterOnSpace, random);
+                consoleText += monster.move(room, player, walkTiles, isMonsterOnSpace, random);
             }
 
             Stair stair = stairs.Find(d => d.Row == player.Row && d.Col == player.Col);

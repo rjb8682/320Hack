@@ -141,7 +141,7 @@ namespace _320Hack
                     count = 0;
                 }
             }
-            outputPanel.Text = "Would you like to continue your adventure? (y/n)";
+            outputPanel.Children.Add(getTextBox("Would you like to continue your adventure? (y/n)"));
         }
 
         private void keyPressed(object sender, KeyEventArgs e)
@@ -152,7 +152,7 @@ namespace _320Hack
                 {
                     revive();
                     gameLevel.setupState(player.CurrentRoom);
-                    outputPanel.Text = "";
+                    outputPanel.Children.Clear();
                     deathArea.Text = "";
                     update();
                 }
@@ -266,7 +266,14 @@ namespace _320Hack
             {
                 responseFromMoving = gameLevel.movePlayer(+1, +1);
             }
-            if (responseFromMoving != "") outputPanel.Text = responseFromMoving;
+
+            if (responseFromMoving != "")
+            {
+                foreach (String s in responseFromMoving.Split('.'))
+                {
+                    if (s != "") outputPanel.Children.Add(getTextBox(s));
+                }
+            }
         }
 
         private void textEntered(object sender, KeyEventArgs e)
@@ -275,7 +282,7 @@ namespace _320Hack
             {
                 String response = processInput(textEntry.Text);
                 textEntry.Clear();
-                outputPanel.Text = response;
+                outputPanel.Children.Add(getTextBox(response));
                 gameArea.IsEnabled = true;
                 Keyboard.Focus(gameArea);
                 gameArea.IsEnabled = false;
@@ -320,6 +327,19 @@ namespace _320Hack
         private void isClosed(object sender, EventArgs e)
         {
             //gameLevel.reset();
+        }
+
+        private TextBox getTextBox(String text)
+        {
+            return new TextBox
+            {
+                Text = text,
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF")),
+                FontSize = 14,
+                Foreground = new SolidColorBrush(Colors.AntiqueWhite),
+                BorderThickness = new Thickness(0),
+                IsReadOnly = true
+            };
         }
 
     }
