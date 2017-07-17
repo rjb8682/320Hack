@@ -21,21 +21,21 @@ namespace _320Hack
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private double titleFontSize = 16.0;
-        private Map gameLevel;
+        private const double titleFontSize = 16.0;
+        private readonly Map gameLevel;
 
         public Key[] keys = {Key.NumPad8, Key.NumPad2, Key.NumPad4, Key.NumPad6, Key.NumPad7, Key.NumPad9, Key.NumPad1, Key.NumPad3,
-                                Key.K, Key.J, Key.H, Key.L, Key.Y, Key.U, Key.B, Key.N,};
+                                Key.K, Key.J, Key.H, Key.L, Key.Y, Key.U, Key.B, Key.N, Key.Left, Key.Right, Key.Up, Key.Down};
 
         public const int TEST_PLAYER_ID = 1;
         public const int INVALID_POSITION = -1;
 
-        public static Char floor = '·';
-        public static Char playerChar = '@';
-        public static Char horizWall = '—';
-        public static Char door = '#';
+        public static char floor = '·';
+        public static char playerChar = '@';
+        public static char horizWall = '—';
+        public static char door = '#';
 
         public const int monsterModifier = 5;
 
@@ -104,26 +104,22 @@ namespace _320Hack
             using (var db = new DbModel())
             {
 
-                List<MonsterHistory> killedMonsters = (from m in db.MonsterHistory
-                                                       where m.PlayerId == player.Id
-                                                       orderby m.Count descending
-                                                       select m).ToList();
+                var killedMonsters = (from m in db.MonsterHistory
+                                      where m.PlayerId == player.Id
+                                      orderby m.Count descending
+                                      select m).ToList();
 
-                int sum = 0;
-                foreach (MonsterHistory m in killedMonsters)
-                {
-                    sum += m.Count;
-                }
+                var sum = killedMonsters.Sum(m => m.Count);
                 deathArea.Text += "\nYou have killed " + sum + " monster" + (sum != 1 ? "s" : "") + ":\n\n";
 
-                int count = 0;
-                foreach (MonsterHistory killedMonster in killedMonsters)
+                var count = 0;
+                foreach (var killedMonster in killedMonsters)
                 {
-                    Monster monster = (from m in db.Monsters
+                    var monster = (from m in db.Monsters
                                        where m.Id == killedMonster.MonsterId
                                        select m).First();
 
-                    for (int i = 0; i < killedMonster.Count; i++)
+                    for (var i = 0; i < killedMonster.Count; i++)
                     {
                         deathArea.Inlines.Add(new Run(monster.Symbol)
                         {
@@ -131,11 +127,10 @@ namespace _320Hack
                         });
 
                         count++;
-                        if (count == 10)
-                        {
-                            deathArea.Inlines.Add("\n");
-                            count = 0;
-                        }
+                        if (count != 10) continue;
+
+                        deathArea.Inlines.Add("\n");
+                        count = 0;
                     }
                     deathArea.Inlines.Add("\n");
                     count = 0;
@@ -146,20 +141,25 @@ namespace _320Hack
 
         private void keyPressed(object sender, KeyEventArgs e)
         {
+            Console.WriteLine("Key pressed: " + e.Key);
+
             if (player.isDead())
             {
-                if (e.Key == Key.Y)
+                switch (e.Key)
                 {
-                    revive();
-                    gameLevel.setupState(player.CurrentRoom);
-                    outputPanel.Children.Clear();
-                    deathArea.Text = "";
-                    update();
-                }
-                else if (e.Key == Key.N)
-                {
-                    new startGame().Show();
-                    this.Close();
+                    case Key.Y:
+                        revive();
+                        gameLevel.setupState(player.CurrentRoom);
+                        outputPanel.Children.Clear();
+                        deathArea.Text = "";
+                        update();
+                        break;
+                    case Key.N:
+                        new startGame().Show();
+                        Close();
+                        break;
+                    default:
+                        return;
                 }
             }
             else if (e.Key == Key.OemTilde)
@@ -177,7 +177,7 @@ namespace _320Hack
             }
             else if (e.Key == Key.OemPeriod && !player.isDead())
             {
-                gameLevel.movePlayer(0,0, true, false);
+                gameLevel.movePlayer(0,0, true);
                 update();
             }
             else if (e.Key == Key.OemComma && !player.isDead())
@@ -199,19 +199,18 @@ namespace _320Hack
                 db.Player.Attach(player);
                 db.Entry(player).State = System.Data.Entity.EntityState.Modified;
 
-                List<Monster> monsters;
-                List<Room> rooms = (from r in db.Rooms select r).ToList();
-                Random random = new Random();
+                var rooms = (from r in db.Rooms select r).ToList();
+                var random = new Random();
 
                 deleteMonsters(db);
 
-                foreach (Room r in rooms)
+                foreach (var r in rooms)
                 {
-                    monsters = (from ms in db.Monsters where ms.MinimumRoom <= r.Id select ms).ToList();
-                    for (int i = 0; i < monsterModifier * r.Id; i++)
+                    var monsters = (from ms in db.Monsters where ms.MinimumRoom <= r.Id select ms).ToList();
+                    for (var i = 0; i < monsterModifier * r.Id; i++)
                     {
-                        Monster template = monsters[random.Next(0, monsters.Count)];
-                        MonsterInstance m = new MonsterInstance(template, player.getLevel(), r.Id);
+                        var template = monsters[random.Next(0, monsters.Count)];
+                        var m = new MonsterInstance(template, player.getLevel(), r.Id);
                         m.place(db, random);
                     }
                 }
@@ -222,8 +221,8 @@ namespace _320Hack
 
         public void deleteMonsters(DbModel db)
         {
-            List<MonsterInstance> otherMonsters = (from ms in db.MonsterInstances select ms).ToList();
-            foreach (MonsterInstance m in otherMonsters)
+            var otherMonsters = (from ms in db.MonsterInstances select ms).ToList();
+            foreach (var m in otherMonsters)
             {
                 db.MonsterInstances.Attach(m);
                 db.Entry(m).State = System.Data.Entity.EntityState.Deleted;
@@ -233,99 +232,98 @@ namespace _320Hack
 
         public void movePlayer(Key k)
         {
-            String responseFromMoving = "";
-            if (k == Key.K || k == Key.NumPad8)
+            Console.WriteLine("Moving player: " + k);
+            string responseFromMoving;
+
+            switch (k)
             {
-                responseFromMoving = gameLevel.movePlayer(-1, 0);
-            }
-            else if (k == Key.J || k == Key.NumPad2)
-            {
-                responseFromMoving = gameLevel.movePlayer(+1, 0);
-            }
-            else if (k == Key.H || k == Key.NumPad4)
-            {
-                responseFromMoving = gameLevel.movePlayer(0, -1);
-            }
-            else if (k == Key.L || k == Key.NumPad6)
-            {
-                responseFromMoving = gameLevel.movePlayer(0, +1);
-            }
-            else if (k == Key.Y || k == Key.NumPad7)
-            {
-                responseFromMoving = gameLevel.movePlayer(-1, -1);
-            }
-            else if (k == Key.U || k == Key.NumPad9)
-            {
-                responseFromMoving = gameLevel.movePlayer(-1, +1);
-            }
-            else if (k == Key.B || k == Key.NumPad1)
-            {
-                responseFromMoving = gameLevel.movePlayer(+1, -1);
-            }
-            else if (k == Key.N || k == Key.NumPad3)
-            {
-                responseFromMoving = gameLevel.movePlayer(+1, +1);
+                case Key.K:
+                case Key.NumPad8:
+                case Key.Up:
+                    responseFromMoving = gameLevel.movePlayer(-1, 0);
+                    break;
+                case Key.J:
+                case Key.NumPad2:
+                case Key.Down:
+                    responseFromMoving = gameLevel.movePlayer(+1, 0);
+                    break;
+                case Key.H:
+                case Key.NumPad4:
+                case Key.Left:
+                    responseFromMoving = gameLevel.movePlayer(0, -1);
+                    break;
+                case Key.L:
+                case Key.NumPad6:
+                case Key.Right:
+                    responseFromMoving = gameLevel.movePlayer(0, +1);
+                    break;
+                case Key.Y:
+                case Key.NumPad7:
+                    responseFromMoving = gameLevel.movePlayer(-1, -1);
+                    break;
+                case Key.U:
+                case Key.NumPad9:
+                    responseFromMoving = gameLevel.movePlayer(-1, +1);
+                    break;
+                case Key.B:
+                case Key.NumPad1:
+                    responseFromMoving = gameLevel.movePlayer(+1, -1);
+                    break;
+                case Key.N:
+                case Key.NumPad3:
+                    responseFromMoving = gameLevel.movePlayer(+1, +1);
+                    break;
+                default:
+                    return;
             }
 
-            if (responseFromMoving != "")
+            if (responseFromMoving == "") return;
+
+            foreach (var s in responseFromMoving.Split('.'))
             {
-                foreach (String s in responseFromMoving.Split('.'))
-                {
-                    if (s != "")
-                    {
-                        outputPanel.Children.Add(getTextBox(s));
-                        OutputScrollViewer.ScrollToBottom();
-                    }
-                }
+                if (s == "") continue;
+
+                outputPanel.Children.Add(getTextBox(s));
+                OutputScrollViewer.ScrollToBottom();
             }
         }
 
         private void textEntered(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
-            {
-                String response = processInput(textEntry.Text);
-                textEntry.Clear();
-                outputPanel.Children.Add(getTextBox(response));
-                gameArea.IsEnabled = true;
-                Keyboard.Focus(gameArea);
-                gameArea.IsEnabled = false;
-            }
+            if (e.Key != Key.Enter) return;
+
+            var response = processInput(textEntry.Text);
+            textEntry.Clear();
+            outputPanel.Children.Add(getTextBox(response));
+            gameArea.IsEnabled = true;
+            Keyboard.Focus(gameArea);
+            gameArea.IsEnabled = false;
         }
 
-        public String processInput(String text)
+        public string processInput(string text)
         {
-            if (text != "" && text[0] != '/')
+            switch (text)
             {
-                return "Not a command. Input /help to see a list of commands";
-            }
-            else
-            {
-                if (text == "/help")
-                {
+                case "/help":
                     textEntry.Clear();
-                    help = new HelpMenu();
-                    help.ShowInTaskbar = false;
-                    help.Left = mainLeft - (help.ActualWidth / 2);
-                    help.Top = mainTop;
+                    help = new HelpMenu
+                    {
+                        ShowInTaskbar = false,
+                        Left = mainLeft - (help.ActualWidth / 2),
+                        Top = mainTop
+                    };
+
                     help.ShowDialog();
-                }
-                else if (text == "/quit")
-                {
+                    break;
+                case "/quit":
                     textEntry.Clear();
                     new startGame().Show();
-                    this.Close();
-                }
-                return "";
+                    Close();
+                    break;
+                default:
+                    return "Not a command. Input /help to see a list of commands";
             }
-        }
-
-        private String getHelpString()
-        {
-            String result = "Movement:\n";
-            result += "\t WASD or Arrow Keys to move the player\n";
-            
-            return result;
+            return "";
         }
 
         private void isClosed(object sender, EventArgs e)
@@ -335,12 +333,15 @@ namespace _320Hack
 
         private TextBox getTextBox(String text)
         {
+            var bgColor = ColorConverter.ConvertFromString("#00FFFFFF");
+            var fgColor = ColorConverter.ConvertFromString("#FFE6E6E6");
+
             return new TextBox
             {
                 Text = text,
-                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#00FFFFFF")),
+                Background = new SolidColorBrush((Color?) bgColor ?? Colors.Transparent),
                 FontSize = 14,
-                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE6E6E6")),
+                Foreground = new SolidColorBrush((Color?) fgColor ?? Colors.DarkGray),
                 BorderThickness = new Thickness(0),
                 IsReadOnly = true
             };

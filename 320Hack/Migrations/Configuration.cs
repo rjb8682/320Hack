@@ -9,7 +9,7 @@ namespace _320Hack.Migrations
     using System.Linq;
     using System.Reflection;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<_320Hack.DbModel>
+    internal sealed class Configuration : DbMigrationsConfiguration<DbModel>
     {
         private const String COMMENT = "//";
         private char[] delimiters;
@@ -21,7 +21,7 @@ namespace _320Hack.Migrations
             delimiters = new char[] { ' ' };
         }
 
-        protected override void Seed(_320Hack.DbModel context)
+        protected override void Seed(DbModel context)
         {
             AddMonsters(context);
             AddItems(context);
