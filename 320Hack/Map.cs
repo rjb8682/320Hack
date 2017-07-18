@@ -63,18 +63,18 @@ namespace _320Hack
             gameArea.Text = "";
             gameArea.Inlines.Clear();
 
-            String inlineBuffer = "";
+            var inlineBuffer = "";
             updateSeen();
 
-            int maxRows = room.LevelTiles.Count;
-            for (int row = 0; row < maxRows; row++ )
+            var maxRows = room.LevelTiles.Count;
+            for (var row = 0; row < maxRows; row++ )
             {
-                int maxCols = room.LevelTiles[row].Count;
-                for (int col = 0; col < maxCols; col++)
+                var maxCols = room.LevelTiles[row].Count;
+                for (var col = 0; col < maxCols; col++)
                 {
                     inlineBuffer = processChar(row, col, inlineBuffer, gameArea);
                 }
-                inlineBuffer += '\n';
+                if (inlineBuffer[inlineBuffer.Length-1] != '\n') inlineBuffer += '\n';
             }
 
             gameArea.Inlines.Add(new Run(inlineBuffer));

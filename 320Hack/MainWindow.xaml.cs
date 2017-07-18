@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
-using System.Reflection;
 
 namespace _320Hack
 {
@@ -47,8 +38,8 @@ namespace _320Hack
 
         public double mainTop;
         public double mainLeft;
-        public double screenWidth = System.Windows.SystemParameters.PrimaryScreenWidth;
-        public double screenHeight = System.Windows.SystemParameters.PrimaryScreenHeight;
+        public double screenWidth = SystemParameters.PrimaryScreenWidth;
+        public double screenHeight = SystemParameters.PrimaryScreenHeight;
 
         public MainWindow(Player player, bool newGame)
         {
@@ -141,8 +132,6 @@ namespace _320Hack
 
         private void keyPressed(object sender, KeyEventArgs e)
         {
-            Console.WriteLine("Key pressed: " + e.Key);
-
             if (player.isDead())
             {
                 switch (e.Key)
@@ -232,7 +221,6 @@ namespace _320Hack
 
         public void movePlayer(Key k)
         {
-            Console.WriteLine("Moving player: " + k);
             string responseFromMoving;
 
             switch (k)
@@ -309,10 +297,10 @@ namespace _320Hack
                     help = new HelpMenu
                     {
                         ShowInTaskbar = false,
-                        Left = mainLeft - (help.ActualWidth / 2),
                         Top = mainTop
                     };
 
+                    help.Left = mainLeft - help.ActualWidth / 2;
                     help.ShowDialog();
                     break;
                 case "/quit":

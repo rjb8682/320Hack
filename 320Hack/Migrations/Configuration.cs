@@ -18,7 +18,7 @@ namespace _320Hack.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            delimiters = new char[] { ' ' };
+            delimiters = new[] { ' ' };
         }
 
         protected override void Seed(DbModel context)
@@ -194,15 +194,16 @@ namespace _320Hack.Migrations
 
         private void AddMonsters(_320Hack.DbModel context)
         {
-            StreamReader monsterReader = new StreamReader(SourceCodePath("../../GameData/Monsters.txt"));
-            int id = 1;
-            String line = monsterReader.ReadLine();
+            var monsterReader = new StreamReader(SourceCodePath("../../GameData/Monsters.txt"));
+            var id = 1;
+            var line = monsterReader.ReadLine();
+
             while (line != null)
             {
                 if (!line.StartsWith(COMMENT))
                 {
-                    String[] tokens = line.Split(delimiters);
-                    Monster monster = new Monster
+                    var tokens = line.Split(delimiters);
+                    var monster = new Monster
                     {
                         Id = id++,
                         Symbol = tokens[0],

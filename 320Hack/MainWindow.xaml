@@ -5,9 +5,9 @@
         WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize" KeyDown="keyPressed" Closed="isClosed">
     <Grid Background="#FF595D72">
         <Grid.RowDefinitions>
-            <RowDefinition Height="60*"/>
+            <RowDefinition Height="65*"/>
             <RowDefinition Height="10*"/>
-            <RowDefinition Height="20*"/>
+            <RowDefinition Height="15*"/>
             <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <Grid x:Name="MainPanel" Grid.Row="0" Margin="0 10">
